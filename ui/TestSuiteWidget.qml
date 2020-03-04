@@ -34,6 +34,11 @@ Item {
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                 clip: false
                 Layout.fillWidth: true
+                Binding {
+                    target: tswModel
+                    property: "newid"
+                    value: identifierWidget.inputid
+                }
             }
 
             InstructionWidget {

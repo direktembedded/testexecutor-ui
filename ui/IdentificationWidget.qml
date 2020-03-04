@@ -7,6 +7,8 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.3
 
 Item {
+    id: identificationWidget
+    property string inputid
     ColumnLayout {
         id: identificationWidgetLayout
         anchors.fill: parent
@@ -25,11 +27,15 @@ Item {
             Layout.fillWidth: true
             TextField {
                 id: singleInputField
-                text: singleInputValue
+                text: ""
                 anchors.fill: parent
                 horizontalAlignment: Text.AlignHCenter
                 placeholderText: "Input"
-                font.pointSize: parent.height * 0.6
+                font.pointSize: parent.height * 0.5
+                onAccepted: {
+                    identificationWidget.inputid = singleInputField.text
+                    singleInputField.text = ""
+                }
             }
         }
     }

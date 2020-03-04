@@ -35,9 +35,12 @@ myResults.populate()
 myResults2 = ResultModel()
 myResults2.populate2()
 
+def input_callback(id):
+    print("In input callback, got id", id)
+
 mySuiteGroup = TestSuiteGroup()
-mySuite = TestSuiteModel(resultlist=myResults)
-mySuite2 = TestSuiteModel(resultlist=myResults2)
+mySuite = TestSuiteModel(resultlist=myResults, setid_callback=input_callback)
+mySuite2 = TestSuiteModel(resultlist=myResults2, setid_callback=input_callback)
 mySuiteGroup.addData(mySuite)
 mySuiteGroup.addData(mySuite2)
 mySuiteGroup.addData(mySuite2)
