@@ -27,7 +27,7 @@ Item {
             id: column
             anchors.fill: parent
 
-            KeyValueList {
+            IdentificationWidget {
                 id: identifierWidget
                 Layout.maximumHeight: parent.height * 0.4
                 Layout.minimumHeight: parent.height * 0.2
