@@ -9,12 +9,14 @@ import QtQuick.Controls 2.3
 Item {
     id: identificationWidget
     property string inputid
+    property var identifiers
     ColumnLayout {
         id: identificationWidgetLayout
         anchors.fill: parent
 
         KeyValueList {
             id: identificationList
+            keyvalues: identifiers
             Layout.fillHeight: true
             Layout.fillWidth: true
         }

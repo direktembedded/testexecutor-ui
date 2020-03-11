@@ -39,6 +39,7 @@ Item {
                     property: "newid"
                     value: identifierWidget.inputid
                 }
+                identifiers: tswModel.identifiers
             }
 
             InstructionWidget {

@@ -33,7 +33,7 @@ class KeyValueModel(QAbstractListModel):
         return len(self._data)
 
     def roleNames(self):
-        return {KeyValueModel.KeyRole:KeyValueModel.KeyKey, KeyValueModel.ValueRole:KeyValueModel.ValueKey}
+        return {KeyValueModel.KeyRole: KeyValueModel.KeyKey, KeyValueModel.ValueRole: KeyValueModel.ValueKey}
 
     def data(self, index, role):
         d = self._data[index.row()]
@@ -43,26 +43,22 @@ class KeyValueModel(QAbstractListModel):
             return d[KeyValueModel.ValueKey]
         return None
 
-    def populate(self):
-        self._data.append({b'key':'id1', b'value':'1234567890'})
-        self._data.append({b'key':'id2', b'value':'Secondary id'})
-        self._data.append({b'key':'another', b'value':'Id for reference'})
-        self._data.append({b'key':'one', b'value':'908976543211234'})
-
-    def populate2(self):
-        self._data.append({b'key':'akey', b'value':'key one'})
-        self._data.append({b'key':'bkey', b'value':'key two'})
-
     def add(self, key, value):
         rowCount = self.rowCount(QModelIndex())
         self.beginInsertRows(QModelIndex(), rowCount, rowCount)
-        self._data.append({b'key':key, b'value':value})
+        self._data.append({KeyValueModel.KeyKey: key, KeyValueModel.ValueKey: value})
         self.endInsertRows()
 
-    def changeme(self, key, value):
-        row = 0 # pass this as argument
-        ix = self.index(row, 0)
-        self._data[row][b'value'] = value
-        self.dataChanged.emit(ix, ix, self.roleNames())
-        self.add('test', value)
+    def setData(self, index, value, role=None):
+        print("setData", index.row(), value, role)
+        self._data[index.row()] = value
+        self.dataChanged.emit(index, index, self.roleNames())
 
+    def setValue(self, key, value):
+        updated = False
+        for row in range(len(self._data)):
+            if self._data[row][KeyValueModel.KeyKey] == key:
+                self._data[row][KeyValueModel.ValueKey] = value
+                ix = self.index(row, 0)
+                self.dataChanged.emit(ix, ix, self.roleNames())
+                break

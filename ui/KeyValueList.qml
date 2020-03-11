@@ -7,6 +7,7 @@ import QtQuick 2.4
 Item {
     width: 400
     clip: true
+    property var keyvalues
     property int viewableCount: -1
 
     Rectangle {
@@ -23,7 +24,7 @@ Item {
             delegate: KeyValueItem {
                 height: (viewableCount <= 0) ? (listView.height / listView.count) : (listView.height / viewableCount)
             }
-            model: keyValueList
+            model: keyvalues
         }
     }
 }

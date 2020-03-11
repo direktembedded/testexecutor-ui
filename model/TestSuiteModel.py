@@ -11,27 +11,30 @@ from PySide2.QtCore import QObject
 from PySide2.QtCore import Slot, Signal, Property
 
 class TestSuiteModel(QObject):
-    def __init__(self, resultlist=None, setid_callback=None):
+    def __init__(self, idlist=None, resultlist=None, setid_callback=None):
         QObject.__init__(self)
+        self._idlist = idlist
         self._resultlist = resultlist
-        self._newId = None
+        self._newId = None # See newid Property below
         self.setid_callback = setid_callback
 
     def resultlist(self):
         return self._resultlist
 
     def keyvalues(self):
-        return None
+        return self._idlist
 
     def instructions(self):
         return "None for instructions"
 
     def _setid(self, id):
+        """ Setter for newid Property """
         self._newId = id
         if self.setid_callback:
             self.setid_callback(id)
 
     def _getid(self):
+        """ Getter for newid Property """
         return self._newId
 
     @Signal
@@ -43,18 +46,18 @@ class TestSuiteModel(QObject):
 
 class TestSuiteGroup(QAbstractListModel):
 
-    KeyValueListRole = Qt.UserRole + 1
+    IdentifierListRole = Qt.UserRole + 1
     InstructionsRole = Qt.UserRole + 2
     ResultListRole = Qt.UserRole + 3
     NewIdRole = Qt.UserRole + 4
-    KeyValueListKey = "keyvalues"
-    InstructionsKey = "instructions"
-    ResultListKey = "resultlist"
+    IdentifierListKey = b"identifiers"
+    InstructionsKey = b"instructions"
+    ResultListKey = b"resultlist"
     NewIdKey = b"newid"
 
-    _roles = {KeyValueListRole: b"keyvalues",
-              InstructionsRole: b"instructions",
-              ResultListRole: b"resultlist",
+    _roles = {IdentifierListRole: IdentifierListKey,
+              InstructionsRole: InstructionsKey,
+              ResultListRole: ResultListKey,
               NewIdRole: NewIdKey
               }
 
@@ -86,7 +89,7 @@ class TestSuiteGroup(QAbstractListModel):
         except IndexError:
             return QVariant()
 
-        if role == self.KeyValueListRole:
+        if role == self.IdentifierListRole:
             return data.keyvalues()
 
         if role == self.InstructionsRole:
