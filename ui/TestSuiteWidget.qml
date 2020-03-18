@@ -61,6 +61,27 @@ Item {
                 clip: true
                 viewableCount: 10 // Change this to get this from a 'test suite view config' model
             }
+            Item {
+                id: buttonContainer
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                // The Item wrapper is to allow TextField pointSize to reference the parents height.
+                Layout.preferredHeight: parent.height * 0.04
+                Layout.minimumHeight: parent.height * 0.04
+                Layout.maximumHeight: parent.height * 0.04
+                Layout.fillWidth: true
+                Button {
+                    id: control
+                    width: parent.width / 2
+                    height: parent.height * 0.8
+                    text: "Stop"
+                    padding: 3
+                    spacing: 3
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    font.pointSize: parent.height * 0.5
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    //onClicked: tswModel.revert()
+                }
+            }
         }
     }
 }
