@@ -32,8 +32,9 @@ class SampleIdentificationData(KeyValueModel):
             print("isalnum:", value)
             self.setValue(SampleIdentificationData.AlphaNum, value)
         else:
-            print("other:", value)
-            self.setValue(SampleIdentificationData.Other, value)
+            if value is not None and value != "":
+                print("other:", value)
+                self.setValue(SampleIdentificationData.Other, value)
 
     Alpha = 'Alpha'
     Number = 'Number'

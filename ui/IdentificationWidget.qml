@@ -34,6 +34,7 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 placeholderText: "Input"
                 font.pointSize: parent.height * 0.5
+                // onAccepted is called when 'return' is entered.
                 onAccepted: {
                     identificationWidget.inputid = singleInputField.text
                     singleInputField.text = ""

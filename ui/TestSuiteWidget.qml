@@ -8,7 +8,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Window 2.10
 
 Item {
-    id: container
+    id: suite_container
     property var tswModel
 
     Frame {
@@ -70,19 +70,63 @@ Item {
                 Layout.maximumHeight: parent.height * 0.04
                 Layout.fillWidth: true
                 Button {
-                    id: control
+                    id: control_button
                     width: parent.width / 2
                     height: parent.height * 0.8
-                    text: "Stop"
+                    text: ""
+                    enabled: false
                     padding: 3
                     spacing: 3
                     anchors.horizontalCenter: parent.horizontalCenter
                     font.pointSize: parent.height * 0.5
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    //onClicked: tswModel.revert()
+                    onClicked: {
+                        // Set suite state to 'next' which is informing the model to change to the next state.
+                        tswModel.suitestate = "next"
+                        // Now the model has changed it state, adjust the UI container's state (see below)
+                        //suite_container.state = "next"
+                    }
                 }
             }
         }
     }
+    state: model.suitestate
+/*
+    Binding {
+        target: tswModel
+        property: "suitestate"
+        value: state
+    }
+*/
+    states: [
+        State {
+            name: "next"
+            PropertyChanges { target: control_button; text: "next"; enabled: false  }
+        },
+        State {
+            name: "idle"
+            PropertyChanges { target: control_button; text: "Idle"; enabled: false  }
+        },
+        State {
+            name: "ready"
+            PropertyChanges { target: control_button; text: "Start"; enabled: true  }
+        },
+        State {
+            name: "running"
+            PropertyChanges { target: control_button; text: "Stop"; enabled: true  }
+        },
+        State {
+            name: "starting"
+            PropertyChanges { target: control_button; text: "Starting"; enabled: false }
+        },
+        State {
+            name: "stopping"
+            PropertyChanges { target: control_button; text: "Stopping"; enabled: false }
+        },
+        State {
+            name: "stopped"
+            PropertyChanges { target: control_button; text: "Stopped"; enabled: false }
+        }
+    ]
 }
 
