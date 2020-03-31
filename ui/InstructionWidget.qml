@@ -37,21 +37,35 @@ Item {
                 font.pixelSize: height * 0.1
             }
 
-            Button {
-                id: buttonCancel
-                text: qsTr("Cancel")
+            Item {
                 Layout.fillWidth: true
+                Layout.preferredHeight: parent.height * 0.02
+                Layout.minimumHeight: 40
+                Layout.maximumHeight: 60
+                Button {
+                    anchors.fill: parent
+                    id: buttonCancel
+                    text: "Cancel"
+                    font.pointSize: parent.height * 0.5
+                }
             }
 
-            Button {
-                id: buttonOk
-                text: "Ok"
+            Item {
                 Layout.fillWidth: true
-                antialiasing: true
-                transformOrigin: Item.Right
-                checkable: false
-                checked: false
-                highlighted: true
+                Layout.preferredHeight: parent.height * 0.02
+                Layout.minimumHeight: 40
+                Layout.maximumHeight: 60
+                Button {
+                    id: buttonOk
+                    anchors.fill: parent
+                    text: "Ok"
+                    antialiasing: true
+                    transformOrigin: Item.Right
+                    checkable: false
+                    checked: false
+                    highlighted: true
+                    font.pointSize: parent.height * 0.5
+                }
             }
         }
     }
