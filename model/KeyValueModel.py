@@ -50,7 +50,6 @@ class KeyValueModel(QAbstractListModel):
         self.endInsertRows()
 
     def setData(self, index, value, role=None):
-        print("setData", index.row(), value, role)
         self._data[index.row()] = value
         self.dataChanged.emit(index, index, self.roleNames())
 

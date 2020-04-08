@@ -35,11 +35,11 @@ Item {
                 clip: false
                 Layout.fillWidth: true
                 Binding {
-                    target: tswModel
+                    target: tswModel.testsuite
                     property: "newid"
                     value: identifierWidget.inputid
                 }
-                identifiers: tswModel.identifiers
+                identifiers: tswModel.testsuite.identifiers
             }
 
             InstructionWidget {
@@ -49,10 +49,11 @@ Item {
                 clip: true
                 Layout.fillHeight: true
                 Layout.fillWidth: true
+                model: tswModel.testsuite.instructions
             }
 
             ResultList {
-                results: tswModel.resultlist
+                results: tswModel.testsuite.results
                 id: testList
                 Layout.preferredHeight: parent.height * 0.3
                 Layout.minimumHeight: parent.height * 0.2
@@ -83,7 +84,7 @@ Item {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     onClicked: {
                         // Set suite state to 'next' which is informing the model to change to the next state.
-                        tswModel.suitestate = "next"
+                        tswModel.testsuite.suitestate = "next"
                         // Now the model has changed it state, adjust the UI container's state (see below)
                         //suite_container.state = "next"
                     }
@@ -91,7 +92,7 @@ Item {
             }
         }
     }
-    state: model.suitestate
+    state: tswModel.testsuite.suitestate
 /*
     Binding {
         target: tswModel

@@ -9,6 +9,8 @@ import QtQuick.Layouts 1.3
 Item {
     width: parent.width
     height: parent.height
+    property var model
+
     Rectangle {
         id: rectangle1
         width: parent.width

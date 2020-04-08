@@ -3,14 +3,11 @@ Copyright (c) 2020 Direkt, Australia
 Licensed under BSD-3-Clause, refer LICENSE.txt
 """
 # This Python file uses the following encoding: utf-8
-from PySide2 import QtWidgets
-from PySide2.QtCore import QAbstractListModel
-from PySide2.QtCore import Qt
-from PySide2.QtCore import QModelIndex
+import threading
 from PySide2.QtCore import QObject
-from PySide2.QtCore import Slot, Signal, Property
+from PySide2.QtCore import Signal, Property
+from PySide2.QtCore import QModelIndex
 
-from model.SuiteStateModel import SuiteStateModel
 
 class TestSuiteModel(QObject):
     # these state strings must match those in TestSuiteWidget.qml
@@ -24,17 +21,14 @@ class TestSuiteModel(QObject):
 
     def __init__(self, idlist=None, resultlist=None, setid_callback=None, setstate_callback=None):
         QObject.__init__(self)
-        self._idlist = idlist
-        self._resultlist = resultlist
+        self._setidentifiers(idlist)
+        self._setresults(resultlist)
+        self._setinstructions(None)
         self._newId = None  # See newid Property below
         self.setid_callback = setid_callback
         self._state = None  # see suitestate Property below
         self.setstate_callback = setstate_callback
-        self.stateChanged.connect(self.weChangedState)
-
-    @Slot()
-    def weChangedState(self):
-        pass
+        self.lock = threading.RLock()
 
     def resultlist(self):
         return self._resultlist
@@ -57,18 +51,28 @@ class TestSuiteModel(QObject):
     def setstate(self, st):
         """ Setter for suitestate Property """
         newstate = None
+        changed = False
         if self.setstate_callback:
             newstate = self.setstate_callback(st)
-        if not newstate:
+        else:
             newstate = self._default_state_change(st)
-        if newstate != self._state:
-            self._state = newstate
+        with self.lock:
+            if newstate and newstate != self._state:
+                changed = True
+            if changed:
+                self._state = newstate
+                print("self._state", self._state)
+        if changed:
             self.stateChanged.emit()
 
     def _getstate(self):
         """ Getter for suitestate Property """
-        return self._state
+        state = None
+        with self.lock:
+            state = self._state
+        return state
 
+    modelChanged = Signal(QModelIndex)
     stateChanged = Signal()
     suitestate = Property(str, _getstate, setstate, notify=stateChanged)
 
@@ -86,76 +90,38 @@ class TestSuiteModel(QObject):
     id_changed = Signal()
     newid = Property(str, _getid, _setid, notify=id_changed)
 
+    def _setidentifiers(self, identifiers):
+        """ Setter for identifiers QAbstractList Property """
+        self._idlist = identifiers
+        self.identifiers_changed.emit()
 
-class TestSuiteGroup(QAbstractListModel):
+    def _getidentifiers(self):
+        """ Getter for identifiers QAbstractList Property """
+        return self._idlist
 
-    IdentifierListRole = Qt.UserRole + 1
-    InstructionsRole = Qt.UserRole + 2
-    ResultListRole = Qt.UserRole + 3
-    NewIdRole = Qt.UserRole + 4
-    SuiteStateRole = Qt.UserRole + 5
-    IdentifierListKey = b"identifiers"
-    InstructionsKey = b"instructions"
-    ResultListKey = b"resultlist"
-    NewIdKey = b"newid"
-    SuiteStateKey = b"suitestate"
+    identifiers_changed = Signal()
+    identifiers = Property(QObject, _getidentifiers, _setidentifiers, notify=identifiers_changed)
 
+    def _setresults(self, results):
+        """ Setter for results QAbstractList Property """
+        self._resultlist = results
+        self.results_changed.emit()
 
-    _roles = {IdentifierListRole: IdentifierListKey,
-              InstructionsRole: InstructionsKey,
-              ResultListRole: ResultListKey,
-              NewIdRole: NewIdKey,
-              SuiteStateRole: SuiteStateKey
-              }
+    def _getresults(self):
+        """ Getter for results QAbstractList Property """
+        return self._resultlist
 
-    def __init__(self, parent=None):
-        QAbstractListModel.__init__(self, parent)
-        self._datas = []
+    results_changed = Signal()
+    results = Property(QObject, _getresults, _setresults, notify=results_changed)
 
-    def addData(self, data):
-        self.beginInsertRows(QModelIndex(), self.rowCount(), self.rowCount())
-        self._datas.append(data)
-        self.endInsertRows()
+    def _setinstructions(self, instruction_info):
+        """ Setter for instructions Property """
+        self._instructions = instruction_info
+        self.instructions_changed.emit()
 
-    def setData(self, index, value, role):
-        try:
-            data = self._datas[index.row()]
-        except IndexError:
-            return False
-        if role == self.NewIdRole:
-            data.newid = value
-            self.dataChanged.emit(index, index, {TestSuiteGroup.NewIdRole: TestSuiteGroup.NewIdKey})
-        elif role == self.SuiteStateRole:
-            data.suitestate = value
-            self.dataChanged.emit(index, index, {TestSuiteGroup.SuiteStateRole: TestSuiteGroup.SuiteStateKey})
-        return True
+    def _getinstructions(self):
+        """ Getter for instructions Property """
+        return self._instructions
 
-    def rowCount(self, parent=QModelIndex()):
-        return len(self._datas)
-
-    def data(self, index, role=Qt.DisplayRole):
-        try:
-            data = self._datas[index.row()]
-        except IndexError:
-            return QVariant()
-
-        if role == self.IdentifierListRole:
-            return data.keyvalues()
-
-        if role == self.InstructionsRole:
-            return data.instructions()
-
-        if role == self.ResultListRole:
-            return data.resultlist()
-
-        if role == self.NewIdRole:
-            return data.newid
-
-        if role == self.SuiteStateRole:
-            return data.suitestate
-
-        return QVariant()
-
-    def roleNames(self):
-        return self._roles
-
+    instructions_changed = Signal()
+    instructions = Property(QObject, _getinstructions, _setinstructions, notify=instructions_changed)

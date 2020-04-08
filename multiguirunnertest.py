@@ -12,7 +12,7 @@ from PySide2.QtCore import QUrl
 import os
 import sys
 
-from model.TestSuiteModel import TestSuiteModel, TestSuiteGroup
+from model.TestSuiteGroup import TestSuiteGroup
 from test.SampleTestSuiteWrapper import SampleTestSuiteWrapper
 
 app = QApplication([])

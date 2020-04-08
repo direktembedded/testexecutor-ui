@@ -18,9 +18,8 @@ class SampleTestExecution:
         self._running = False
         self._exit_callback = exit_callback
         self._prepare_tests()
-        self._name = None
 
-    def run(self, name):
+    def run(self, name=None):
         self._name = name
         if not self._runner:
             self._runner = threading.Thread(target=self._threads_run, args=(name,))
@@ -39,23 +38,42 @@ class SampleTestExecution:
                        {"name": "test three", "result": True}, {"name": "test four", "result": True},
                        {"name": "test five", "result": True}, {"name": "test six", "result": False}]
 
-    def _threads_run(self):
+    def _threads_run(self, name):
         """
         Each test is identical bar the name, and slowly runs through a set of fixed steps as an example.
         :return:
         """
         # TODO: add every second to not include full self._tests list to test that GUI can handle adding tests as they
         # come along, rather than expecting a whole list of tests
-        self._listener.suiteStart(self._name, self._tests)
+        print("Started new runner thread")
+        testnames = []
+        for test in self._tests:
+            testnames.append(test["name"])
+        self._listener.suiteStart(name, None)
+        #self._listener.suiteStart(name, testnames)
         fail_count = 0
         for test in self._tests:
             if self._running:
                 tname = test["name"]
                 self._listener.testStarted(tname)
-                self._listener.feedback("Doing something")
+                self._listener.feedback(tname, "Doing something")
                 self._listener.testProgress(tname, 0.5)
-                self._listener.testCompleted(tname, result=test["pass"])
+                self._listener.testCompleted(tname, result=test["result"])
                 time.sleep(self._timeout)
-        self._listener.suiteEnd(self._name, failures=fail_count, message="")
+        self._listener.suiteEnd(name, failures=fail_count, message="")
         if self._exit_callback:
             self._exit_callback()
+
+"""
+These are the Listener APIs.
+    - def testStarted(self, name):
+    - def testCompleted(self, name, result):
+    - def testProgress(self, name, progress):
+    - def feedback(self, name, data):
+    def userInput(self, name, message):
+    def userDecision(self, name, message):
+    def userInstructions(self, name, message, expectResponse = True):
+    - def suiteStart(self, name = "test run", tests=[]):
+    - def suiteEnd(self, name="test run", failures=-1, message=""):
+    def suiteAbort(self, name="test run", message=""):
+"""

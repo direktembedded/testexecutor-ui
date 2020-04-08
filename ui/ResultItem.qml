@@ -55,7 +55,7 @@ Item {
                 Text {
                     id: feedback
                     color: "#e5e2e2"
-                    text: result
+                    text: test.feedback
                     verticalAlignment: Text.AlignVCenter
                     clip: false
                     font.pixelSize: parent.height / 1.2
