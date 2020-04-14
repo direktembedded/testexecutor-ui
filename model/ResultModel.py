@@ -18,6 +18,8 @@ class Result(QObject):
         #self._setidentifiers(idlist)
         self._name = name
         self._feedback = None
+        self._result = None
+        self._duration = None
 
     def _setfeedback(self, feedback):
         """ Setter for feedback Property """
@@ -31,6 +33,46 @@ class Result(QObject):
 
     feedback_changed = Signal()
     feedback = Property(str, _getfeedback, _setfeedback, notify=feedback_changed)
+
+    def _setresult(self, result):
+        """ Setter for result Property """
+        if self._result != result:
+            self._result = result
+            self.result_changed.emit()
+
+    def _getresult(self):
+        """ Getter for result Property """
+        return self._result
+
+    result_changed = Signal()
+    result = Property(str, _getresult, _setresult, notify=result_changed)
+
+    def _setduration(self, duration):
+        """ Setter for duration Property """
+        if self._duration != duration:
+            self._duration = duration
+            self.duration_changed.emit()
+
+    def _getduration(self):
+        """ Getter for duration Property """
+        return self._duration
+
+    duration_changed = Signal()
+    duration = Property(str, _getduration, _setduration, notify=duration_changed)
+
+    def _setname(self, name):
+        """ Setter for name Property """
+        if self._name != name:
+            self._name = name
+            self.name_changed.emit()
+
+    def _getname(self):
+        """ Getter for name Property """
+        return self._name
+
+    name_changed = Signal()
+    name = Property(str, _getname, _setname, notify=name_changed)
+
 
 
 class ResultModel(QAbstractListModel):

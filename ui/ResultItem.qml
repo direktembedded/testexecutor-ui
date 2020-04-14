@@ -34,7 +34,7 @@ Item {
                 Text {
                     id: resultName
                     color: "#e5e2e2"
-                    text: name
+                    text: test.name
                     verticalAlignment: Text.AlignVCenter
                     font.pixelSize: parent.height / 1.2
                     anchors.rightMargin: 2
@@ -57,7 +57,7 @@ Item {
                     color: "#e5e2e2"
                     text: test.feedback
                     verticalAlignment: Text.AlignVCenter
-                    clip: false
+                    clip: true
                     font.pixelSize: parent.height / 1.2
                     anchors.rightMargin: 0
                     anchors.leftMargin: 3
@@ -76,7 +76,7 @@ Item {
                 Text {
                     id: timeProgress
                     color: "#e5e2e2"
-                    text: duration
+                    text: test.duration
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignRight
                     font.pixelSize: parent.height / 1.2
