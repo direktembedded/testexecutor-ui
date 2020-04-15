@@ -5,11 +5,14 @@ from PySide2.QtCore import QObject
 from model.TestSuiteModel import TestSuiteModel
 from control.TestListenerApi import TestListenerApi
 
+
 class Link(QObject):
     addSignal = Signal(str, str)
     startSignal = Signal(str)
     populateSignal = Signal(list)
     feedbackSignal = Signal(str, str)
+    endSignal = Signal(str, str)
+
 
 class TestSuiteListener(TestListenerApi):
     def __init__(self, model=None):
@@ -19,13 +22,14 @@ class TestSuiteListener(TestListenerApi):
         self.link.startSignal.connect(self.model.results.start, Qt.QueuedConnection)
         self.link.populateSignal.connect(self.model.results.populateTests, Qt.QueuedConnection)
         self.link.feedbackSignal.connect(self.model.results.setFeedback, Qt.QueuedConnection)
+        self.link.endSignal.connect(self.model.results.end, Qt.QueuedConnection)
 
     # Test Listener Api methods
     def testStarted(self, name):
-        #self.link.addSignal.emit(name, "started")
         self.link.startSignal.emit(name)
 
     def testCompleted(self, name, result):
+        self.link.endSignal.emit(name, result)
         pass
 
     def testProgress(self, name, progress):

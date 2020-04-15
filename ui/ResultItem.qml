@@ -87,5 +87,20 @@ Item {
             }
         }
     }
+    state: test.result
+    states: [
+        State {
+            name: "Running"
+            PropertyChanges { target: feedbackRectangle; color: "#e5e2e2"  }
+        },
+        State {
+            name: "Pass"
+            PropertyChanges { target: feedbackRectangle; color: "green"  }
+        },
+        State {
+            name: "Fail"
+            PropertyChanges { target: feedbackRectangle; color: "red"  }
+        }
+    ]
 }
 

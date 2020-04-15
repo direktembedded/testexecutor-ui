@@ -9,6 +9,7 @@ Licensed under BSD-3-Clause, refer LICENSE.txt
 import threading
 import time
 
+from model.ResultModel import Result
 
 class SampleTestExecution:
     def __init__(self, listener, exit_callback=None, timeout=1.0):
@@ -34,9 +35,9 @@ class SampleTestExecution:
         """
         :return: list of test names, and pass or fail state
         """
-        self._tests = [{"name": "test one", "result": True}, {"name": "test two", "result": False},
-                       {"name": "test three", "result": True}, {"name": "test four", "result": True},
-                       {"name": "test five", "result": True}, {"name": "test six", "result": False}]
+        self._tests = [{"name": "test one", "result": Result.StatePass}, {"name": "test two", "result": Result.StateFail},
+                       {"name": "test three", "result": Result.StatePass}, {"name": "test four", "result": Result.StatePass},
+                       {"name": "test five", "result": Result.StatePass}, {"name": "test six", "result": Result.StateFail}]
 
     def _threads_run(self, name):
         """

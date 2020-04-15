@@ -13,6 +13,11 @@ from PySide2.QtCore import Property
 from PySide2.QtCore import QObject
 
 class Result(QObject):
+
+    StateRunning = "Running"
+    StatePass = "Pass"
+    StateFail = "Fail"
+
     def __init__(self, name):
         QObject.__init__(self)
         #self._setidentifiers(idlist)
@@ -124,12 +129,30 @@ class ResultModel(QAbstractListModel):
         for row in range(len(self._data)):
             test = self._data[row][self.TestKey]
             if test.name == name:
+                test.result = Result.StateRunning
                 ix = self.index(row, 0)
                 self.dataChanged.emit(ix, ix, self.roleNames())
                 existing = True
                 break
         if not existing:
             self.add(name, None)
+
+    @Slot(str, str)
+    def end(self, name, result):
+        """
+        Method called to end a test.
+        Only updated if test if found. If no tests with name exist, nothing is done.
+        :param name: unique name of the test
+        :return: None
+        """
+        for row in range(len(self._data)):
+            test = self._data[row][self.TestKey]
+            if test.name == name:
+                test.result = result
+                test.progress = 1
+                ix = self.index(row, 0)
+                self.dataChanged.emit(ix, ix, self.roleNames())
+                break
 
     @Slot(str, str)
     def setFeedback(self, key, feedback):
