@@ -55,7 +55,6 @@ class SampleTestExecution:
         for test in self._tests:
             testnames.append(test["name"])
         self._listener.suiteStart(name, None)
-        #self._listener.suiteStart(name, testnames)
         fail_count = 0
         for test in self._tests:
             if self._running:

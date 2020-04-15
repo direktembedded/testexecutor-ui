@@ -3,12 +3,9 @@ Copyright (c) 2020 Direkt, Australia
 Licensed under BSD-3-Clause, refer LICENSE.txt
 """
 # This Python file uses the following encoding: utf-8
-from PySide2 import QtCore
-from PySide2 import QtWidgets
 from PySide2.QtCore import QAbstractListModel
 from PySide2.QtCore import Qt
 from PySide2.QtCore import QModelIndex
-from PySide2.QtCore import QObject
 
 class value:
     def __init__(self, key, value):
@@ -54,7 +51,6 @@ class KeyValueModel(QAbstractListModel):
         self.dataChanged.emit(index, index, self.roleNames())
 
     def setValue(self, key, value):
-        updated = False
         for row in range(len(self._data)):
             if self._data[row][KeyValueModel.KeyKey] == key:
                 self._data[row][KeyValueModel.ValueKey] = value

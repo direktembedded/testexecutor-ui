@@ -44,7 +44,7 @@ class TestSuiteListener(TestListenerApi):
     def userDecision(self, name, message):
         return None
 
-    def userInstructions(self, name, message, expectResponse = True):
+    def userInstructions(self, name, message, expectResponse=True):
         return None
 
     def suiteStart(self, name="test run", tests=[]):
@@ -64,4 +64,3 @@ class TestSuiteListener(TestListenerApi):
     def suiteAbort(self, name="test run", message=""):
         self.model.suitestate = TestSuiteModel.STATE_STOPPED
         pass
-

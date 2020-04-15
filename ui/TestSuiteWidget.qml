@@ -85,8 +85,6 @@ Item {
                     onClicked: {
                         // Set suite state to 'next' which is informing the model to change to the next state.
                         tswModel.testsuite.suitestate = "next"
-                        // Now the model has changed it state, adjust the UI container's state (see below)
-                        //suite_container.state = "next"
                     }
                 }
             }
