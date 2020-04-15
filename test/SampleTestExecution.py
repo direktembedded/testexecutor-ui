@@ -60,10 +60,18 @@ class SampleTestExecution:
             if self._running:
                 tname = test["name"]
                 self._listener.testStarted(tname)
+                time.sleep(self._timeout/6)
                 self._listener.feedback(tname, "Doing something")
-                self._listener.testProgress(tname, 0.5)
+                time.sleep(self._timeout/6)
+                self._listener.testProgress(tname, 10)
+                time.sleep(self._timeout/6)
+                self._listener.testProgress(tname, 30)
+                time.sleep(self._timeout/6)
+                self._listener.testProgress(tname, 50)
+                time.sleep(self._timeout/6)
+                self._listener.testProgress(tname, 70)
+                time.sleep(self._timeout/6)
                 self._listener.testCompleted(tname, result=test["result"])
-                time.sleep(self._timeout)
         if self._running:
             self._listener.suiteEnd(name, failures=fail_count, message="")
         if self._exit_callback:

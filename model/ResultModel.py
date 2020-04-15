@@ -25,6 +25,7 @@ class Result(QObject):
         self._feedback = None
         self._result = None
         self._duration = None
+        self._progress = 0
 
     def _setfeedback(self, feedback):
         """ Setter for feedback Property """
@@ -77,6 +78,23 @@ class Result(QObject):
 
     name_changed = Signal()
     name = Property(str, _getname, _setname, notify=name_changed)
+
+    def _setprogress(self, progress):
+        """ Setter for progress Property """
+        if self._progress != progress:
+            if progress > 1:
+                progress = 1
+            elif progress < 0:
+                progress = 0
+            self._progress = progress
+            self.progress_changed.emit()
+
+    def _getprogress(self):
+        """ Getter for progress Property """
+        return self._progress
+
+    progress_changed = Signal()
+    progress = Property(float, _getprogress, _setprogress, notify=progress_changed)
 
 
 class ResultModel(QAbstractListModel):
@@ -165,7 +183,7 @@ class ResultModel(QAbstractListModel):
     def end(self, name, result):
         """
         Method called to end a test.
-        Only updated if test if found. If no tests with name exist, nothing is done.
+        Only updated if test is found. If no tests with name exist, nothing is done.
         :param name: unique name of the test
         :return: None
         """
@@ -174,6 +192,23 @@ class ResultModel(QAbstractListModel):
             if test.name == name:
                 test.result = result
                 test.progress = 1
+                ix = self.index(row, 0)
+                self.dataChanged.emit(ix, ix, self.roleNames())
+                break
+
+    @Slot(str, int)
+    def progress(self, name, progress):
+        """
+        Method called to end a test.
+        Only updated if test is found. If no tests with name exist, nothing is done.
+        :param name: unique name of the test
+        :param progress: 0 to 100 for percentage of test progress.
+        :return: None
+        """
+        for row in range(len(self._data)):
+            test = self._data[row][self.TestKey]
+            if test.name == name:
+                test.progress = progress / 100
                 ix = self.index(row, 0)
                 self.dataChanged.emit(ix, ix, self.roleNames())
                 break

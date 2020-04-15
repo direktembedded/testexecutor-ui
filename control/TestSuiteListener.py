@@ -12,6 +12,7 @@ class Link(QObject):
     populateSignal = Signal(list)
     feedbackSignal = Signal(str, str)
     endSignal = Signal(str, str)
+    progressSignal = Signal(str, int)
 
 
 class TestSuiteListener(TestListenerApi):
@@ -23,6 +24,7 @@ class TestSuiteListener(TestListenerApi):
         self.link.populateSignal.connect(self.model.results.populateTests, Qt.QueuedConnection)
         self.link.feedbackSignal.connect(self.model.results.setFeedback, Qt.QueuedConnection)
         self.link.endSignal.connect(self.model.results.end, Qt.QueuedConnection)
+        self.link.progressSignal.connect(self.model.results.progress, Qt.QueuedConnection)
 
     # Test Listener Api methods
     def testStarted(self, name):
@@ -30,10 +32,9 @@ class TestSuiteListener(TestListenerApi):
 
     def testCompleted(self, name, result):
         self.link.endSignal.emit(name, result)
-        pass
 
     def testProgress(self, name, progress):
-        pass
+        self.link.progressSignal.emit(name, progress)
 
     def feedback(self, name, data):
         self.link.feedbackSignal.emit(name, data)

@@ -50,8 +50,12 @@ Item {
                 border.color: "#b9e5e2e2"
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                border.width: 0
-
+                Rectangle {
+                    height: parent.height
+                    width: parent.width * test.progress
+                    color: test.progress == 1 ? "transparent" : "green"
+                    opacity: 0.5
+                }
                 Text {
                     id: feedback
                     color: "#e5e2e2"
