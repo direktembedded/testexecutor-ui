@@ -12,19 +12,17 @@ Item {
     property var tswModel
 
     Frame {
-        width: parent.width
-        height: parent.height
+        padding: 4
+        anchors.fill: parent
 
         background: Rectangle {
             id: frameRectangle
             color: "transparent"
-            border.width: 2
-            border.color: frameRectangle.color
             anchors.fill: parent
         }
 
         ColumnLayout {
-            id: column
+            id: testSuiteColumn
             anchors.fill: parent
 
             IdentificationWidget {
@@ -162,4 +160,3 @@ Item {
         return colour;
     }
 }
-

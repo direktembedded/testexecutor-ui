@@ -62,6 +62,8 @@ class TestSuiteModel(QObject):
             if changed:
                 self._state = newstate
         if changed:
+            if self._state == self.STATE_READY:
+                self.results.clear()
             self.result_changed.emit()
             self.stateChanged.emit()
 

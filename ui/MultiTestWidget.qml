@@ -10,7 +10,7 @@ Item {
     height: 800
     Row {
         id: suiteRows
-        spacing: 5
+        spacing: 2
         clip: false
         anchors.fill: parent
         Repeater {
@@ -19,7 +19,7 @@ Item {
             model: model_list
             delegate: TestSuiteWidget {
                 tswModel: model
-                width: parent.width / testSuiteRepeater.count
+                width: parent.width / testSuiteRepeater.count - 1
                 height: parent.height
             }
         }
