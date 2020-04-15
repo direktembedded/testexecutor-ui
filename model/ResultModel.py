@@ -107,6 +107,30 @@ class ResultModel(QAbstractListModel):
         self._data[index.row()] = value
         self.dataChanged.emit(index, index, self.roleNames())
 
+    def overallResult(self):
+        """
+        Return the test suite result status
+        :return: None: State is unknown. Either no test results or error occurred.
+                 Result.StateRunning: A test is in progress
+                 Result.StatePass: All test have been run and all passed
+                 Result.StateFail: One state failed
+        """
+        overall_result = None
+        passed_count = 0
+        if self._data and len(self._data):
+            for item in self._data:
+                test = item[self.TestKey]
+                if test.result == Result.StateFail:
+                    overall_result = test.result
+                    break
+                elif test.result == Result.StateRunning:
+                    overall_result = test.result
+                    break
+            if not overall_result:
+                overall_result = Result.StatePass
+        return overall_result
+
+
     @Slot(str, str)
     def add(self, name, result):
         rowCount = self.rowCount()

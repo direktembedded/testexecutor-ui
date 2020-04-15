@@ -16,10 +16,10 @@ Item {
         height: parent.height
 
         background: Rectangle {
-            id: rectangle
+            id: frameRectangle
             color: "transparent"
-            border.width: 10
-            border.color: "red"
+            border.width: 2
+            border.color: frameRectangle.color
             anchors.fill: parent
         }
 
@@ -112,36 +112,56 @@ Item {
             PropertyChanges { target: control_button; text: "Idle"; enabled: false  }
             PropertyChanges { target: instructionWidget; enabled: false  }
             PropertyChanges { target: identifierWidget; enabled: true  }
+            PropertyChanges { target: frameRectangle; color: suiteResultColour() }
         },
         State {
             name: "ready"
             PropertyChanges { target: control_button; text: "Start"; enabled: true  }
             PropertyChanges { target: instructionWidget; enabled: true  }
             PropertyChanges { target: identifierWidget; enabled: false  }
+            PropertyChanges { target: frameRectangle; color: "gray" }
         },
         State {
             name: "running"
             PropertyChanges { target: control_button; text: "Stop"; enabled: true  }
             PropertyChanges { target: instructionWidget; enabled: true  }
             PropertyChanges { target: identifierWidget; enabled: false  }
+            PropertyChanges { target: frameRectangle; color: "gray" }
         },
         State {
             name: "starting"
             PropertyChanges { target: control_button; text: "Starting"; enabled: false }
             PropertyChanges { target: instructionWidget; enabled: false  }
+            PropertyChanges { target: frameRectangle; color: "gray" }
         },
         State {
             name: "stopping"
             PropertyChanges { target: control_button; text: "Stopping"; enabled: false }
             PropertyChanges { target: instructionWidget; enabled: false  }
             PropertyChanges { target: identifierWidget; enabled: false  }
+            PropertyChanges { target: frameRectangle; color: "yellow" }
         },
         State {
             name: "stopped"
             PropertyChanges { target: control_button; text: "Stopped"; enabled: false }
             PropertyChanges { target: instructionWidget; enabled: false  }
             PropertyChanges { target: identifierWidget; enabled: true  }
+            PropertyChanges { target: frameRectangle; color: "orange" }
         }
     ]
+    function suiteResultColour()
+    {
+        var colour = "lightgray";
+        if (tswModel.testsuite.result === "Pass")
+        {
+            colour = "green"
+        }
+        else if (tswModel.testsuite.result === "Fail")
+        {
+            colour = "red"
+        }
+        console.log("tswModel.result", tswModel.testsuite.result)
+        return colour;
+    }
 }
 

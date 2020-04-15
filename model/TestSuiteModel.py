@@ -61,8 +61,8 @@ class TestSuiteModel(QObject):
                 changed = True
             if changed:
                 self._state = newstate
-                print("self._state", self._state)
         if changed:
+            self.result_changed.emit()
             self.stateChanged.emit()
 
     def _getstate(self):
@@ -72,7 +72,6 @@ class TestSuiteModel(QObject):
             state = self._state
         return state
 
-    modelChanged = Signal(QModelIndex)
     stateChanged = Signal()
     suitestate = Property(str, _getstate, setstate, notify=stateChanged)
 
@@ -125,3 +124,20 @@ class TestSuiteModel(QObject):
 
     instructions_changed = Signal()
     instructions = Property(QObject, _getinstructions, _setinstructions, notify=instructions_changed)
+
+    def _getresult(self):
+        """
+        Getter for result Property
+        Checks all test results and returns state
+        :return: Result.StatePass if every test passed
+                 Result.StateFail if a single test failed within suite
+                 Result.StateRunning if suite is still in progress
+                 None if error occurred or no tests started
+        """
+        suite_result = None
+        if self.results:
+            suite_result = self.results.overallResult()
+        return suite_result
+
+    result_changed = Signal()
+    result = Property(str, _getresult, None, notify=result_changed)

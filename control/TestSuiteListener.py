@@ -54,12 +54,10 @@ class TestSuiteListener(TestListenerApi):
         :param tests: The tests to run
         :return: nothing
         """
-        print("suiteStart", name, ":", tests)
         self.link.populateSignal.emit(tests)
         self.model.suitestate = TestSuiteModel.STATE_RUNNING
 
     def suiteEnd(self, name="test run", failures=-1, message=""):
-        print("suiteStart", name)
         self.model.suitestate = TestSuiteModel.STATE_IDLE
         pass
 
