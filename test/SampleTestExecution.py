@@ -65,7 +65,8 @@ class SampleTestExecution:
                 self._listener.testProgress(tname, 0.5)
                 self._listener.testCompleted(tname, result=test["result"])
                 time.sleep(self._timeout)
-        self._listener.suiteEnd(name, failures=fail_count, message="")
+        if self._running:
+            self._listener.suiteEnd(name, failures=fail_count, message="")
         if self._exit_callback:
             self._exit_callback()
 

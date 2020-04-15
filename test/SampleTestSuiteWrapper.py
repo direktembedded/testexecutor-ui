@@ -48,6 +48,7 @@ class SampleTestSuiteWrapper(TestSuiteModel, TestSuiteListener):
                 self._start_suite()
             elif self.suitestate == TestSuiteModel.STATE_RUNNING:
                 newstate = TestSuiteModel.STATE_STOPPED
+                self._stop_suite()
             else:
                 newstate = TestSuiteModel.STATE_IDLE
         else:
