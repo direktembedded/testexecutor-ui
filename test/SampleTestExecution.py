@@ -11,7 +11,10 @@ import time
 
 from model.ResultModel import Result
 
+ExampleInstance = 1
+
 class SampleTestExecution:
+
     def __init__(self, listener, exit_callback=None, timeout=1.0):
         self._listener = listener
         self._timeout = timeout
@@ -33,11 +36,12 @@ class SampleTestExecution:
 
     def _prepare_tests(self):
         """
-        :return: list of test names, and pass or fail state
+        Return one of a multiple of tests groups, so different suites will have different 'virtual' test runs.
+        :return: list of test names, and pass or fail state.
         """
-        self._tests = [{"name": "test one", "result": Result.StatePass}, {"name": "test two", "result": Result.StateFail},
-                       {"name": "test three", "result": Result.StatePass}, {"name": "test four", "result": Result.StatePass},
-                       {"name": "test five", "result": Result.StatePass}, {"name": "test six", "result": Result.StateFail}]
+        global ExampleInstance
+        self._tests = self._testGroups[ExampleInstance % len(self._testGroups)]
+        ExampleInstance = ExampleInstance + 1
 
     def _threads_run(self, name):
         """
@@ -65,6 +69,24 @@ class SampleTestExecution:
         if self._exit_callback:
             self._exit_callback()
 
+    _testGroups = [
+        [
+            {"name": "test one", "result": Result.StatePass},
+            {"name": "test two", "result": Result.StateFail},
+            {"name": "test three", "result": Result.StatePass},
+            {"name": "test four", "result": Result.StatePass},
+            {"name": "test five", "result": Result.StatePass},
+            {"name": "test six", "result": Result.StateFail}
+        ],
+        [
+            {"name": "flash", "result": Result.StatePass},
+            {"name": "console", "result": Result.StatePass},
+            {"name": "ethernet", "result": Result.StatePass},
+            {"name": "serial", "result": Result.StatePass},
+            {"name": "usb", "result": Result.StatePass},
+            {"name": "buttons", "result": Result.StatePass}
+        ],
+    ]
 """
 These are the Listener APIs.
     - def testStarted(self, name):
