@@ -1,6 +1,7 @@
 from PySide2.QtCore import Signal
 from PySide2.QtCore import Qt
 from PySide2.QtCore import QObject
+from PySide2.QtCore import QMutex
 
 from model.TestSuiteModel import TestSuiteModel
 from control.TestListenerApi import TestListenerApi
@@ -13,7 +14,8 @@ class Link(QObject):
     feedbackSignal = Signal(str, str)
     endSignal = Signal(str, str)
     progressSignal = Signal(str, int)
-    blockingUserDecision = Signal(list, str, str, list)
+    userDecisionSignal = Signal(str, str, list)
+    userWaitMutex = QMutex()
 
 
 class TestSuiteListener(TestListenerApi):
@@ -26,7 +28,7 @@ class TestSuiteListener(TestListenerApi):
         self.link.feedbackSignal.connect(self.model.results.setFeedback, Qt.QueuedConnection)
         self.link.endSignal.connect(self.model.results.end, Qt.QueuedConnection)
         self.link.progressSignal.connect(self.model.results.progress, Qt.QueuedConnection)
-        self.link.blockingUserDecision.connect(self.model.instructions.userDecision, Qt.BlockingQueuedConnection)
+        self.link.userDecisionSignal.connect(self.model.instructions.userDecision, Qt.BlockingQueuedConnection)
 
     # Test Listener Api methods
     def testStarted(self, name):
@@ -45,18 +47,22 @@ class TestSuiteListener(TestListenerApi):
         return None
 
     def userDecision(self, name, message):
-        return None
+        buttons = ["Yes", "No"]
+        self.link.userWaitMutex.lock()
+        self.link.userDecisionSignal.emit(name, message, buttons)
+        self.model.instructions.control.userDecisionWait.wait(self.link.userWaitMutex)
+        self.link.userWaitMutex.unlock()
+        return self.model.instructions.control.lastUserDecision()
 
     def userInstructions(self, name, message, expectResponse=True):
-        buttons = None
+        buttons = []
         if expectResponse:
             buttons = ["Ok"]
-        decision = []
-        self.link.blockingUserDecision.emit(decision, name, message, buttons)
-        response = None
-        if len(decision) > 0:
-            response = decision[0]
-        return response
+        self.link.userWaitMutex.lock()
+        self.link.userDecisionSignal.emit(name, message, buttons)
+        self.model.instructions.control.userDecisionWait.wait(self.link.userWaitMutex)
+        self.link.userWaitMutex.unlock()
+        return self.model.instructions.control.lastUserDecision()
 
     def suiteStart(self, name="test run", tests=[]):
         """

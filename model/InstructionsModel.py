@@ -7,7 +7,7 @@ from PySide2.QtCore import Slot
 from PySide2.QtCore import Signal
 from PySide2.QtCore import Property
 from PySide2.QtCore import QObject
-from PySide2.QtCore import QCoreApplication
+from PySide2.QtCore import QWaitCondition
 
 class ControlButtonConfig(QObject):
 
@@ -47,26 +47,24 @@ class InstructionControl(QObject):
         self._buttons = [ControlButtonConfig(), ControlButtonConfig()]
         self._controlReceived = None
         self._waiting = False
+        self.userDecisionWait = QWaitCondition()
 
-    def getDecision(self, buttontextList):
+    def requestDecision(self, buttontextList):
         self._controlReceived = None
         self._waiting = True
         self.setButtons(buttontextList)
-        # There is a tight link between this loop and the onControl slot of this model!
-        while not self._controlReceived and self._waiting:
-            QCoreApplication.processEvents()
-        control = None
-        if self._waiting:
-            control = self._controlReceived
-            self._controlReceived = None
-        return control
+
+    def lastUserDecision(self):
+        return self._controlReceived
 
     @Slot(str)
     def onControl(self, decision):
         self._controlReceived = decision
+        self.userDecisionWait.wakeAll()
 
     def cancelWaiting(self):
-        self._waiting = False
+        self._controlReceived = None
+        self.userDecisionWait.wakeAll()
 
     def setButtons(self, buttonTextList):
         info = buttonTextList
@@ -104,8 +102,8 @@ class InstructionModel(QObject):
         self._control = InstructionControl()
         self._enabled = False
 
-    @Slot(list, str, str, list)
-    def userDecision(self, decision, name, message, control):
+    @Slot(str, str, list)
+    def userDecision(self, name, message, control):
         """
         Method called to send instructions to the user
         :param name: unique name of the test, not used
@@ -115,8 +113,7 @@ class InstructionModel(QObject):
                  TODO detail the kind of responses that could be possible
         """
         self.instructionText = message
-        value = self.control.getDecision(control)
-        decision.append(value)
+        self.control.requestDecision(control)
 
     def _setinstructionText(self, instructionText):
         """ Setter for instructionText Property """
