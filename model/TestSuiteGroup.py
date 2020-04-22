@@ -18,7 +18,7 @@ if view.status() != QQuickView.Error:
     view.showMaximized()
 
 Copyright (c) 2020 Direkt, Australia
-Licensed under BSD-3-Clause, refer LICENSE.txt
+Licensed under BSD-3-Clause, refer LICENSE
 """
 
 from PySide2.QtCore import QAbstractListModel

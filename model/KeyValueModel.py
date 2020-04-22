@@ -1,6 +1,6 @@
 """
 Copyright (c) 2020 Direkt, Australia
-Licensed under BSD-3-Clause, refer LICENSE.txt
+Licensed under BSD-3-Clause, refer LICENSE
 """
 # This Python file uses the following encoding: utf-8
 from PySide2.QtCore import QAbstractListModel

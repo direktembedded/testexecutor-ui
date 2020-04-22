@@ -3,7 +3,7 @@ Test module to kick off text-executor gui.
 execute as python3 <filename.py>
 
 Copyright (c) 2020 Direkt, Australia
-Licensed under BSD-3-Clause, refer LICENSE.txt
+Licensed under BSD-3-Clause, refer LICENSE
 """
 from PySide2.QtWidgets import QApplication
 from PySide2.QtQuick import QQuickView

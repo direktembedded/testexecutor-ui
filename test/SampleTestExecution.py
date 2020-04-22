@@ -4,7 +4,7 @@ This class' run command is called to start executing tests in a separate thread,
 on the listener to provide user feedback of tests being run.
 
 Copyright (c) 2020 Direkt, Australia
-Licensed under BSD-3-Clause, refer LICENSE.txt
+Licensed under BSD-3-Clause, refer LICENSE
 """
 import threading
 import time

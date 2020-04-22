@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2020 Direkt, Australia
- * Licensed under BSD-3-Clause, refer LICENSE.txt
+ * Licensed under BSD-3-Clause, refer LICENSE
  */
 import QtQuick 2.4
 import QtQuick.Layouts 1.3
