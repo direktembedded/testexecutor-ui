@@ -7,11 +7,11 @@ from PySide2.QtCore import Slot
 from PySide2.QtCore import Signal
 from PySide2.QtCore import Property
 from PySide2.QtCore import QObject
-
+from PySide2.QtCore import QCoreApplication
 
 class ControlButtonConfig(QObject):
 
-    def __init__(self, text="--"):
+    def __init__(self, text=None):
         QObject.__init__(self)
         self._text = text
 
@@ -19,11 +19,9 @@ class ControlButtonConfig(QObject):
         """ Setter for text Property """
         if self._text != text:
             en = self.enabled
-            print("en", en)
             self._text = text
             self.text_changed.emit()
             if en is not self.enabled:
-                print("enabled changed")
                 self.enable_changed.emit()
 
     def _gettext(self):
@@ -36,11 +34,10 @@ class ControlButtonConfig(QObject):
     def _getenabled(self):
         """ Getter for enabled Property """
         en = (self._text is not None) and (self._text is not "")
-        print ("test", self._text, "getenabled", en)
         return en
 
     enable_changed = Signal()
-    enabled = Property(str, _getenabled, None, notify=enable_changed)
+    enabled = Property(bool, _getenabled, None, notify=enable_changed)
 
 
 class InstructionControl(QObject):
@@ -48,9 +45,28 @@ class InstructionControl(QObject):
     def __init__(self):
         QObject.__init__(self)
         self._buttons = [ControlButtonConfig(), ControlButtonConfig()]
+        self._controlReceived = None
+        self._waiting = False
 
-    def getEnabled(self):
-        return self._buttonLeft.enabled and self._buttonRight.enabled
+    def getDecision(self, buttontextList):
+        self._controlReceived = None
+        self._waiting = True
+        self.setButtons(buttontextList)
+        # There is a tight link between this loop and the onControl slot of this model!
+        while not self._controlReceived and self._waiting:
+            QCoreApplication.processEvents()
+        control = None
+        if self._waiting:
+            control = self._controlReceived
+            self._controlReceived = None
+        return control
+
+    @Slot(str)
+    def onControl(self, decision):
+        self._controlReceived = decision
+
+    def cancelWaiting(self):
+        self._waiting = False
 
     def setButtons(self, buttonTextList):
         info = buttonTextList
@@ -86,9 +102,10 @@ class InstructionModel(QObject):
         QObject.__init__(self)
         self._instructionText = None
         self._control = InstructionControl()
+        self._enabled = False
 
-    @Slot(str, str, list)
-    def userDecision(self, name, message, control):
+    @Slot(list, str, str, list)
+    def userDecision(self, decision, name, message, control):
         """
         Method called to send instructions to the user
         :param name: unique name of the test, not used
@@ -98,8 +115,8 @@ class InstructionModel(QObject):
                  TODO detail the kind of responses that could be possible
         """
         self.instructionText = message
-        print("userDecision", name, message, control)
-        self.control.setButtons(control)
+        value = self.control.getDecision(control)
+        decision.append(value)
 
     def _setinstructionText(self, instructionText):
         """ Setter for instructionText Property """
@@ -126,3 +143,19 @@ class InstructionModel(QObject):
 
     control_changed = Signal()
     control = Property(QObject, _getcontrol, _setcontrol, notify=control_changed)
+
+    def _setenabled(self, enabled):
+        """ Setter for enabled Property """
+        if not enabled:
+            # If we have been disabled, ensure there is no pending control blocking operation
+            self.control.cancelWaiting()
+        if self._enabled != enabled:
+            self._enabled = enabled
+            self.enabled_changed.emit()
+
+    def _getenabled(self):
+        """ Getter for enabled Property """
+        return self._enabled
+
+    enabled_changed = Signal()
+    enabled = Property(bool, _getenabled, _setenabled, notify=enabled_changed)

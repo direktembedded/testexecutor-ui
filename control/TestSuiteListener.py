@@ -13,7 +13,7 @@ class Link(QObject):
     feedbackSignal = Signal(str, str)
     endSignal = Signal(str, str)
     progressSignal = Signal(str, int)
-    blockingUserDecision = Signal(str, str, list)
+    blockingUserDecision = Signal(list, str, str, list)
 
 
 class TestSuiteListener(TestListenerApi):
@@ -51,7 +51,11 @@ class TestSuiteListener(TestListenerApi):
         buttons = None
         if expectResponse:
             buttons = ["Ok"]
-        response = self.link.blockingUserDecision.emit(name, message, buttons)
+        decision = []
+        self.link.blockingUserDecision.emit(decision, name, message, buttons)
+        response = None
+        if len(decision) > 0:
+            response = decision[0]
         return response
 
     def suiteStart(self, name="test run", tests=[]):

@@ -7,9 +7,16 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 
 Item {
+    id: instructionWidget
     width: parent.width
     height: parent.height
     property var model
+
+    Binding {
+        target: model
+        property: "enabled"
+        value: instructionWidget.enabled
+    }
 
     Rectangle {
         id: rectangle1
@@ -47,10 +54,13 @@ Item {
                 Layout.maximumHeight: 60
                 Button {
                     anchors.fill: parent
-                    id: buttonCancel
+                    id: leftButton
                     text: model.control.leftButton.text
-                    enabled: model.control.rightButton.enabled
+                    enabled: model.control.leftButton.enabled
                     font.pointSize: parent.height * 0.5
+                    onClicked: {
+                        onControlClick(model.control.leftButton.text)
+                    }
                 }
             }
 
@@ -60,7 +70,7 @@ Item {
                 Layout.minimumHeight: 40
                 Layout.maximumHeight: 60
                 Button {
-                    id: buttonOk
+                    id: rightButton
                     anchors.fill: parent
                     text: model.control.rightButton.text
                     enabled: model.control.rightButton.enabled
@@ -70,8 +80,12 @@ Item {
                     checked: false
                     highlighted: true
                     font.pointSize: parent.height * 0.5
+                    onClicked: onControlClick(model.control.rightButton.text)
                 }
             }
         }
+    }
+    function onControlClick(control) {
+        model.control.onControl(control)
     }
 }
