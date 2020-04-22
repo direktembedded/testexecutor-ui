@@ -13,6 +13,7 @@ class Link(QObject):
     feedbackSignal = Signal(str, str)
     endSignal = Signal(str, str)
     progressSignal = Signal(str, int)
+    blockingUserDecision = Signal(str, str, list)
 
 
 class TestSuiteListener(TestListenerApi):
@@ -25,6 +26,7 @@ class TestSuiteListener(TestListenerApi):
         self.link.feedbackSignal.connect(self.model.results.setFeedback, Qt.QueuedConnection)
         self.link.endSignal.connect(self.model.results.end, Qt.QueuedConnection)
         self.link.progressSignal.connect(self.model.results.progress, Qt.QueuedConnection)
+        self.link.blockingUserDecision.connect(self.model.instructions.userDecision, Qt.BlockingQueuedConnection)
 
     # Test Listener Api methods
     def testStarted(self, name):
@@ -46,7 +48,11 @@ class TestSuiteListener(TestListenerApi):
         return None
 
     def userInstructions(self, name, message, expectResponse=True):
-        return None
+        buttons = None
+        if expectResponse:
+            buttons = ["Ok"]
+        response = self.link.blockingUserDecision.emit(name, message, buttons)
+        return response
 
     def suiteStart(self, name="test run", tests=[]):
         """

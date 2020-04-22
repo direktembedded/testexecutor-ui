@@ -6,8 +6,7 @@ Licensed under BSD-3-Clause, refer LICENSE.txt
 import threading
 from PySide2.QtCore import QObject
 from PySide2.QtCore import Signal, Property
-from PySide2.QtCore import QModelIndex
-
+from model.InstructionsModel import InstructionModel
 
 class TestSuiteModel(QObject):
     # these state strings must match those in TestSuiteWidget.qml
@@ -23,7 +22,7 @@ class TestSuiteModel(QObject):
         QObject.__init__(self)
         self._setidentifiers(idlist)
         self._setresults(resultlist)
-        self._setinstructions(None)
+        self._setinstructions(InstructionModel())
         self._newId = None  # See newid Property below
         self.setid_callback = setid_callback
         self._state = None  # see suitestate Property below

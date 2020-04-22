@@ -68,6 +68,7 @@ class SampleTestExecution:
                 self._listener.testProgress(tname, 30)
                 time.sleep(self._timeout/6)
                 self._listener.testProgress(tname, 50)
+                self._listener.userInstructions(tname, "{0} Please do something for me".format(tname), True)
                 time.sleep(self._timeout/6)
                 self._listener.testProgress(tname, 70)
                 time.sleep(self._timeout/6)
