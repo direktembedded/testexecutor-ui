@@ -58,42 +58,66 @@ class SampleTestExecution:
         fail_count = 0
         for test in self._tests:
             if self._running:
-                tname = test["name"]
-                self._listener.testStarted(tname)
-                time.sleep(self._timeout/6)
-                self._listener.feedback(tname, "Doing something")
-                time.sleep(self._timeout/6)
-                self._listener.testProgress(tname, 10)
-                time.sleep(self._timeout/6)
-                self._listener.testProgress(tname, 30)
-                time.sleep(self._timeout/6)
-                self._listener.testProgress(tname, 50)
-                self._listener.userInstructions(tname, "{0} Please do something for me".format(tname), True)
-                time.sleep(self._timeout/6)
-                self._listener.testProgress(tname, 70)
-                time.sleep(self._timeout/6)
-                self._listener.testCompleted(tname, result=test["result"])
+                self._runTest(test)
         if self._running:
             self._listener.suiteEnd(name, failures=fail_count, message="")
         if self._exit_callback:
             self._exit_callback()
 
+    def _runTest(self, test):
+        if test["type"] == 0:
+            self._runTest0(test)
+        else:
+            self._runTest1(test)
+
+    def _runTest0(self, test):
+        tname = test["name"]
+        self._listener.testStarted(tname)
+        time.sleep(self._timeout / 6)
+        self._listener.feedback(tname, "Doing something")
+        time.sleep(self._timeout / 6)
+        self._listener.testProgress(tname, 10)
+        time.sleep(self._timeout / 6)
+        decision = self._listener.userDecision(tname, "Click no to fail, yes to continue")
+        if decision == "No":
+            self._listener.testCompleted(tname, result=Result.StateFail)
+            return
+        self._listener.testProgress(tname, 30)
+        time.sleep(self._timeout / 6)
+        self._listener.testProgress(tname, 50)
+        self._listener.userInstructions(tname, "{0} Please do something for me".format(tname), True)
+        time.sleep(self._timeout / 6)
+        self._listener.testProgress(tname, 70)
+        time.sleep(self._timeout / 6)
+        self._listener.testCompleted(tname, result=test["result"])
+
+    def _runTest1(self, test):
+        tname = test["name"]
+        self._listener.testStarted(tname)
+        time.sleep(self._timeout / 6)
+        self._listener.feedback(tname, "Doing something")
+        for i in range(1,90,5):
+            time.sleep(self._timeout / 5)
+            self._listener.testProgress(tname, i)
+            self._listener.feedback(tname, "{0}".format(i))
+        self._listener.testCompleted(tname, result=test["result"])
+
     _testGroups = [
         [
-            {"name": "test one", "result": Result.StatePass},
-            {"name": "test two", "result": Result.StateFail},
-            {"name": "test three", "result": Result.StatePass},
-            {"name": "test four", "result": Result.StatePass},
-            {"name": "test five", "result": Result.StatePass},
-            {"name": "test six", "result": Result.StateFail}
+            {"name": "test one", "result": Result.StatePass, "type": 1},
+            {"name": "test two", "result": Result.StateFail, "type": 1},
+            {"name": "test three", "result": Result.StatePass, "type": 1},
+            {"name": "test four", "result": Result.StatePass, "type": 1},
+            {"name": "test five", "result": Result.StatePass, "type": 1},
+            {"name": "test six", "result": Result.StateFail, "type": 1}
         ],
         [
-            {"name": "flash", "result": Result.StatePass},
-            {"name": "console", "result": Result.StatePass},
-            {"name": "ethernet", "result": Result.StatePass},
-            {"name": "serial", "result": Result.StatePass},
-            {"name": "usb", "result": Result.StatePass},
-            {"name": "buttons", "result": Result.StatePass}
+            {"name": "flash", "result": Result.StatePass, "type": 0},
+            {"name": "console", "result": Result.StatePass, "type": 0},
+            {"name": "ethernet", "result": Result.StatePass, "type": 1},
+            {"name": "serial", "result": Result.StatePass, "type": 1},
+            {"name": "usb", "result": Result.StatePass, "type": 1},
+            {"name": "buttons", "result": Result.StatePass, "type": 1}
         ],
     ]
 """
