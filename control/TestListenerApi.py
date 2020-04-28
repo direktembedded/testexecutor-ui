@@ -16,13 +16,13 @@ class TestListenerApi(object):
     def feedback(self, name, data):
         pass
 
-    def userInput(self, name, message):
+    def userInput(self, title, message):
         return None
 
-    def userDecision(self, name, message):
+    def userDecision(self, title, message):
         return None
 
-    def userInstructions(self, name, message, expectResponse = True):
+    def userInstructions(self, title, message, expectResponse = True):
         return None
 
     def suiteStart(self, name = "test run", tests=[]):

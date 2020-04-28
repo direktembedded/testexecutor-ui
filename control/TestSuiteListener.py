@@ -43,23 +43,27 @@ class TestSuiteListener(TestListenerApi):
     def feedback(self, name, data):
         self.link.feedbackSignal.emit(name, data)
 
-    def userInput(self, name, message):
-        return None
+    def userInput(self, title, message):
+        """
+        Place holder for allowing user to return a value
+        Unused currently
+        """
+        pass
 
-    def userDecision(self, name, message):
+    def userDecision(self, title, message):
         buttons = ["Yes", "No"]
         self.link.userWaitMutex.lock()
-        self.link.userDecisionSignal.emit(name, message, buttons)
+        self.link.userDecisionSignal.emit(title, message, buttons)
         self.model.instructions.control.userDecisionWait.wait(self.link.userWaitMutex)
         self.link.userWaitMutex.unlock()
         return self.model.instructions.control.lastUserDecision()
 
-    def userInstructions(self, name, message, expectResponse=True):
+    def userInstructions(self, title, message, expectResponse=True):
         buttons = []
         if expectResponse:
             buttons = ["Ok"]
         self.link.userWaitMutex.lock()
-        self.link.userDecisionSignal.emit(name, message, buttons)
+        self.link.userDecisionSignal.emit(title, message, buttons)
         self.model.instructions.control.userDecisionWait.wait(self.link.userWaitMutex)
         self.link.userWaitMutex.unlock()
         return self.model.instructions.control.lastUserDecision()
