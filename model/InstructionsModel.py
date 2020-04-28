@@ -9,6 +9,7 @@ from PySide2.QtCore import Property
 from PySide2.QtCore import QObject
 from PySide2.QtCore import QWaitCondition
 
+
 class ControlButtonConfig(QObject):
 
     def __init__(self, text=None):
@@ -71,12 +72,12 @@ class InstructionControl(QObject):
         if type(buttonTextList) is str:
             info = [buttonTextList]
         if type(info) is list:
-            i = len(self._buttons) - 1
+            i = 0
             for txt in info:
                 self._buttons[i].text = txt
-                i = i - 1
-            for j in range(i, -1, -1):
-                self._buttons[i].text = None
+                i = i + 1
+            for j in range(i, len(self._buttons)):
+                self._buttons[j].text = None
 
     # TODO: Consider modifying to provide more buttons, rather than fixed right left.
     def _getleftButton(self):
