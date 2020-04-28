@@ -56,7 +56,17 @@ class InstructionControl(QObject):
         self.setButtons(buttontextList)
 
     def lastUserDecision(self):
-        return self._controlReceived
+        """
+        Obtain the last user decision that was chosen by the user, or None if no decision pending.
+        The decision is not cleared until the next call to requestDecision.
+        Current implementation returns the lower case of the text on the control buttons. This is not a clean solution
+        and should be changed by adding a decision string list to requestDecision instead.
+        :return: decision string
+        """
+        decision = self._controlReceived
+        if decision:
+            decision = decision.lower()
+        return decision
 
     @Slot(str)
     def onControl(self, decision):
@@ -104,7 +114,7 @@ class InstructionModel(QObject):
         self._enabled = False
 
     @Slot(str, str, list)
-    def userDecision(self, name, message, control):
+    def userDecision(self, title, message, control):
         """
         Method called to send instructions to the user
         :param name: unique name of the test, not used
