@@ -42,6 +42,7 @@ Item {
                     font.pointSize: parent.height * 0.7
                     font.bold: true
                     font.family: "Arial"
+                    clip: true
                 }
             }
 

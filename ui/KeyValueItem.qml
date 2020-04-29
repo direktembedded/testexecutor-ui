@@ -37,12 +37,10 @@ Item {
                     id: identifierName
                     color: "#e5e2e2"
                     text: key
-                    fontSizeMode: Text.Fit
                     verticalAlignment: Text.AlignVCenter
-                    //font.pixelSize: parent.height / 1.2
                     anchors.rightMargin: 2
                     anchors.fill: parent
-                    font.pointSize: 100
+                    font.pointSize: parent.height * 0.7
                     minimumPointSize: 10
                     clip: true
                     horizontalAlignment: Text.AlignRight
