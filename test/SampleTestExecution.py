@@ -98,10 +98,14 @@ class SampleTestExecution:
         self._listener.testStarted(tname)
         time.sleep(self._timeout / 6)
         self._listener.feedback(tname, "Doing something")
+        j = 1
         for i in range(1,90,5):
             time.sleep(self._timeout / 5)
             self._listener.testProgress(tname, i)
             self._listener.feedback(tname, "{0}".format(i))
+            self._listener.userInstructions("Step {0}".format(int(j)), "The test is still working on step {0}".format(int(j)), False)
+            j = j + 0.3
+        self._listener.feedback(tname, "{0}".format(100))
         self._listener.testCompleted(tname, result=test["result"])
 
     _testGroups = [

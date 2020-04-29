@@ -53,7 +53,7 @@ class InstructionControl(QObject):
     def requestDecision(self, buttontextList):
         self._controlReceived = None
         self._waiting = True
-        self.setButtons(buttontextList)
+        return self.setButtons(buttontextList)
 
     def lastUserDecision(self):
         """
@@ -88,6 +88,7 @@ class InstructionControl(QObject):
                 i = i + 1
             for j in range(i, len(self._buttons)):
                 self._buttons[j].text = None
+        return len(info) > 0
 
     # TODO: Consider modifying to provide more buttons, rather than fixed right left.
     def _getleftButton(self):
@@ -119,15 +120,18 @@ class InstructionModel(QObject):
     def userDecision(self, title, message, control):
         """
         Method called to send instructions to the user
+        The caller will use control.lastUserDecision() to obtain the decision chosen, implementing a wait state
+        if required.
+        If no control information is given, then this model will remain disabled as their is no expectation for the
+        user to provide input.
         :param name: unique name of the test, not used
         :param message: class containing information to display to the user
         :param control: list of text to display on decision/control buttons
-        :return: None if no return info, otherwise action information is returned.
-                 TODO detail the kind of responses that could be possible
+        :return: None
         """
         self.instructionTitle = title
         self.instructionText = message
-        self.control.requestDecision(control)
+        self.enabled = self.control.requestDecision(control)
 
     def _setinstructionText(self, instructionText):
         """ Setter for instructionText Property """
