@@ -17,13 +17,13 @@ class SampleTestSuiteWrapper(TestSuiteModel, TestSuiteListener):
     TestSuiteModel constructor, and suite control business logic written in them.
     The TestListenerApi methods are implement and exercise the TestSuitModel properties directly.
     """
-    def __init__(self):
+    def __init__(self, title="Sample Suite"):
         self._id_data = SampleIdentificationData()
         self._id_data.populate()
         self._results = ResultModel()
         self._testrun = None
         TestSuiteModel.__init__(self, self._id_data, self._results, self._input_filter,
-                                setstate_callback=self._state_control_callback)
+                                setstate_callback=self._state_control_callback, title=title)
         self.suitestate = TestSuiteModel.STATE_IDLE
         TestSuiteListener.__init__(self, model=self)
 

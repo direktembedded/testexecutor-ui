@@ -24,7 +24,7 @@ url = QUrl.fromLocalFile(qml_file)
 
 mySuiteGroup = TestSuiteGroup()
 for i in range(4):
-    mySuiteGroup.addData(SampleTestSuiteWrapper())
+    mySuiteGroup.addData(SampleTestSuiteWrapper("Station {0}".format(i)))
 
 view.setSource(url)
 view.setResizeMode(QQuickView.SizeRootObjectToView)

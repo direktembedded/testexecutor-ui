@@ -18,7 +18,7 @@ class TestSuiteModel(QObject):
     STATE_READY = "ready"
     STATE_NEXT = "next"  # When suitestate is set to 'next', the UI state button has been pressed
 
-    def __init__(self, idlist=None, resultlist=None, setid_callback=None, setstate_callback=None):
+    def __init__(self, idlist=None, resultlist=None, setid_callback=None, setstate_callback=None, title=None):
         QObject.__init__(self)
         self._setidentifiers(idlist)
         self._setresults(resultlist)
@@ -28,6 +28,7 @@ class TestSuiteModel(QObject):
         self._state = None  # see suitestate Property below
         self.setstate_callback = setstate_callback
         self.lock = threading.RLock()
+        self._title = title
 
     def resultlist(self):
         return self._resultlist
@@ -142,3 +143,24 @@ class TestSuiteModel(QObject):
 
     result_changed = Signal()
     result = Property(str, _getresult, None, notify=result_changed)
+
+    def _settitle(self, title):
+        """ Setter for title Property """
+        print("_settitle", title)
+        changed = False
+        with self.lock:
+            if self._title != title:
+                self._title = title
+                changed = True
+        if changed:
+            self.title_changed.emit()
+
+    def _gettitle(self):
+        """ Getter for title Property """
+        title = ""
+        with self.lock:
+            title = self._title
+        return title
+
+    title_changed = Signal()
+    title = Property(str, _gettitle, _settitle, notify=title_changed)

@@ -25,6 +25,26 @@ Item {
             id: testSuiteColumn
             anchors.fill: parent
 
+            Rectangle {
+                id: rectangleTitle
+                Layout.maximumHeight: parent.height * 0.1
+                Layout.minimumHeight: parent.height * 0.04
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                Layout.fillWidth: true
+                color: frameRectangle.color
+
+                Text {
+                    id: suiteTitle
+                    text: tswModel.testsuite.title
+                    font.weight: Font.ExtraBold
+                    anchors.fill: parent
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: parent.height * 0.7
+                    font.bold: true
+                    font.family: "Arial"
+                }
+            }
+
             IdentificationWidget {
                 id: identifierWidget
                 Layout.maximumHeight: parent.height * 0.4
@@ -89,13 +109,7 @@ Item {
         }
     }
     state: tswModel.testsuite.suitestate
-/*
-    Binding {
-        target: tswModel
-        property: "suitestate"
-        value: state
-    }
-*/
+
     states: [
         State {
             name: "next"
