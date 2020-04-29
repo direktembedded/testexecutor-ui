@@ -112,6 +112,8 @@ class InstructionModel(QObject):
         self._instructionText = None
         self._control = InstructionControl()
         self._enabled = False
+        self._instructionTitle = None
+        self._instructionText = None
 
     @Slot(str, str, list)
     def userDecision(self, title, message, control):
@@ -123,6 +125,7 @@ class InstructionModel(QObject):
         :return: None if no return info, otherwise action information is returned.
                  TODO detail the kind of responses that could be possible
         """
+        self.instructionTitle = title
         self.instructionText = message
         self.control.requestDecision(control)
 
@@ -130,6 +133,11 @@ class InstructionModel(QObject):
         """ Setter for instructionText Property """
         if self._instructionText != instructionText:
             self._instructionText = instructionText
+            if "html" not in instructionText.lower():
+                if "\r\n" in instructionText:
+                    self._instructionText = instructionText.replace("\r\n", "<br/>")
+                if "\n" in self._instructionText:
+                    self._instructionText = instructionText.replace("\n", "<br/>")
             self.instructionText_changed.emit()
 
     def _getinstructionText(self):
@@ -138,6 +146,19 @@ class InstructionModel(QObject):
 
     instructionText_changed = Signal()
     instructionText = Property(str, _getinstructionText, _setinstructionText, notify=instructionText_changed)
+
+    def _setinstructionTitle(self, instructionTitle):
+        """ Setter for instructionTitle Property """
+        if self._instructionTitle != instructionTitle:
+            self._instructionTitle = instructionTitle
+            self.instructionTitle_changed.emit()
+
+    def _getinstructionTitle(self):
+        """ Getter for instructionTitle Property """
+        return self._instructionTitle
+
+    instructionTitle_changed = Signal()
+    instructionTitle = Property(str, _getinstructionTitle, _setinstructionTitle, notify=instructionTitle_changed)
 
     def _setcontrol(self, control):
         """ Setter for control Property """

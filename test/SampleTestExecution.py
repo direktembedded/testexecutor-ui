@@ -74,19 +74,21 @@ class SampleTestExecution:
         tname = test["name"]
         self._listener.testStarted(tname)
         time.sleep(self._timeout / 6)
-        self._listener.feedback(tname, "Doing something")
+        self._listener.feedback(tname, "Do something")
         time.sleep(self._timeout / 6)
         self._listener.testProgress(tname, 10)
         time.sleep(self._timeout / 6)
-        decision = self._listener.userDecision(tname, "Click no to fail, yes to continue")
-        if decision == "No":
+        decision = self._listener.userDecision("Select Test Result", "Click\nNo to fail\nYes to continue")
+        if decision == "no":
             self._listener.testCompleted(tname, result=Result.StateFail)
             return
         self._listener.testProgress(tname, 30)
         time.sleep(self._timeout / 6)
         self._listener.testProgress(tname, 50)
-        self._listener.userInstructions(tname, "{0} Please do something for me".format(tname), True)
+        self._listener.userInstructions("", "There is no title but please go ahead and do something for me anyway by pressing Ok", True)
         time.sleep(self._timeout / 6)
+        self._listener.userInstructions("", self._exampleHtml, False)
+        time.sleep(self._timeout)
         self._listener.testProgress(tname, 70)
         time.sleep(self._timeout / 6)
         self._listener.testCompleted(tname, result=test["result"])
@@ -120,6 +122,19 @@ class SampleTestExecution:
             {"name": "buttons", "result": Result.StatePass, "type": 1}
         ],
     ]
+
+    _exampleHtml = """<HTML>
+<BODY BGCOLOR="violet">
+<H1>This is a Html Instruction</H1>
+<H2>It may help</H2>
+<P>
+<ul>
+  <li>Make for easier reading!</li>
+  <li><B><I>and highlighting</I></B></li>
+</ul>
+</BODY>
+</HTML>
+    """
 """
 These are the Listener APIs.
     - def testStarted(self, name):

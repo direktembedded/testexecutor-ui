@@ -64,7 +64,8 @@ class TestSuiteListener(TestListenerApi):
             buttons = ["Ok"]
         self.link.userWaitMutex.lock()
         self.link.userDecisionSignal.emit(title, message, buttons)
-        self.model.instructions.control.userDecisionWait.wait(self.link.userWaitMutex)
+        if expectResponse:
+            self.model.instructions.control.userDecisionWait.wait(self.link.userWaitMutex)
         self.link.userWaitMutex.unlock()
         return self.model.instructions.control.lastUserDecision()
 
