@@ -88,7 +88,7 @@ class InstructionControl(QObject):
                 i = i + 1
             for j in range(i, len(self._buttons)):
                 self._buttons[j].text = None
-        return len(info) > 0
+        return buttonTextList and len(info) > 0
 
     # TODO: Consider modifying to provide more buttons, rather than fixed right left.
     def _getleftButton(self):

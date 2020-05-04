@@ -106,6 +106,7 @@ class SampleTestExecution:
             self._listener.userInstructions("Step {0}".format(int(j)), "The test is still working on step {0}".format(int(j)), False)
             j = j + 0.3
         self._listener.feedback(tname, "{0}".format(100))
+        self._listener.clearInstructions()
         self._listener.testCompleted(tname, result=test["result"])
 
     _testGroups = [

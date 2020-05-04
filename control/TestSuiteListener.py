@@ -66,6 +66,7 @@ class TestSuiteListener(TestListenerApi):
         self.link.userDecisionSignal.emit(title, message, buttons)
         if expectResponse:
             self.model.instructions.control.userDecisionWait.wait(self.link.userWaitMutex)
+            self.clearInstructions()
         self.link.userWaitMutex.unlock()
         return self.model.instructions.control.lastUserDecision()
 
@@ -86,3 +87,6 @@ class TestSuiteListener(TestListenerApi):
     def suiteAbort(self, name="test run", message=""):
         self.model.suitestate = TestSuiteModel.STATE_STOPPED
         pass
+
+    def clearInstructions(self):
+        self.link.userDecisionSignal.emit(None, None, None)

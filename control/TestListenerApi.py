@@ -34,3 +34,5 @@ class TestListenerApi(object):
     def suiteAbort(self, name="test run", message=""):
         pass
 
+    def clearInstructions(self):
+        pass
