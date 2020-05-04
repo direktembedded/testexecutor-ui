@@ -30,6 +30,7 @@ class TestSuiteModel(QObject):
         self.lock = threading.RLock()
         self._title = title
 
+        """
     def resultlist(self):
         return self._resultlist
 
@@ -38,6 +39,13 @@ class TestSuiteModel(QObject):
 
     def instructions(self):
         return "None for instructions"
+        """
+
+    def clear(self):
+        self.instructions.clear()
+        self.results.clear()
+        self.identifiers.clearData()
+        self.suitestate = self.STATE_IDLE
 
     def _default_state_change(self, st):
         newstate = st

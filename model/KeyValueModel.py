@@ -60,3 +60,9 @@ class KeyValueModel(QAbstractListModel):
             if self._data[row][KeyValueModel.KeyKey] == key:
                 value = self._data[row][KeyValueModel.ValueKey]
         return value
+
+    def clearData(self):
+        for row in range(len(self._data)):
+            self._data[row][KeyValueModel.ValueKey] = ""
+            ix = self.index(row, 0)
+            self.dataChanged.emit(ix, ix, self.roleNames())

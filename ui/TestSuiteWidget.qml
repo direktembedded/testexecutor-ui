@@ -127,7 +127,7 @@ Item {
         },
         State {
             name: "ready"
-            PropertyChanges { target: control_button; text: "Start"; enabled: true  }
+            PropertyChanges { target: control_button; text: "Clear"; enabled: true  }
             PropertyChanges { target: instructionWidget; enabled: true  }
             PropertyChanges { target: identifierWidget; enabled: false  }
             PropertyChanges { target: frameRectangle; color: "gray" }
@@ -148,13 +148,13 @@ Item {
         State {
             name: "stopping"
             PropertyChanges { target: control_button; text: "Stopping"; enabled: false }
-            PropertyChanges { target: instructionWidget; enabled: false  }
+            PropertyChanges { target: instructionWidget; enabled: true  }
             PropertyChanges { target: identifierWidget; enabled: false  }
-            PropertyChanges { target: frameRectangle; color: "yellow" }
+            PropertyChanges { target: frameRectangle; color: "orange" }
         },
         State {
             name: "stopped"
-            PropertyChanges { target: control_button; text: "Stopped"; enabled: false }
+            PropertyChanges { target: control_button; text: "Clear"; enabled: true }
             PropertyChanges { target: instructionWidget; enabled: false  }
             PropertyChanges { target: identifierWidget; enabled: true  }
             PropertyChanges { target: frameRectangle; color: "orange" }
@@ -171,7 +171,6 @@ Item {
         {
             colour = "red"
         }
-        console.log("tswModel.result", tswModel.testsuite.result)
         return colour;
     }
 }

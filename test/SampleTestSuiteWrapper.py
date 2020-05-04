@@ -41,13 +41,17 @@ class SampleTestSuiteWrapper(TestSuiteModel, TestSuiteListener):
     def _stop_suite(self):
         self._testrun.stop()
 
+    def _clear_suite(self):
+        self.clear()
+
     def _state_control_callback(self, st):
         newstate = None
+        clearStates = [TestSuiteModel.STATE_READY, TestSuiteModel.STATE_STOPPED]
         if st == TestSuiteModel.STATE_NEXT:
-            if self.suitestate == TestSuiteModel.STATE_READY or not self.suitestate:
-                self._start_suite()
+            if self.suitestate in clearStates or not self.suitestate:
+                self._clear_suite()
             elif self.suitestate == TestSuiteModel.STATE_RUNNING:
-                newstate = TestSuiteModel.STATE_STOPPED
+                newstate = TestSuiteModel.STATE_STOPPING
                 self._stop_suite()
             else:
                 newstate = TestSuiteModel.STATE_IDLE
@@ -68,5 +72,6 @@ class SampleTestSuiteWrapper(TestSuiteModel, TestSuiteListener):
             self.suitestate = TestSuiteModel.STATE_READY
 
     def _on_exit(self):
-        print("Test Run Exited")
+        if self.suitestate == TestSuiteModel.STATE_STOPPING:
+            self.suitestate = TestSuiteModel.STATE_STOPPED
         self._testrun = None

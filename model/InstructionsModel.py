@@ -68,6 +68,10 @@ class InstructionControl(QObject):
             decision = decision.lower()
         return decision
 
+    def clear(self):
+        self.cancelWaiting()
+        self.setButtons([])
+
     @Slot(str)
     def onControl(self, decision):
         self._controlReceived = decision
@@ -120,6 +124,11 @@ class InstructionModel(QObject):
         self._enabled = False
         self._instructionTitle = None
         self._instructionText = None
+
+    def clear(self):
+        self.instructionTitle = ""
+        self.instructionText = ""
+        self.control.clear()
 
     @Slot(str, str, list)
     def userDecision(self, title, message, control):

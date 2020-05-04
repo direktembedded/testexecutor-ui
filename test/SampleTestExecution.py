@@ -32,7 +32,6 @@ class SampleTestExecution:
 
     def stop(self):
         self._running = False
-        print("Suite exiting")
 
     def _prepare_tests(self):
         """
@@ -139,17 +138,4 @@ class SampleTestExecution:
 </ul>
 </BODY>
 </HTML>
-    """
-"""
-These are the Listener APIs.
-    - def testStarted(self, name):
-    - def testCompleted(self, name, result):
-    - def testProgress(self, name, progress):
-    - def feedback(self, name, data):
-    def userInput(self, name, message):
-    def userDecision(self, name, message):
-    def userInstructions(self, name, message, expectResponse = True):
-    - def suiteStart(self, name = "test run", tests=[]):
-    - def suiteEnd(self, name="test run", failures=-1, message=""):
-    def suiteAbort(self, name="test run", message=""):
 """
