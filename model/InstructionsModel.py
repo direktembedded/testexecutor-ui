@@ -47,12 +47,12 @@ class InstructionControl(QObject):
         QObject.__init__(self)
         self._buttons = [ControlButtonConfig(), ControlButtonConfig()]
         self._controlReceived = None
-        self._waiting = False
         self.userDecisionWait = QWaitCondition()
+
+    onUserDecision = Signal(str)
 
     def requestDecision(self, buttontextList):
         self._controlReceived = None
-        self._waiting = True
         return self.setButtons(buttontextList)
 
     def lastUserDecision(self):
@@ -71,7 +71,9 @@ class InstructionControl(QObject):
     @Slot(str)
     def onControl(self, decision):
         self._controlReceived = decision
+        self.setButtons([])  # Do not allow for a second button press by clearing all buttons
         self.userDecisionWait.wakeAll()
+        self.onUserDecision.emit(self.lastUserDecision())
 
     def cancelWaiting(self):
         self._controlReceived = None
@@ -88,7 +90,10 @@ class InstructionControl(QObject):
                 i = i + 1
             for j in range(i, len(self._buttons)):
                 self._buttons[j].text = None
-        return buttonTextList and len(info) > 0
+        present = False
+        if buttonTextList:
+            present = len(info) > 0
+        return present
 
     # TODO: Consider modifying to provide more buttons, rather than fixed right left.
     def _getleftButton(self):

@@ -7,10 +7,6 @@ from PySide2.QtCore import QAbstractListModel
 from PySide2.QtCore import Qt
 from PySide2.QtCore import QModelIndex
 
-class value:
-    def __init__(self, key, value):
-        key = key
-        value = value
 
 class KeyValueModel(QAbstractListModel):
 
@@ -57,3 +53,10 @@ class KeyValueModel(QAbstractListModel):
                 ix = self.index(row, 0)
                 self.dataChanged.emit(ix, ix, self.roleNames())
                 break
+
+    def getValue(self, key):
+        value = None
+        for row in range(len(self._data)):
+            if self._data[row][KeyValueModel.KeyKey] == key:
+                value = self._data[row][KeyValueModel.ValueKey]
+        return value

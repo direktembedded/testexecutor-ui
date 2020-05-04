@@ -27,13 +27,14 @@ class SampleTestSuiteWrapper(TestSuiteModel, TestSuiteListener):
         self.suitestate = TestSuiteModel.STATE_IDLE
         TestSuiteListener.__init__(self, model=self)
 
-    def _start_suite(self):
+    def _start_suite(self, response=None):
         """
         This internal _start_suite will start the new thread which will be the test run execution. The test run in turn
         should call the TestListenerApi's suiteStart
         :return:
         """
         if not self._testrun:
+            self.suitestate = TestSuiteModel.STATE_STARTING  # recursive loop risk!
             self._testrun = SampleTestExecution(listener=self, exit_callback=self._on_exit)
             self._testrun.run()
 
@@ -44,7 +45,6 @@ class SampleTestSuiteWrapper(TestSuiteModel, TestSuiteListener):
         newstate = None
         if st == TestSuiteModel.STATE_NEXT:
             if self.suitestate == TestSuiteModel.STATE_READY or not self.suitestate:
-                self.suitestate = TestSuiteModel.STATE_STARTING  # recursive loop risk!
                 self._start_suite()
             elif self.suitestate == TestSuiteModel.STATE_RUNNING:
                 newstate = TestSuiteModel.STATE_STOPPED
@@ -63,6 +63,8 @@ class SampleTestSuiteWrapper(TestSuiteModel, TestSuiteListener):
         """
         self._id_data.input_filter(input)
         if input is not None and input != "":
+            msg = "Setup your device under test\nThen press Start"
+            self.asyncInstructions(self._id_data.getValue(SampleIdentificationData.Alpha), msg, callback=self._start_suite, control=["Start"])
             self.suitestate = TestSuiteModel.STATE_READY
 
     def _on_exit(self):

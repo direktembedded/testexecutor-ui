@@ -1,4 +1,5 @@
 from PySide2.QtCore import Signal
+from PySide2.QtCore import Slot
 from PySide2.QtCore import Qt
 from PySide2.QtCore import QObject
 from PySide2.QtCore import QMutex
@@ -16,6 +17,17 @@ class Link(QObject):
     progressSignal = Signal(str, int)
     userDecisionSignal = Signal(str, str, list)
     userWaitMutex = QMutex()
+    _userCallback = None
+
+    def setAsyncInstructionCallback(self, signal, callback):
+        self._userCallback = callback
+        signal.connect(self._asyncInstructionCallback, Qt.QueuedConnection)
+
+    @Slot(str)
+    def _asyncInstructionCallback(self, response):
+        if self._userCallback:
+            self._userCallback(response)
+            self._userCallback = None
 
 
 class TestSuiteListener(TestListenerApi):
@@ -28,7 +40,7 @@ class TestSuiteListener(TestListenerApi):
         self.link.feedbackSignal.connect(self.model.results.setFeedback, Qt.QueuedConnection)
         self.link.endSignal.connect(self.model.results.end, Qt.QueuedConnection)
         self.link.progressSignal.connect(self.model.results.progress, Qt.QueuedConnection)
-        self.link.userDecisionSignal.connect(self.model.instructions.userDecision, Qt.BlockingQueuedConnection)
+        self.link.userDecisionSignal.connect(self.model.instructions.userDecision, Qt.QueuedConnection)
 
     # Test Listener Api methods
     def testStarted(self, name):
@@ -87,6 +99,10 @@ class TestSuiteListener(TestListenerApi):
     def suiteAbort(self, name="test run", message=""):
         self.model.suitestate = TestSuiteModel.STATE_STOPPED
         pass
+
+    def asyncInstructions(self, title, message, callback=None, control=[], response=[]):
+        self.link.setAsyncInstructionCallback(self.model.instructions.control.onUserDecision, callback)
+        self.link.userDecisionSignal.emit(title, message, control)
 
     def clearInstructions(self):
         self.link.userDecisionSignal.emit(None, None, None)

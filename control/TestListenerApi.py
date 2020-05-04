@@ -34,5 +34,8 @@ class TestListenerApi(object):
     def suiteAbort(self, name="test run", message=""):
         pass
 
+    def asyncInstructions(self, title, message, callback=None, control=[], response=[]):
+        pass
+
     def clearInstructions(self):
         pass
