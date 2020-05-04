@@ -16,10 +16,11 @@ class SampleIdentificationData(KeyValueModel):
         KeyValueModel.__init__(self, parent, clone)
 
     def populate(self):
-        self.add(SampleIdentificationData.Alpha, 'type')
-        self.add(SampleIdentificationData.Number, '1')
-        self.add(SampleIdentificationData.AlphaNum, 'or2')
-        self.add(SampleIdentificationData.Other, 'in Input box')
+        self.add(self.Alpha, 'type')
+        self.add(self.Number, '1')
+        self.add(self.AlphaNum, 'or2')
+        self.add(self.Other, 'in Input box')
+        self.add(self.List, ['one', 'two', 'three'])
 
     def input_filter(self, value):
         if value.isalpha():
@@ -40,3 +41,4 @@ class SampleIdentificationData(KeyValueModel):
     Number = 'Number'
     AlphaNum = 'Alphanum'
     Other = 'Other'
+    List = 'List'

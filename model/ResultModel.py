@@ -20,7 +20,6 @@ class Result(QObject):
 
     def __init__(self, name):
         QObject.__init__(self)
-        #self._setidentifiers(idlist)
         self._name = name
         self._feedback = None
         self._result = None
