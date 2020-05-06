@@ -3,6 +3,7 @@ Copyright (c) 2020 Direkt, Australia
 Licensed under BSD-3-Clause, refer LICENSE
 """
 from model.KeyValueModel import KeyValueModel
+from model.KeyValueModel import KeyValue
 
 
 class SampleIdentificationData(KeyValueModel):
@@ -16,11 +17,11 @@ class SampleIdentificationData(KeyValueModel):
         KeyValueModel.__init__(self, parent, clone)
 
     def populate(self):
-        self.add(self.Alpha, 'type')
-        self.add(self.Number, '1')
-        self.add(self.AlphaNum, 'or2')
-        self.add(self.Other, 'in Input box')
-        self.add(self.List, ['one', 'two', 'three'])
+        self.add(self.Alpha, KeyValue(self.Alpha, 'type'))
+        self.add(self.Number, KeyValue(self.Number, '1'))
+        self.add(self.AlphaNum, KeyValue(self.AlphaNum, 'or2'))
+        self.add(self.Other, KeyValue(self.Other, 'in Input box'))
+        self.add(self.List, KeyValue(self.List, ''), ['', 'one', 'two', 'three'])
 
     def input_filter(self, value):
         if value.isalpha():

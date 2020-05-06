@@ -12,6 +12,12 @@ Item {
     height: 40
     clip: true
 
+    Binding {
+        target: model.value
+        property: "value"
+        value: valueIsArray() ? comboControl.currentText : identifier.text
+    }
+
     Rectangle {
         id: rectangle
         width: parent.width
@@ -35,7 +41,7 @@ Item {
                 Text {
                     id: identifierName
                     color: "#e5e2e2"
-                    text: label
+                    text: value.label
                     verticalAlignment: Text.AlignVCenter
                     anchors.rightMargin: 2
                     anchors.fill: parent
@@ -56,7 +62,7 @@ Item {
                     id: comboControl
                     anchors.fill: parent
                     font.pointSize: parent.height * 0.5
-                    model: value
+                    model: possibles
                     visible: valueIsArray()
                     delegate: ItemDelegate {
                         width: comboControl.width
@@ -75,7 +81,7 @@ Item {
 
                 TextInput {
                     id: identifier
-                    text: value
+                    text: value.value
                     visible: !valueIsArray()
                     activeFocusOnPress: false
                     autoScroll: true
@@ -89,7 +95,8 @@ Item {
         }
     }
     function valueIsArray() {
-        return (value.length > 1) ? true : false;
+        console.log("possibles.length", possibles.length)
+        return (possibles.length > 1) ? true : false;
     }
 }
 
