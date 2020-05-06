@@ -65,10 +65,11 @@ class SampleTestSuiteWrapper(TestSuiteModel, TestSuiteListener):
         :param input: The new input text from UI
         :return: None
         """
+        hadModel = self._id_data.hasModel()
         self._id_data.input_filter(input)
-        if input is not None and input != "":
+        if not hadModel and self._id_data.hasModel():
             msg = "Setup your device under test\nThen press Start"
-            self.asyncInstructions(self._id_data.getValue(SampleIdentificationData.Alpha), msg, callback=self._start_suite, control=["Start"])
+            self.asyncInstructions(self._id_data.getValue(SampleIdentificationData.SerialNumber), msg, callback=self._start_suite, control=["Start"])
             self.suitestate = TestSuiteModel.STATE_READY
 
     def _on_exit(self):

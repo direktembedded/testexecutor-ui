@@ -2,6 +2,7 @@
 Copyright (c) 2020 Direkt, Australia
 Licensed under BSD-3-Clause, refer LICENSE
 """
+import string
 from model.KeyValueModel import KeyValueModel
 from model.KeyValueModel import KeyValue
 
@@ -17,29 +18,32 @@ class SampleIdentificationData(KeyValueModel):
         KeyValueModel.__init__(self, parent, clone)
 
     def populate(self):
-        self.add(self.Alpha, KeyValue(self.Alpha, 'type'))
-        self.add(self.Number, KeyValue(self.Number, '1'))
-        self.add(self.AlphaNum, KeyValue(self.AlphaNum, 'or2'))
-        self.add(self.Other, KeyValue(self.Other, 'in Input box'))
+        self.add(self.SerialNumber, KeyValue('S/N', ''))
+        self.add(self.Model, KeyValue(self.Model, ''))
+        self.add(self.Mac, KeyValue(self.Mac, ''))
+        self.add(self.OtherId, KeyValue(self.OtherId, ''))
         self.add(self.List, KeyValue(self.List, ''), ['', 'one', 'two', 'three'])
+
+    def hasModel(self):
+        return self.getValue(self.Model) and self.getValue(self.Model) != ""
 
     def input_filter(self, value):
         if value.isalpha():
             print("isalpha:", value)
-            self.setValue(SampleIdentificationData.Alpha, value)
+            self.setValue(SampleIdentificationData.Model, value)
         elif value.isdigit():
             print("isdigit:", value)
-            self.setValue(SampleIdentificationData.Number, value)
-        elif value.isalnum():
-            print("isalnum:", value)
-            self.setValue(SampleIdentificationData.AlphaNum, value)
+            self.setValue(SampleIdentificationData.SerialNumber, value)
+        elif value.isalnum() and all(c in string.hexdigits for c in value):
+            print("ishex:", value)
+            self.setValue(SampleIdentificationData.Mac, value)
         else:
             if value is not None and value != "":
                 print("other:", value)
-                self.setValue(SampleIdentificationData.Other, value)
+                self.setValue(SampleIdentificationData.OtherId, value)
 
-    Alpha = 'Alpha'
-    Number = 'Number'
-    AlphaNum = 'Alphanum'
-    Other = 'Other'
+    SerialNumber = 'SN'
+    Model = 'Model'
+    Mac = 'Address'
+    OtherId = 'OtherId'
     List = 'List'
