@@ -63,7 +63,7 @@ class Result(QObject):
         return self._duration
 
     duration_changed = Signal()
-    duration = Property(str, _getduration, _setduration, notify=duration_changed)
+    duration = Property(int, _getduration, _setduration, notify=duration_changed)
 
     def _setname(self, name):
         """ Setter for name Property """

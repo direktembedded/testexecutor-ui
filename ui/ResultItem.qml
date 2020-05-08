@@ -71,22 +71,30 @@ Item {
 
             Rectangle {
                 id: timeRectangle
-                Layout.preferredWidth: parent.width * 0.1
-                Layout.maximumWidth: parent.width * 0.2
+                Layout.preferredWidth: parent.width * 0.2
+                Layout.maximumWidth: parent.width * 0.3
                 color: "#00000000"
                 Layout.fillHeight: true
                 border.width: 0
                 border.color: "#e5e2e2"
+                Timer {
+                    interval: 500;
+                    running: test.progress < 1;
+                    repeat: true
+                    onTriggered: {
+                        test.duration = test.duration + 1
+                    }
+                }
                 Text {
                     id: timeProgress
                     color: "#e5e2e2"
-                    text: test.duration
+                    text: formatTime(test.duration)
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignRight
                     font.pixelSize: parent.height / 1.2
                     anchors.rightMargin: 0
                     anchors.fill: parent
-                    clip: false
+                    clip: true
                 }
             }
         }
@@ -106,5 +114,23 @@ Item {
             PropertyChanges { target: feedbackRectangle; color: "red"  }
         }
     ]
+
+    function formatTime(timeInSeconds) {
+        var pad = function(num, size) { return ('000' + num).slice(size * -1); },
+        time = parseFloat(timeInSeconds).toFixed(3),
+        hours = Math.floor(time / 60 / 60),
+        minutes = Math.floor(time / 60) % 60,
+        seconds = Math.floor(time - minutes * 60),
+        milliseconds = time.slice(-3);
+
+        var s = pad(seconds, 2);
+        if (timeInSeconds >= 60*60) {
+            s = pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2)
+        } else if (timeInSeconds >= 60){
+            s = pad(minutes, 2) + ':' + pad(seconds, 2)
+        }
+
+        return s;
+    }
 }
 
