@@ -10,8 +10,10 @@ import QtQuick.Window 2.10
 Item {
     id: suite_container
     property var tswModel
+    property int duration
 
     Frame {
+        bottomPadding: 8
         padding: 4
         anchors.fill: parent
 
@@ -84,26 +86,56 @@ Item {
             }
             Item {
                 id: buttonContainer
+                Layout.fillHeight: true
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 // The Item wrapper is to allow TextField pointSize to reference the parents height.
                 Layout.preferredHeight: parent.height * 0.04
                 Layout.minimumHeight: parent.height * 0.04
                 Layout.maximumHeight: parent.height * 0.04
                 Layout.fillWidth: true
-                Button {
-                    id: control_button
-                    width: parent.width / 2
-                    height: parent.height * 0.8
-                    text: ""
-                    enabled: false
-                    padding: 3
-                    spacing: 3
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    font.pointSize: parent.height * 0.5
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    onClicked: {
-                        // Set suite state to 'next' which is informing the model to change to the next state.
-                        tswModel.testsuite.suitestate = "next"
+                GridLayout {
+                    anchors.fill: parent
+                    columns: 5
+                    rows: 1
+                    Button {
+                        id: control_button
+                        width: parent.width / 2
+                        height: parent.height * 0.8
+                        text: ""
+                        topPadding: 5
+                        bottomPadding: 5
+                        Layout.column: 3
+                        Layout.columnSpan: 1
+                        enabled: false
+                        padding: 3
+                        spacing: 3
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.pointSize: parent.height * 0.5
+                        onClicked: {
+                            // Set suite state to 'next' which is informing the model to change to the next state.
+                            tswModel.testsuite.suitestate = "next"
+                        }
+                    }
+                    Timer {
+                        interval: 500;
+                        running: state === "running" || state === "stopping";
+                        repeat: true
+                        onTriggered: {
+                            duration = duration + 1
+                        }
+                    }
+                    Text {
+                        id: suiteProgress
+                        color: "#e5e2e2"
+                        text: formatTime(duration)
+                        Layout.fillWidth: true
+                        Layout.column: 5
+                        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignRight
+                        font.pixelSize: parent.height / 1.2
+                        anchors.rightMargin: 0
+                        clip: true
                     }
                 }
             }
@@ -124,6 +156,7 @@ Item {
             PropertyChanges { target: instructionWidget; enabled: false  }
             PropertyChanges { target: identifierWidget; enabled: true  }
             PropertyChanges { target: frameRectangle; color: suiteResultColour() }
+            PropertyChanges { target: suite_container; duration: 0 }
         },
         State {
             name: "ready"
@@ -172,5 +205,22 @@ Item {
             colour = "red"
         }
         return colour;
+    }
+    function formatTime(timeInSeconds) {
+        var pad = function(num, size) { return ('000' + num).slice(size * -1); },
+        time = parseFloat(timeInSeconds).toFixed(3),
+        hours = Math.floor(time / 60 / 60),
+        minutes = Math.floor(time / 60) % 60,
+        seconds = Math.floor(time - minutes * 60),
+        milliseconds = time.slice(-3);
+
+        var s = pad(seconds, 2);
+        if (timeInSeconds >= 60*60) {
+            s = pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2)
+        } else if (timeInSeconds >= 60){
+            s = pad(minutes, 2) + ':' + pad(seconds, 2)
+        }
+
+        return s;
     }
 }
