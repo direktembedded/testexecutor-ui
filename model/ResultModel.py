@@ -101,12 +101,10 @@ class ResultModel(QAbstractListModel):
     TestRole = Qt.UserRole
     TestKey = b"test"
 
-    def __init__(self, parent=None, clone=None):
+    def __init__(self, parent=None):
         QAbstractListModel.__init__(self, parent)
-        if clone:
-            self._data = clone._data
-        else:
-            self._data = []
+        self._currentTestIndex = -1
+        self._data = []
 
     def rowCount(self, parent=QModelIndex()):
         return len(self._data)
@@ -172,11 +170,13 @@ class ResultModel(QAbstractListModel):
             if test.name == name:
                 test.result = Result.StateRunning
                 ix = self.index(row, 0)
+                self._setcurrentTestIndex(row)
                 self.dataChanged.emit(ix, ix, self.roleNames())
                 existing = True
                 break
         if not existing:
             self.add(name, Result.StateRunning)
+            self._setcurrentTestIndex(len(self._data) - 1)
 
     @Slot(str, str)
     def end(self, name, result):
@@ -248,3 +248,16 @@ class ResultModel(QAbstractListModel):
         self._data.clear()
         self.endRemoveRows()
         return True
+
+    def _setcurrentTestIndex(self, currentTestIndex):
+        """ Setter for currentTestIndex Property """
+        if self._currentTestIndex != currentTestIndex:
+            self._currentTestIndex = currentTestIndex
+            self.currentTestIndex_changed.emit()
+
+    def _getcurrentTestIndex(self):
+        """ Getter for currentTestIndex Property """
+        return self._currentTestIndex
+
+    currentTestIndex_changed = Signal()
+    currentTestIndex = Property(int, _getcurrentTestIndex, _setcurrentTestIndex, notify=currentTestIndex_changed)

@@ -7,29 +7,29 @@ import QtQuick.Controls 2.1
 
 Item {
     width: 600
-    //height: children.height
     clip: true
     property var results
     property int viewableCount: -1
 
     Rectangle {
         id: resultListRectangle
-        //height: children.height
         color: "#e5e2e2"
         anchors.fill: parent
 
-        //property var rectResults: parent.results
         ListView {
             id: resultListView
             spacing: 1
-            //height: children.height
             snapMode: ListView.NoSnap
             boundsBehavior: Flickable.StopAtBounds
+            currentIndex: results.currentTestIndex
+            highlightFollowsCurrentItem: true
             anchors.fill: parent
             delegate: ResultItem {
                 height: (viewableCount <= 0) ? (resultListView.height / resultListView.count) : (resultListView.height / viewableCount)
                 Component.onCompleted: {
-                    resultListView.positionViewAtEnd()
+                    if (results.currentTestIndex === -1) {
+                        resultListView.positionViewAtEnd();
+                    }
                 }
             }
             model: results

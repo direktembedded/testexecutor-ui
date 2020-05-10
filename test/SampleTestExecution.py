@@ -58,6 +58,10 @@ class SampleTestExecution:
         for test in self._tests:
             if self._running:
                 self._runTest(test)
+        if len(self._tests) > 10:
+            tname = self._tests[5]["name"]
+            self._listener.testStarted(tname)
+            self._listener.feedback(tname, "Restarted test only")
         if self._running:
             self._listener.suiteEnd(name, failures=fail_count, message="")
         if self._exit_callback:
@@ -136,12 +140,6 @@ class SampleTestExecution:
             {"name": "buttons", "result": Result.StatePass, "type": 1}
         ],
         [
-            {"name": "test one", "result": Result.StatePass, "type": 2},
-            {"name": "test two", "result": Result.StateFail, "type": 2},
-            {"name": "test three", "result": Result.StatePass, "type": 2},
-            {"name": "test four", "result": Result.StatePass, "type": 2},
-            {"name": "test five", "result": Result.StatePass, "type": 2},
-            {"name": "test six", "result": Result.StateFail, "type": 2},
             {"name": "test 1", "result": Result.StatePass, "type": 2},
             {"name": "test 2", "result": Result.StateFail, "type": 2},
             {"name": "test 3", "result": Result.StatePass, "type": 2},
@@ -153,7 +151,13 @@ class SampleTestExecution:
             {"name": "test 9", "result": Result.StatePass, "type": 2},
             {"name": "test 10", "result": Result.StatePass, "type": 2},
             {"name": "test 11", "result": Result.StatePass, "type": 2},
-            {"name": "test 12", "result": Result.StateFail, "type": 2}
+            {"name": "test 12", "result": Result.StateFail, "type": 2},
+            {"name": "test 13", "result": Result.StatePass, "type": 2},
+            {"name": "test 14", "result": Result.StateFail, "type": 2},
+            {"name": "test 15", "result": Result.StatePass, "type": 2},
+            {"name": "test 16", "result": Result.StatePass, "type": 2},
+            {"name": "test 17", "result": Result.StatePass, "type": 2},
+            {"name": "test 18", "result": Result.StateFail, "type": 2}
         ],
     ]
 
