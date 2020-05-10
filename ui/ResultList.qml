@@ -28,6 +28,9 @@ Item {
             anchors.fill: parent
             delegate: ResultItem {
                 height: (viewableCount <= 0) ? (resultListView.height / resultListView.count) : (resultListView.height / viewableCount)
+                Component.onCompleted: {
+                    resultListView.positionViewAtEnd()
+                }
             }
             model: results
             ScrollBar.vertical: ScrollBar {}
