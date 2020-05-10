@@ -18,12 +18,12 @@ class Result(QObject):
     StatePass = "Pass"
     StateFail = "Fail"
 
-    def __init__(self, name):
+    def __init__(self, name, result=None):
         QObject.__init__(self)
         self._name = name
         self._feedback = None
-        self._result = None
-        self._duration = None
+        self._result = result
+        self._duration = 0
         self._progress = 0
 
     def _setfeedback(self, feedback):
@@ -152,7 +152,7 @@ class ResultModel(QAbstractListModel):
     def add(self, name, result):
         rowCount = self.rowCount()
         self.beginInsertRows(QModelIndex(), rowCount, rowCount)
-        test = {b'test': Result(name)}
+        test = {b'test': Result(name, result)}
         self._data.append(test)
         self.endInsertRows()
         return test
@@ -176,7 +176,7 @@ class ResultModel(QAbstractListModel):
                 existing = True
                 break
         if not existing:
-            self.add(name, None)
+            self.add(name, Result.StateRunning)
 
     @Slot(str, str)
     def end(self, name, result):

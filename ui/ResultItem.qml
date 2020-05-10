@@ -78,8 +78,8 @@ Item {
                 border.width: 0
                 border.color: "#e5e2e2"
                 Timer {
-                    interval: 500;
-                    running: test.progress < 1;
+                    interval: 1000;
+                    running: (state === "Running") && (test.progress < 1);
                     repeat: true
                     onTriggered: {
                         test.duration = test.duration + 1

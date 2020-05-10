@@ -117,7 +117,7 @@ Item {
                         }
                     }
                     Timer {
-                        interval: 500;
+                        interval: 1000;
                         running: state === "running" || state === "stopping";
                         repeat: true
                         onTriggered: {
