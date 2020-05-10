@@ -66,8 +66,10 @@ class SampleTestExecution:
     def _runTest(self, test):
         if test["type"] == 0:
             self._runTest0(test)
-        else:
+        elif test["type"] == 1:
             self._runTest1(test)
+        else:
+            self._runTest2(test)
 
     def _runTest0(self, test):
         tname = test["name"]
@@ -108,6 +110,14 @@ class SampleTestExecution:
         self._listener.clearInstructions()
         self._listener.testCompleted(tname, result=test["result"])
 
+    def _runTest2(self, test):
+        tname = test["name"]
+        self._listener.testStarted(tname)
+        self._listener.feedback(tname, "Quick test")
+        time.sleep(1)
+        self._listener.clearInstructions()
+        self._listener.testCompleted(tname, result=test["result"])
+
     _testGroups = [
         [
             {"name": "test one", "result": Result.StatePass, "type": 1},
@@ -124,6 +134,26 @@ class SampleTestExecution:
             {"name": "serial", "result": Result.StatePass, "type": 1},
             {"name": "usb", "result": Result.StatePass, "type": 1},
             {"name": "buttons", "result": Result.StatePass, "type": 1}
+        ],
+        [
+            {"name": "test one", "result": Result.StatePass, "type": 2},
+            {"name": "test two", "result": Result.StateFail, "type": 2},
+            {"name": "test three", "result": Result.StatePass, "type": 2},
+            {"name": "test four", "result": Result.StatePass, "type": 2},
+            {"name": "test five", "result": Result.StatePass, "type": 2},
+            {"name": "test six", "result": Result.StateFail, "type": 2},
+            {"name": "test 1", "result": Result.StatePass, "type": 2},
+            {"name": "test 2", "result": Result.StateFail, "type": 2},
+            {"name": "test 3", "result": Result.StatePass, "type": 2},
+            {"name": "test 4", "result": Result.StatePass, "type": 2},
+            {"name": "test 5", "result": Result.StatePass, "type": 2},
+            {"name": "test 6", "result": Result.StateFail, "type": 2},
+            {"name": "test 7", "result": Result.StatePass, "type": 2},
+            {"name": "test 8", "result": Result.StateFail, "type": 2},
+            {"name": "test 9", "result": Result.StatePass, "type": 2},
+            {"name": "test 10", "result": Result.StatePass, "type": 2},
+            {"name": "test 11", "result": Result.StatePass, "type": 2},
+            {"name": "test 12", "result": Result.StateFail, "type": 2}
         ],
     ]
 
