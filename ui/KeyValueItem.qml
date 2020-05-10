@@ -72,7 +72,7 @@ Item {
                             elide: Text.ElideRight
                             verticalAlignment: Text.AlignVCenter
                         }
-                        highlighted: control.highlightedIndex === index
+                        highlighted: comboControl.highlightedIndex === index
                     }
                     background: Rectangle {
                         border.width: 1
@@ -95,7 +95,6 @@ Item {
         }
     }
     function valueIsArray() {
-        console.log("possibles.length", possibles.length)
         return (possibles.length > 1) ? true : false;
     }
 }
