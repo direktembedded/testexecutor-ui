@@ -58,7 +58,7 @@ Item {
                 }
                 Text {
                     id: feedback
-                    color: "#e5e2e2"
+                    color: test.progress < 1 ? "black" : "#e5e2e2"
                     text: test.feedback
                     verticalAlignment: Text.AlignVCenter
                     clip: true
