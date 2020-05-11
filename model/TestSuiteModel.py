@@ -5,7 +5,7 @@ Licensed under BSD-3-Clause, refer LICENSE
 # This Python file uses the following encoding: utf-8
 import threading
 from PySide2.QtCore import QObject
-from PySide2.QtCore import Signal, Property
+from PySide2.QtCore import Signal, Property, Slot
 from model.InstructionsModel import InstructionModel
 
 class TestSuiteModel(QObject):
@@ -29,17 +29,6 @@ class TestSuiteModel(QObject):
         self.setstate_callback = setstate_callback
         self.lock = threading.RLock()
         self._title = title
-
-        """
-    def resultlist(self):
-        return self._resultlist
-
-    def keyvalues(self):
-        return self._idlist
-
-    def instructions(self):
-        return "None for instructions"
-        """
 
     def clear(self):
         self.instructions.clear()
@@ -172,3 +161,8 @@ class TestSuiteModel(QObject):
 
     title_changed = Signal()
     title = Property(str, _gettitle, _settitle, notify=title_changed)
+
+    @Slot()
+    def active(self):
+        activeStates = [self.STATE_STOPPING, self.STATE_STARTING, self.STATE_RUNNING]
+        return self.suitestate in activeStates

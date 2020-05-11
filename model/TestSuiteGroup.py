@@ -24,6 +24,7 @@ Licensed under BSD-3-Clause, refer LICENSE
 from PySide2.QtCore import QAbstractListModel
 from PySide2.QtCore import Qt
 from PySide2.QtCore import QModelIndex
+from PySide2.QtCore import Signal, Property
 
 
 class TestSuiteGroup(QAbstractListModel):
@@ -71,3 +72,15 @@ class TestSuiteGroup(QAbstractListModel):
 
     def roleNames(self):
         return self._roles
+
+    def _getactive_suites(self):
+        """ Getter for active_suites Property """
+        active = False
+        for item in self._datas:
+            active = item.active()
+            if active:
+                break
+        return active
+
+    active_suites_changed = Signal()
+    active_suites = Property(bool, _getactive_suites, None, notify=active_suites_changed)
