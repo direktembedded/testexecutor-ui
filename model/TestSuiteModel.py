@@ -14,6 +14,7 @@ class TestSuiteModel(QObject):
     STATE_STARTING = "starting"
     STATE_STOPPING = "stopping"
     STATE_STOPPED = "stopped"
+    STATE_END = "end"
     STATE_IDLE = "idle"
     STATE_READY = "ready"
     STATE_NEXT = "next"  # When suitestate is set to 'next', the UI state button has been pressed

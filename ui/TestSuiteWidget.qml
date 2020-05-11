@@ -170,7 +170,7 @@ Item {
             name: "ready"
             PropertyChanges { target: control_button; text: "Clear"; enabled: true  }
             PropertyChanges { target: instructionWidget; enabled: true  }
-            PropertyChanges { target: identifierWidget; enabled: false  }
+            PropertyChanges { target: identifierWidget; enabled: true  }
             PropertyChanges { target: frameRectangle; color: "gray" }
         },
         State {
@@ -199,6 +199,13 @@ Item {
             PropertyChanges { target: instructionWidget; enabled: false  }
             PropertyChanges { target: identifierWidget; enabled: true  }
             PropertyChanges { target: frameRectangle; color: "orange" }
+        },
+        State {
+            name: "end"
+            PropertyChanges { target: control_button; text: "Clear"; enabled: true }
+            PropertyChanges { target: instructionWidget; enabled: false  }
+            PropertyChanges { target: identifierWidget; enabled: true  }
+            PropertyChanges { target: frameRectangle; color: suiteResultColour() }
         }
     ]
     function suiteResultColour()

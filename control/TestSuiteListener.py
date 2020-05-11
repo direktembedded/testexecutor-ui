@@ -93,7 +93,7 @@ class TestSuiteListener(TestListenerApi):
         self.model.suitestate = TestSuiteModel.STATE_RUNNING
 
     def suiteEnd(self, name="test run", failures=-1, message=""):
-        self.model.suitestate = TestSuiteModel.STATE_IDLE
+        self.model.suitestate = TestSuiteModel.STATE_END
         pass
 
     def suiteAbort(self, name="test run", message=""):

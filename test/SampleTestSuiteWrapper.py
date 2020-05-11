@@ -46,7 +46,7 @@ class SampleTestSuiteWrapper(TestSuiteModel, TestSuiteListener):
 
     def _state_control_callback(self, st):
         newstate = None
-        clearStates = [TestSuiteModel.STATE_READY, TestSuiteModel.STATE_STOPPED]
+        clearStates = [TestSuiteModel.STATE_READY, TestSuiteModel.STATE_STOPPED, TestSuiteModel.STATE_END]
         if st == TestSuiteModel.STATE_NEXT:
             if self.suitestate in clearStates or not self.suitestate:
                 self._clear_suite()
@@ -65,14 +65,15 @@ class SampleTestSuiteWrapper(TestSuiteModel, TestSuiteListener):
         :param input: The new input text from UI
         :return: None
         """
-        hadModel = self._id_data.hasModel()
         self._id_data.input_filter(input)
-        if not hadModel and self._id_data.hasModel():
+        if self._id_data.hasModel():
             msg = "Setup your device under test\nThen press Start"
-            self.asyncInstructions(self._id_data.getValue(SampleIdentificationData.SerialNumber), msg, callback=self._start_suite, control=["Start"])
+            self.asyncInstructions(self._id_data.getValue(SampleIdentificationData.Model), msg, callback=self._start_suite, control=["Start"])
             self.suitestate = TestSuiteModel.STATE_READY
 
     def _on_exit(self):
+        print("_on_exit", self.suitestate)
         if self.suitestate == TestSuiteModel.STATE_STOPPING:
+            print("stopped")
             self.suitestate = TestSuiteModel.STATE_STOPPED
         self._testrun = None
