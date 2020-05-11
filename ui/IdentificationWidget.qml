@@ -36,6 +36,9 @@ Item {
                 font.pointSize: parent.height * 0.5
                 // onAccepted is called when 'return' is entered.
                 onAccepted: {
+                    if (identificationWidget.inputid === singleInputField.text) {
+                        identificationWidget.inputid = ""
+                    }
                     identificationWidget.inputid = singleInputField.text
                     singleInputField.text = ""
                 }
