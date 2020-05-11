@@ -8,6 +8,9 @@ Licensed under BSD-3-Clause, refer LICENSE
 from PySide2.QtWidgets import QApplication
 from PySide2.QtQuick import QQuickView
 from PySide2.QtCore import QUrl
+from PySide2.QtCore import Qt
+from PySide2.QtCore import QCoreApplication
+from PySide2.QtQml import QQmlApplicationEngine
 
 import os
 import sys
@@ -15,29 +18,21 @@ import sys
 from model.TestSuiteGroup import TestSuiteGroup
 from test.SampleTestSuiteWrapper import SampleTestSuiteWrapper
 
-app = QApplication([])
-view = QQuickView()
-current_path = os.path.dirname(sys.argv[0])
-ui_path = os.path.join(current_path, 'ui')
-qml_file = os.path.join(ui_path, 'MultiTestWidget.qml')
-url = QUrl.fromLocalFile(qml_file)
+if __name__ == "__main__":
+    current_path = os.path.dirname(sys.argv[0])
+    ui_path = os.path.join(current_path, 'ui')
+    qml_file = os.path.join(ui_path, 'MultiTestWindow.qml')
+    url = QUrl.fromLocalFile(qml_file)
 
-mySuiteGroup = TestSuiteGroup()
-for i in range(4):
-    mySuiteGroup.addData(SampleTestSuiteWrapper("Station {0}".format(i)))
+    app = QApplication(sys.argv)
+    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+    QCoreApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
 
-view.setSource(url)
-view.setResizeMode(QQuickView.SizeRootObjectToView)
-if view.status() == QQuickView.Error:
-    oops = view.errors()
-    print(oops)
-    import sys
-    sys.exit(-1)
-else:
-    view.rootContext().setContextProperty("model_list", mySuiteGroup)
-    view.showMaximized()
+    mySuiteGroup = TestSuiteGroup()
+    for i in range(4):
+        mySuiteGroup.addData(SampleTestSuiteWrapper("Station {0}".format(i)))
 
-app.exec_()
+    engine = QQmlApplicationEngine(url)
+    engine.rootContext().setContextProperty("model_list", mySuiteGroup)
 
-
-
+    exit(app.exec_())

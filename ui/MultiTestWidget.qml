@@ -3,11 +3,10 @@
  * Licensed under BSD-3-Clause, refer LICENSE
  */
 import QtQuick 2.4
-import QtQuick.Window 2.10
 
 Item {
-    width: 800
-    height: 800
+    property var test_suites
+    anchors.fill: parent
     Row {
         id: suiteRows
         spacing: 2
@@ -16,7 +15,7 @@ Item {
         Repeater {
             id: testSuiteRepeater
             anchors.fill: parent
-            model: model_list
+            model: test_suites
             delegate: TestSuiteWidget {
                 tswModel: model
                 width: parent.width / testSuiteRepeater.count - 1
