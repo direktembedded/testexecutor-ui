@@ -88,6 +88,15 @@ Item {
                     onClicked: {
                         onControlClick(model.control.leftButton.text)
                     }
+                    contentItem: Text {
+                        text: leftButton.text
+                        font: leftButton.font
+                        opacity: enabled ? 1.0 : 0.3
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideNone
+                        clip: true
+                    }
                 }
             }
 
@@ -108,6 +117,15 @@ Item {
                     highlighted: true
                     font.pointSize: parent.height * 0.5
                     onClicked: onControlClick(model.control.rightButton.text)
+                    contentItem: Text {
+                        text: rightButton.text
+                        font: rightButton.font
+                        opacity: enabled ? 1.0 : 0.3
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideNone
+                        clip: true
+                    }
                 }
             }
         }

@@ -99,21 +99,29 @@ Item {
                     rows: 1
                     Button {
                         id: control_button
-                        width: parent.width / 2
+                        width: parent.width
                         height: parent.height * 0.8
                         text: ""
-                        topPadding: 5
-                        bottomPadding: 5
                         Layout.column: 3
                         Layout.columnSpan: 1
                         enabled: false
-                        padding: 3
+                        padding: 0
                         spacing: 3
                         anchors.horizontalCenter: parent.horizontalCenter
-                        font.pointSize: parent.height * 0.5
+                        font.pointSize: parent.height * 0.7
                         onClicked: {
                             // Set suite state to 'next' which is informing the model to change to the next state.
                             tswModel.testsuite.suitestate = "next"
+                        }
+                        contentItem: Text {
+                            text: control_button.text
+                            font: control_button.font
+                            opacity: enabled ? 1.0 : 0.3
+                            //color: control_button.down ? "#17a81a" : "#21be2b"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideNone
+                            clip: true
                         }
                     }
                     Timer {
