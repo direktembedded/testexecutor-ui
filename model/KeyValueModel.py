@@ -3,6 +3,7 @@ Copyright (c) 2020 Direkt, Australia
 Licensed under BSD-3-Clause, refer LICENSE
 """
 # This Python file uses the following encoding: utf-8
+import threading
 from PySide2.QtCore import QAbstractListModel
 from PySide2.QtCore import Qt
 from PySide2.QtCore import QObject
@@ -13,31 +14,44 @@ from PySide2.QtCore import Property, Signal
 class KeyValue(QObject):
     def __init__(self, label, value):
         QObject.__init__(self)
+        self.lock = threading.RLock()
         self._value = value
         self._label = label
 
     def _setvalue(self, value):
         """ Setter for value Property """
-        if self._value != value:
-            self._value = value
+        changed = False
+        with self.lock:
+            if self._value != value:
+                self._value = value
+                changed = True
+        if changed:
             self.value_changed.emit()
 
     def _getvalue(self):
         """ Getter for value Property """
-        return self._value
+        with self.lock:
+            v = self._value
+        return v
 
     value_changed = Signal()
     value = Property(str, _getvalue, _setvalue, notify=value_changed)
 
     def _setlabel(self, label):
         """ Setter for label Property """
-        if self._label != label:
-            self._label = label
+        changed = False
+        with self.lock:
+            if self._label != label:
+                self._label = label
+                changed = True
+        if changed:
             self.label_changed.emit()
 
     def _getlabel(self):
         """ Getter for label Property """
-        return self._label
+        with self.lock:
+            l = self._label
+        return l
 
     label_changed = Signal()
     label = Property(str, _getlabel, _setlabel, notify=label_changed)
@@ -55,6 +69,7 @@ class KeyValueModel(QAbstractListModel):
 
     def __init__(self, parent = None, clone = None):
         QAbstractListModel.__init__(self, parent)
+        self.lock = threading.RLock()
         if clone:
             self._data = clone._data
         else:
@@ -69,7 +84,8 @@ class KeyValueModel(QAbstractListModel):
                 KeyValueModel.ValueRole: KeyValueModel.ValueKey}
 
     def data(self, index, role):
-        d = self._data[index.row()]
+        with self.lock:
+            d = self._data[index.row()]
         if role == KeyValueModel.KeyRole:
             return d[KeyValueModel.KeyKey]
         elif role == KeyValueModel.ValueRole:
@@ -81,34 +97,45 @@ class KeyValueModel(QAbstractListModel):
     def add(self, key, value, possibleValues=[]):
         rowCount = self.rowCount(QModelIndex())
         self.beginInsertRows(QModelIndex(), rowCount, rowCount)
-        self._data.append({KeyValueModel.KeyKey: key, KeyValueModel.ValueKey: value, KeyValueModel.PossibleValuesKey: possibleValues})
+        with self.lock:
+            self._data.append({KeyValueModel.KeyKey: key, KeyValueModel.ValueKey: value, KeyValueModel.PossibleValuesKey: possibleValues})
         self.endInsertRows()
 
     def setData(self, index, value, role=None):
-        self._data[index.row()] = value
+        with self.lock:
+            self._data[index.row()] = value
         self.dataChanged.emit(index, index, self.roleNames())
 
     def setValue(self, key, value):
+        changed = False
         for row in range(len(self._data)):
-            if self._data[row][KeyValueModel.KeyKey] == key:
-                self._data[row][KeyValueModel.ValueKey].value = value
-                ix = self.index(row, 0)
-                self.dataChanged.emit(ix, ix, self.roleNames())
-                break
+            with self.lock:
+                if self._data[row][KeyValueModel.KeyKey] == key:
+                    self._data[row][KeyValueModel.ValueKey].value = value
+                    ix = self.index(row, 0)
+                    changed = True
+                    break
+        if changed:
+            self.dataChanged.emit(ix, ix, self.roleNames())
 
     def setPossibleValues(self, key, values):
-        for row in range(len(self._data)):
-            if self._data[row][KeyValueModel.KeyKey] == key:
-                self._data[row][KeyValueModel.PossibleValuesKey] = values
-                ix = self.index(row, 0)
-                self.dataChanged.emit(ix, ix, self.roleNames())
-                break
+        changed = False
+        with self.lock:
+            for row in range(len(self._data)):
+                if self._data[row][KeyValueModel.KeyKey] == key:
+                    self._data[row][KeyValueModel.PossibleValuesKey] = values
+                    ix = self.index(row, 0)
+                    changed = True
+                    break
+        if changed:
+            self.dataChanged.emit(ix, ix, self.roleNames())
 
     def getValue(self, key):
         value = None
         for row in range(len(self._data)):
-            if self._data[row][KeyValueModel.KeyKey] == key:
-                value = self._data[row][KeyValueModel.ValueKey].value
+            with self.lock:
+                if self._data[row][KeyValueModel.KeyKey] == key:
+                    value = self._data[row][KeyValueModel.ValueKey].value
         return value
 
     def clearData(self):
@@ -117,7 +144,8 @@ class KeyValueModel(QAbstractListModel):
         :return: None
         """
         for row in range(len(self._data)):
-            self._data[row][KeyValueModel.ValueKey].value = ""
-            self._data[row][KeyValueModel.PossibleValuesKey] = []
-            ix = self.index(row, 0)
+            with self.lock:
+                self._data[row][KeyValueModel.PossibleValuesKey] = []
+                self._data[row][KeyValueModel.ValueKey].value = ""
+                ix = self.index(row, 0)
             self.dataChanged.emit(ix, ix, self.roleNames())

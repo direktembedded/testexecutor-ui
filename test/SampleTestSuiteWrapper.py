@@ -72,8 +72,6 @@ class SampleTestSuiteWrapper(TestSuiteModel, TestSuiteListener):
             self.suitestate = TestSuiteModel.STATE_READY
 
     def _on_exit(self):
-        print("_on_exit", self.suitestate)
         if self.suitestate == TestSuiteModel.STATE_STOPPING:
-            print("stopped")
             self.suitestate = TestSuiteModel.STATE_STOPPED
         self._testrun = None

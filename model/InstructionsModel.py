@@ -3,6 +3,7 @@ Copyright (c) 2020 Direkt, Australia
 Licensed under BSD-3-Clause, refer LICENSE file
 """
 # This Python file uses the following encoding: utf-8
+import threading
 from PySide2.QtCore import Slot
 from PySide2.QtCore import Signal
 from PySide2.QtCore import Property
@@ -14,20 +15,27 @@ class ControlButtonConfig(QObject):
 
     def __init__(self, text=None):
         QObject.__init__(self)
+        self.lock = threading.RLock()
         self._text = text
 
     def _settext(self, text):
         """ Setter for text Property """
-        if self._text != text:
-            en = self.enabled
-            self._text = text
+        en = self.enabled
+        changed = False
+        with self.lock:
+            if self._text != text:
+                self._text = text
+                changed = True
+        if changed:
             self.text_changed.emit()
             if en is not self.enabled:
                 self.enable_changed.emit()
 
     def _gettext(self):
         """ Getter for text Property """
-        return self._text
+        with self.lock:
+            t = self._text
+        return t
 
     text_changed = Signal()
     text = Property(str, _gettext, _settext, notify=text_changed)
@@ -45,6 +53,7 @@ class InstructionControl(QObject):
     
     def __init__(self):
         QObject.__init__(self)
+        self.lock = threading.RLock()
         self._buttons = [ControlButtonConfig(), ControlButtonConfig()]
         self._controlReceived = None
         self.userDecisionWait = QWaitCondition()
@@ -52,7 +61,8 @@ class InstructionControl(QObject):
     onUserDecision = Signal(str)
 
     def requestDecision(self, buttontextList):
-        self._controlReceived = None
+        with self.lock:
+            self._controlReceived = None
         return self.setButtons(buttontextList)
 
     def lastUserDecision(self):
@@ -63,9 +73,10 @@ class InstructionControl(QObject):
         and should be changed by adding a decision string list to requestDecision instead.
         :return: decision string
         """
-        decision = self._controlReceived
-        if decision:
-            decision = decision.lower()
+        with self.lock:
+            decision = self._controlReceived
+            if decision:
+                decision = decision.lower()
         return decision
 
     def clear(self):
@@ -74,7 +85,8 @@ class InstructionControl(QObject):
 
     @Slot(str)
     def onControl(self, decision):
-        self._controlReceived = decision
+        with self.lock:
+            self._controlReceived = decision
         self.setButtons([])  # Do not allow for a second button press by clearing all buttons
         self.userDecisionWait.wakeAll()
         self.onUserDecision.emit(self.lastUserDecision())
@@ -87,13 +99,14 @@ class InstructionControl(QObject):
         info = buttonTextList
         if type(buttonTextList) is str:
             info = [buttonTextList]
-        if type(info) is list:
-            i = 0
-            for txt in info:
-                self._buttons[i].text = txt
-                i = i + 1
-            for j in range(i, len(self._buttons)):
-                self._buttons[j].text = None
+        with self.lock:
+            if type(info) is list:
+                i = 0
+                for txt in info:
+                    self._buttons[i].text = txt
+                    i = i + 1
+                for j in range(i, len(self._buttons)):
+                    self._buttons[j].text = None
         present = False
         if buttonTextList:
             present = len(info) > 0
@@ -102,14 +115,18 @@ class InstructionControl(QObject):
     # TODO: Consider modifying to provide more buttons, rather than fixed right left.
     def _getleftButton(self):
         """ Getter for leftButton Property """
-        return self._buttons[0]
+        with self.lock:
+            b = self._buttons[0]
+        return b
 
     leftButton_changed = Signal()
     leftButton = Property(QObject, _getleftButton, None, notify=leftButton_changed)
 
     def _getrightButton(self):
         """ Getter for rightButton Property """
-        return self._buttons[1]
+        with self.lock:
+            b = self._buttons[1]
+        return b
 
     rightButton_changed = Signal()
     rightButton = Property(QObject, _getrightButton, None, notify=rightButton_changed)
@@ -119,6 +136,7 @@ class InstructionModel(QObject):
 
     def __init__(self):
         QObject.__init__(self)
+        self.lock = threading.RLock()
         self._instructionText = None
         self._control = InstructionControl()
         self._enabled = False
@@ -149,44 +167,62 @@ class InstructionModel(QObject):
 
     def _setinstructionText(self, instructionText):
         """ Setter for instructionText Property """
-        if self._instructionText != instructionText:
-            self._instructionText = instructionText
-            if "html" not in instructionText.lower():
-                if "\r\n" in instructionText:
-                    self._instructionText = instructionText.replace("\r\n", "<br/>")
-                if "\n" in self._instructionText:
-                    self._instructionText = instructionText.replace("\n", "<br/>")
+        changed = False
+        with self.lock:
+            if self._instructionText != instructionText:
+                changed = True
+                self._instructionText = instructionText
+                if "html" not in instructionText.lower():
+                    if "\r\n" in instructionText:
+                        self._instructionText = instructionText.replace("\r\n", "<br/>")
+                    if "\n" in self._instructionText:
+                        self._instructionText = instructionText.replace("\n", "<br/>")
+        if changed:
             self.instructionText_changed.emit()
 
     def _getinstructionText(self):
         """ Getter for instructionText Property """
-        return self._instructionText
+        with self.lock:
+            instr = self._instructionText
+        return instr
 
     instructionText_changed = Signal()
     instructionText = Property(str, _getinstructionText, _setinstructionText, notify=instructionText_changed)
 
     def _setinstructionTitle(self, instructionTitle):
         """ Setter for instructionTitle Property """
-        if self._instructionTitle != instructionTitle:
-            self._instructionTitle = instructionTitle
+        changed = False
+        with self.lock:
+            if self._instructionTitle != instructionTitle:
+                self._instructionTitle = instructionTitle
+                changed = True
+        if changed:
             self.instructionTitle_changed.emit()
 
     def _getinstructionTitle(self):
         """ Getter for instructionTitle Property """
-        return self._instructionTitle
+        with self.lock:
+            t = self._instructionTitle
+        return t
 
     instructionTitle_changed = Signal()
     instructionTitle = Property(str, _getinstructionTitle, _setinstructionTitle, notify=instructionTitle_changed)
 
     def _setcontrol(self, control):
         """ Setter for control Property """
-        if self._control != control:
-            self._control = control
+        changed = False
+        with self.lock:
+            if self._control != control:
+                self._control = control
+                changed = True
+        if changed:
             self.control_changed.emit()
 
     def _getcontrol(self):
         """ Getter for control Property """
-        return self._control
+        with self.lock:
+            c = self._control
+        return c
 
     control_changed = Signal()
     control = Property(QObject, _getcontrol, _setcontrol, notify=control_changed)
@@ -196,13 +232,19 @@ class InstructionModel(QObject):
         if not enabled:
             # If we have been disabled, ensure there is no pending control blocking operation
             self.control.cancelWaiting()
-        if self._enabled != enabled:
-            self._enabled = enabled
+        changed = False
+        with self.lock:
+            if self._enabled != enabled:
+                self._enabled = enabled
+                changed = True
+        if changed:
             self.enabled_changed.emit()
 
     def _getenabled(self):
         """ Getter for enabled Property """
-        return self._enabled
+        with self.lock:
+            e = self._enabled
+        return e
 
     enabled_changed = Signal()
     enabled = Property(bool, _getenabled, _setenabled, notify=enabled_changed)

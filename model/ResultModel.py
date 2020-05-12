@@ -3,6 +3,7 @@ Copyright (c) 2020 Direkt, Australia
 Licensed under BSD-3-Clause, refer LICENSE
 """
 # This Python file uses the following encoding: utf-8
+import threading
 from PySide2 import QtCore
 from PySide2.QtCore import QAbstractListModel
 from PySide2.QtCore import Qt
@@ -20,6 +21,7 @@ class Result(QObject):
 
     def __init__(self, name, result=None):
         QObject.__init__(self)
+        self.lock = threading.RLock()
         self._name = name
         self._feedback = None
         self._result = result
@@ -28,64 +30,92 @@ class Result(QObject):
 
     def _setfeedback(self, feedback):
         """ Setter for feedback Property """
-        if self._feedback != feedback:
-            self._feedback = feedback
+        changed = False
+        with self.lock:
+            if self._feedback != feedback:
+                self._feedback = feedback
+                changed = True
+        if changed:
             self.feedback_changed.emit()
 
     def _getfeedback(self):
         """ Getter for feedback Property """
-        return self._feedback
+        with self.lock:
+            fb = self._feedback
+        return fb
 
     feedback_changed = Signal()
     feedback = Property(str, _getfeedback, _setfeedback, notify=feedback_changed)
 
     def _setresult(self, result):
         """ Setter for result Property """
-        if self._result != result:
-            self._result = result
+        changed = False
+        with self.lock:
+            if self._result != result:
+                self._result = result
+                changed = True
+        if changed:
             self.result_changed.emit()
 
     def _getresult(self):
         """ Getter for result Property """
-        return self._result
+        with self.lock:
+            r = self._result
+        return r
 
     result_changed = Signal()
     result = Property(str, _getresult, _setresult, notify=result_changed)
 
     def _setduration(self, duration):
         """ Setter for duration Property """
-        if self._duration != duration:
-            self._duration = duration
+        changed = False
+        with self.lock:
+            if self._duration != duration:
+                self._duration = duration
+                changed = True
+        if changed:
             self.duration_changed.emit()
 
     def _getduration(self):
         """ Getter for duration Property """
-        return self._duration
+        with self.lock:
+            dur = self._duration
+        return dur
 
     duration_changed = Signal()
     duration = Property(int, _getduration, _setduration, notify=duration_changed)
 
     def _setname(self, name):
         """ Setter for name Property """
-        if self._name != name:
-            self._name = name
+        changed = False
+        with self.lock:
+            if self._name != name:
+                self._name = name
+                changed = True
+        if changed:
             self.name_changed.emit()
 
     def _getname(self):
         """ Getter for name Property """
-        return self._name
+        with self.lock:
+            n = self._name
+        return n
 
     name_changed = Signal()
     name = Property(str, _getname, _setname, notify=name_changed)
 
     def _setprogress(self, progress):
         """ Setter for progress Property """
-        if self._progress != progress:
-            if progress > 1:
-                progress = 1
-            elif progress < 0:
-                progress = 0
-            self._progress = progress
+        changed = False
+        with self.lock:
+            if self._progress != progress:
+                if progress > 1:
+                    progress = 1
+                elif progress < 0:
+                    progress = 0
+                self._progress = progress
+                changed = True
+        if changed:
             self.progress_changed.emit()
 
     def _getprogress(self):
@@ -103,6 +133,7 @@ class ResultModel(QAbstractListModel):
 
     def __init__(self, parent=None):
         QAbstractListModel.__init__(self, parent)
+        self.lock = threading.RLock()
         self._currentTestIndex = -1
         self._data = []
 
@@ -251,13 +282,19 @@ class ResultModel(QAbstractListModel):
 
     def _setcurrentTestIndex(self, currentTestIndex):
         """ Setter for currentTestIndex Property """
-        if self._currentTestIndex != currentTestIndex:
-            self._currentTestIndex = currentTestIndex
+        changed = False
+        with self.lock:
+            if self._currentTestIndex != currentTestIndex:
+                self._currentTestIndex = currentTestIndex
+                changed = True
+        if changed:
             self.currentTestIndex_changed.emit()
 
     def _getcurrentTestIndex(self):
         """ Getter for currentTestIndex Property """
-        return self._currentTestIndex
+        with self.lock:
+            index = self._currentTestIndex
+        return index
 
     currentTestIndex_changed = Signal()
     currentTestIndex = Property(int, _getcurrentTestIndex, _setcurrentTestIndex, notify=currentTestIndex_changed)

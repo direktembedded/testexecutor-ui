@@ -21,6 +21,7 @@ class TestSuiteModel(QObject):
 
     def __init__(self, idlist=None, resultlist=None, setid_callback=None, setstate_callback=None, title=None):
         QObject.__init__(self)
+        self.lock = threading.RLock()
         self._setidentifiers(idlist)
         self._setresults(resultlist)
         self._setinstructions(InstructionModel())
@@ -28,7 +29,6 @@ class TestSuiteModel(QObject):
         self.setid_callback = setid_callback
         self._state = None  # see suitestate Property below
         self.setstate_callback = setstate_callback
-        self.lock = threading.RLock()
         self._title = title
 
     def clear(self):
@@ -60,7 +60,7 @@ class TestSuiteModel(QObject):
             if changed:
                 self._state = newstate
         if changed:
-            if self._state == self.STATE_READY:
+            if newstate == self.STATE_READY:
                 self.results.clear()
             self.result_changed.emit()
             self.stateChanged.emit()
@@ -77,50 +77,63 @@ class TestSuiteModel(QObject):
 
     def _setid(self, id):
         """ Setter for newid Property """
-        self._newId = id
+        with self.lock:
+            self._newId = id
         if self.setid_callback:
             self.setid_callback(id)
         self.id_changed.emit()
 
     def _getid(self):
         """ Getter for newid Property """
-        return self._newId
+        id = None
+        with self.lock:
+            id = self._newId
+        return id
 
     id_changed = Signal()
     newid = Property(str, _getid, _setid, notify=id_changed)
 
     def _setidentifiers(self, identifiers):
         """ Setter for identifiers QAbstractList Property """
-        self._idlist = identifiers
+        with self.lock:
+            self._idlist = identifiers
         self.identifiers_changed.emit()
 
     def _getidentifiers(self):
         """ Getter for identifiers QAbstractList Property """
-        return self._idlist
+        with self.lock:
+            list = self._idlist
+        return list
 
     identifiers_changed = Signal()
     identifiers = Property(QObject, _getidentifiers, _setidentifiers, notify=identifiers_changed)
 
     def _setresults(self, results):
         """ Setter for results QAbstractList Property """
-        self._resultlist = results
+        with self.lock:
+            self._resultlist = results
         self.results_changed.emit()
 
     def _getresults(self):
         """ Getter for results QAbstractList Property """
-        return self._resultlist
+        with self.lock:
+            list = self._resultlist
+        return list
 
     results_changed = Signal()
     results = Property(QObject, _getresults, _setresults, notify=results_changed)
 
     def _setinstructions(self, instruction_info):
         """ Setter for instructions Property """
-        self._instructions = instruction_info
+        with self.lock:
+            self._instructions = instruction_info
         self.instructions_changed.emit()
 
     def _getinstructions(self):
         """ Getter for instructions Property """
-        return self._instructions
+        with self.lock:
+            instr = self._instructions
+        return instr
 
     instructions_changed = Signal()
     instructions = Property(QObject, _getinstructions, _setinstructions, notify=instructions_changed)
@@ -135,8 +148,9 @@ class TestSuiteModel(QObject):
                  None if error occurred or no tests started
         """
         suite_result = None
-        if self.results:
-            suite_result = self.results.overallResult()
+        with self.lock:
+            if self.results:
+                suite_result = self.results.overallResult()
         return suite_result
 
     result_changed = Signal()

@@ -28,6 +28,7 @@ class SampleIdentificationData(KeyValueModel):
         return self.getValue(self.Model) and self.getValue(self.Model) != ""
 
     def input_filter(self, value):
+        self.setPossibleValues(self.List, ['', 'one', 'two', 'three'])
         if value.isalpha():
             print("isalpha:", value)
             self.setValue(SampleIdentificationData.Model, value)
