@@ -46,7 +46,7 @@ class SampleTestSuiteWrapper(TestSuiteModel, TestSuiteListener):
 
     def _state_control_callback(self, st):
         newstate = None
-        clearStates = [TestSuiteModel.STATE_READY, TestSuiteModel.STATE_STOPPED, TestSuiteModel.STATE_END]
+        clearStates = [TestSuiteModel.STATE_READY, TestSuiteModel.STATE_STOPPED, TestSuiteModel.STATE_END, TestSuiteModel.STATE_IDLE]
         if st == TestSuiteModel.STATE_NEXT:
             if self.suitestate in clearStates or not self.suitestate:
                 self._clear_suite()

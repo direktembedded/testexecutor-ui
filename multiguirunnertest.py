@@ -29,7 +29,7 @@ if __name__ == "__main__":
     QCoreApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
 
     mySuiteGroup = TestSuiteGroup()
-    for i in range(4):
+    for i in range(6):
         mySuiteGroup.addData(SampleTestSuiteWrapper("Station {0}".format(i)))
 
     engine = QQmlApplicationEngine(url)

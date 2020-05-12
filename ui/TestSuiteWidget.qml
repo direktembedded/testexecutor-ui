@@ -160,7 +160,7 @@ Item {
         },
         State {
             name: "idle"
-            PropertyChanges { target: control_button; text: "Idle"; enabled: false  }
+            PropertyChanges { target: control_button; text: "Clear"; enabled: true  }
             PropertyChanges { target: instructionWidget; enabled: false  }
             PropertyChanges { target: identifierWidget; enabled: true  }
             PropertyChanges { target: frameRectangle; color: suiteResultColour() }
