@@ -11,6 +11,7 @@ from PySide2.QtCore import QUrl
 from PySide2.QtCore import Qt
 from PySide2.QtCore import QCoreApplication
 from PySide2.QtQml import QQmlApplicationEngine
+from PySide2.QtGui import QIcon
 
 import os
 import sys
@@ -23,8 +24,10 @@ if __name__ == "__main__":
     ui_path = os.path.join(current_path, 'ui')
     qml_file = os.path.join(ui_path, 'MultiTestWindow.qml')
     url = QUrl.fromLocalFile(qml_file)
+    iconFile = os.path.join(ui_path, 'te-64x64.ico')
 
     app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon(iconFile))
     QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     QCoreApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
 
