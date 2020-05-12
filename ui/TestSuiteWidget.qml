@@ -41,7 +41,7 @@ Item {
                     font.weight: Font.ExtraBold
                     anchors.fill: parent
                     horizontalAlignment: Text.AlignHCenter
-                    font.pointSize: parent.height * 0.7
+                    font.pixelSize: parent.height * 0.7
                     font.bold: true
                     font.family: "Arial"
                     clip: true
@@ -88,7 +88,7 @@ Item {
                 id: buttonContainer
                 Layout.fillHeight: true
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                // The Item wrapper is to allow TextField pointSize to reference the parents height.
+                // The Item wrapper is to allow TextField pixelSize to reference the parents height.
                 Layout.preferredHeight: parent.height * 0.04
                 Layout.minimumHeight: parent.height * 0.04
                 Layout.maximumHeight: parent.height * 0.04
@@ -108,7 +108,7 @@ Item {
                         padding: 0
                         spacing: 3
                         anchors.horizontalCenter: parent.horizontalCenter
-                        font.pointSize: parent.height * 0.7
+                        font.pixelSize: parent.height * 0.7
                         onClicked: {
                             // Set suite state to 'next' which is informing the model to change to the next state.
                             tswModel.testsuite.suitestate = "next"

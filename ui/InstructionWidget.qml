@@ -84,7 +84,7 @@ Item {
                     id: leftButton
                     text: model.control.leftButton.text
                     enabled: model.control.leftButton.enabled
-                    font.pointSize: parent.height * 0.5
+                    font.pixelSize: parent.height * 0.7
                     onClicked: {
                         onControlClick(model.control.leftButton.text)
                     }
@@ -115,7 +115,7 @@ Item {
                     checkable: false
                     checked: false
                     highlighted: true
-                    font.pointSize: parent.height * 0.5
+                    font.pixelSize: parent.height * 0.7
                     onClicked: onControlClick(model.control.rightButton.text)
                     contentItem: Text {
                         text: rightButton.text

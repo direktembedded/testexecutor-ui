@@ -45,8 +45,9 @@ Item {
                     verticalAlignment: Text.AlignVCenter
                     anchors.rightMargin: 2
                     anchors.fill: parent
-                    font.pointSize: parent.height * 0.7
-                    minimumPointSize: 10
+                    font.pixelSize: parent.height * 0.7
+                    fontSizeMode: Text.Fit
+                    minimumPixelSize: 10
                     clip: true
                     horizontalAlignment: Text.AlignRight
                 }
@@ -61,7 +62,7 @@ Item {
                 ComboBox {
                     id: comboControl
                     anchors.fill: parent
-                    font.pointSize: parent.height * 0.5
+                    font.pixelSize: parent.height * 0.7
                     model: possibles
                     visible: valueIsArray()
                     delegate: ItemDelegate {

@@ -22,7 +22,7 @@ Item {
         }
 
         Item {
-            // The Item wrapper is to allow TextField pointSize to reference the parents height.
+            // The Item wrapper is to allow TextField pixelSize to reference the parents height.
             Layout.preferredHeight: parent.height * 0.2
             Layout.minimumHeight: parent.height * 0.1
             Layout.maximumHeight: parent.height * 0.3
@@ -33,7 +33,7 @@ Item {
                 anchors.fill: parent
                 horizontalAlignment: Text.AlignHCenter
                 placeholderText: "Input"
-                font.pointSize: parent.height * 0.5
+                font.pixelSize: parent.height * 0.7
                 // onAccepted is called when 'return' is entered.
                 onAccepted: {
                     if (identificationWidget.inputid === singleInputField.text) {
