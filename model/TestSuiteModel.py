@@ -62,6 +62,8 @@ class TestSuiteModel(QObject):
         if changed:
             if newstate == self.STATE_READY:
                 self.results.clear()
+            elif newstate == self.STATE_STOPPING:
+                self.instructions.clear()
             self.result_changed.emit()
             self.stateChanged.emit()
 
@@ -158,7 +160,6 @@ class TestSuiteModel(QObject):
 
     def _settitle(self, title):
         """ Setter for title Property """
-        print("_settitle", title)
         changed = False
         with self.lock:
             if self._title != title:

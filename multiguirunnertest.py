@@ -17,25 +17,33 @@ import os
 import sys
 
 from model.TestSuiteGroup import TestSuiteGroup
+from model.MultiTestWindowModel import MultiTestWindowModel
 from test.SampleTestSuiteWrapper import SampleTestSuiteWrapper
 
 if __name__ == "__main__":
+    mySuiteGroup = TestSuiteGroup()
+    for i in range(6):
+        mySuiteGroup.addData(SampleTestSuiteWrapper("Station {0}".format(i)))
+
     current_path = os.path.dirname(sys.argv[0])
     ui_path = os.path.join(current_path, 'ui')
     qml_file = os.path.join(ui_path, 'MultiTestWindow.qml')
     url = QUrl.fromLocalFile(qml_file)
     iconFile = os.path.join(ui_path, 'te-64x64.ico')
 
-    app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon(iconFile))
+    # messy style: material
+    # workable styles: fusion, imagine, universal
+    #sys.argv += ['--style', 'fusion']
+
     QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     QCoreApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
+    app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon(iconFile))
 
-    mySuiteGroup = TestSuiteGroup()
-    for i in range(6):
-        mySuiteGroup.addData(SampleTestSuiteWrapper("Station {0}".format(i)))
+    windowModel = MultiTestWindowModel(mySuiteGroup.abortAll, "Muliple Runner")
 
     engine = QQmlApplicationEngine(url)
     engine.rootContext().setContextProperty("model_list", mySuiteGroup)
+    engine.rootContext().setContextProperty("app_model", windowModel)
 
     exit(app.exec_())

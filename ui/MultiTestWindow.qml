@@ -4,7 +4,7 @@ import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
     id: application
-    title: "Test Executor"
+    title: (app_model) ? app_model.title : "Test Executor"
     visible: true
     width: 800
     height: 800
@@ -14,8 +14,11 @@ ApplicationWindow {
     onClosing: {
         if (model_list.active_suites) {
             close.accepted = false
-            //activeSuitesDialog.open()
-            closeToolTip.open()
+            if (Boolean(app_model) && app_model.allowAbort) {
+                activeSuitesDialog.open()
+            } else {
+                closeToolTip.open()
+            }
         } else {
             close.accepted = true
         }
@@ -31,26 +34,28 @@ ApplicationWindow {
         contentItem:
             Column {
                 Text {
-                    text: "There Are Still Tests Running"
+                    text: (app_model) ? app_model.closeHeading : "There Are Still Tests Running"
                     font.pointSize: application.height * 0.03
                     font.weight: Font.ExtraBold
                 }
                 Text {
-                    text: "Stop all suites if you want to quit"
+                    text: (app_model) ? app_model.closeText : "Stop all suites if you want to quit"
                     font.pointSize: application.height * 0.02
                     font.weight: Font.ExtraBold
                 }
             }
-
     }
 
     Dialog {
         id: activeSuitesDialog
-        title: "Test Running"
+        title: (app_model) ? app_model.closeHeading : "There Are Still Tests Running"
         Label {
-            text: "Please stop all tests before exiting"
+            text: (app_model) ? app_model.closeText : "Do you want to abort all tests?"
         }
-        standardButtons: StandardButton.Ok
+        standardButtons: StandardButton.Yes | StandardButton.No
+        onYes: {
+            app_model.abortAll()
+        }
     }
 }
 

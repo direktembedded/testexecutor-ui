@@ -46,7 +46,6 @@ Item {
                     anchors.rightMargin: 2
                     anchors.fill: parent
                     font.pixelSize: parent.height * 0.7
-                    fontSizeMode: Text.Fit
                     minimumPixelSize: 10
                     clip: true
                     horizontalAlignment: Text.AlignRight

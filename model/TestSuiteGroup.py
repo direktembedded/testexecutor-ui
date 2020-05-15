@@ -63,12 +63,12 @@ class TestSuiteGroup(QAbstractListModel):
         try:
             data = self._datas[index.row()]
         except IndexError:
-            return QVariant()
+            return None
 
         if role == self.TestSuiteRole:
             return data
 
-        return QVariant()
+        return None
 
     def roleNames(self):
         return self._roles
@@ -84,3 +84,7 @@ class TestSuiteGroup(QAbstractListModel):
 
     active_suites_changed = Signal()
     active_suites = Property(bool, _getactive_suites, None, notify=active_suites_changed)
+
+    def abortAll(self):
+        for item in self._datas:
+            item.suiteAbort()

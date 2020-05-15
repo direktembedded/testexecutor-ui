@@ -94,11 +94,9 @@ class TestSuiteListener(TestListenerApi):
 
     def suiteEnd(self, name="test run", failures=-1, message=""):
         self.model.suitestate = TestSuiteModel.STATE_END
-        pass
 
     def suiteAbort(self, name="test run", message=""):
-        self.model.suitestate = TestSuiteModel.STATE_STOPPED
-        pass
+        self.model.suitestate = TestSuiteModel.STATE_STOPPING
 
     def asyncInstructions(self, title, message, callback=None, control=[], response=[]):
         self.link.setAsyncInstructionCallback(self.model.instructions.control.onUserDecision, callback)
