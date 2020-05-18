@@ -15,7 +15,8 @@ Item {
     Frame {
         bottomPadding: 8
         padding: 4
-        anchors.fill: parent
+        width: parent.width
+        height: parent.height
 
         background: Rectangle {
             id: frameRectangle
@@ -41,7 +42,7 @@ Item {
                     font.weight: Font.ExtraBold
                     anchors.fill: parent
                     horizontalAlignment: Text.AlignHCenter
-                    font.pixelSize: parent.height * 0.7
+                    font.pixelSize: parent.height
                     font.bold: true
                     font.family: "Arial"
                     clip: true
@@ -95,14 +96,14 @@ Item {
                 Layout.fillWidth: true
                 GridLayout {
                     anchors.fill: parent
-                    columns: 5
+                    columns: 3
                     rows: 1
                     Button {
                         id: control_button
                         width: parent.width
                         height: parent.height * 0.8
                         text: ""
-                        Layout.column: 3
+                        Layout.column: 2
                         Layout.columnSpan: 1
                         enabled: false
                         padding: 0
@@ -136,9 +137,10 @@ Item {
                         id: suiteProgress
                         color: "#e5e2e2"
                         text: formatTime(duration)
-                        Layout.fillWidth: true
-                        Layout.column: 5
+                        Layout.fillWidth: false
+                        Layout.column: 3
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                        Layout.columnSpan: 1
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignRight
                         font.pixelSize: parent.height / 1.2

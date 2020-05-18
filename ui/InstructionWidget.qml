@@ -43,17 +43,17 @@ Item {
                 Rectangle {
                     id: rectangleText
                     anchors.fill: parent
-                    color: (model.enabled && model.instructionText && !model.instructionText.toLowerCase().includes("html")) ? "yellow" : rectangleBase.color
+                    color: (Boolean(model) && model.enabled && model.instructionText && !model.instructionText.toLowerCase().includes("html")) ? "yellow" : rectangleBase.color
                     ColumnLayout {
                         anchors.fill: parent
                         spacing: 10
                         TextEdit {
                             id: instructionTitle
-                            visible: model.instructionTitle ? true : false
+                            visible: (Boolean(model) && model.instructionTitle) ? true : false
                             Layout.preferredHeight: parent.height * 0.1
                             Layout.minimumHeight: 0
                             Layout.maximumHeight: 60
-                            text: model.instructionTitle
+                            text: model ? model.instructionTitle : ""
                             textFormat: Text.AutoText
                             font.pixelSize: parent.height * 0.1
                             wrapMode: TextEdit.WordWrap
@@ -64,7 +64,7 @@ Item {
                             Layout.fillHeight: true
                             Layout.fillWidth: true
                             //text: "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:24px; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Feedback</p></body></html>"
-                            text: model.instructionText
+                            text: model ? model.instructionText : ""
                             textFormat: Text.AutoText
                             font.pixelSize: parent.height * 0.07
                             wrapMode: TextEdit.WordWrap
@@ -82,8 +82,8 @@ Item {
                 Button {
                     anchors.fill: parent
                     id: leftButton
-                    text: model.control.leftButton.text
-                    enabled: model.control.leftButton.enabled
+                    text: model ? model.control.leftButton.text : ""
+                    enabled: model ? model.control.leftButton.enabled : false
                     font.pixelSize: parent.height * 0.7
                     onClicked: {
                         onControlClick(model.control.leftButton.text)
@@ -108,8 +108,8 @@ Item {
                 Button {
                     id: rightButton
                     anchors.fill: parent
-                    text: model.control.rightButton.text
-                    enabled: model.control.rightButton.enabled
+                    text: model ? model.control.rightButton.text : ""
+                    enabled: model ? model.control.rightButton.enabled : false
                     antialiasing: true
                     transformOrigin: Item.Right
                     checkable: false

@@ -12,7 +12,6 @@ class MultiTestWindowModel(QObject):
         self._closeText = "Stop all suites if you want to quit"
         self._allowAbort = False
         if abortCallback is not None:
-            print("allowing abort")
             self._allowAbort = True
             self._closeText = "Do you want to abort all tests?"
 

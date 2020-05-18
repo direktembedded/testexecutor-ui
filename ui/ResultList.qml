@@ -21,7 +21,7 @@ Item {
             spacing: 1
             snapMode: ListView.NoSnap
             boundsBehavior: Flickable.StopAtBounds
-            currentIndex: results.currentTestIndex
+            currentIndex: results ? results.currentTestIndex : 0
             highlightFollowsCurrentItem: true
             anchors.fill: parent
             delegate: ResultItem {

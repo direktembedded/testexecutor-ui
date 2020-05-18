@@ -42,8 +42,9 @@ if __name__ == "__main__":
 
     windowModel = MultiTestWindowModel(mySuiteGroup.abortAll, "Muliple Runner")
 
-    engine = QQmlApplicationEngine(url)
+    engine = QQmlApplicationEngine()
     engine.rootContext().setContextProperty("model_list", mySuiteGroup)
     engine.rootContext().setContextProperty("app_model", windowModel)
+    engine.load(url)
 
     exit(app.exec_())
