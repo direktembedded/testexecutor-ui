@@ -65,6 +65,7 @@ Item {
                 }
                 identifiers: tswModel.testsuite.identifiers
                 color: config.identification.color
+                proportion: config.identification.proportion
                 itemConfig: config.identification.item
             }
 

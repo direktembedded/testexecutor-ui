@@ -12,7 +12,7 @@ Item {
     property var identifiers
     property var color: "#e5e2e2"
     property var proportion: 0.15
-    property var itemConfig
+    property alias itemConfig: identificationList.itemConfig
 
     ColumnLayout {
         id: identificationWidgetLayout
@@ -24,7 +24,6 @@ Item {
             Layout.fillHeight: true
             Layout.fillWidth: true
             color: identificationWidget.color
-            itemConfig: identificationWidget.itemConfig
         }
 
         Item {
