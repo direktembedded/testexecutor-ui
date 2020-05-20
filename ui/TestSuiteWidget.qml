@@ -11,6 +11,7 @@ Item {
     id: suite_container
     property var tswModel
     property int duration
+    property var config: TestSuiteConfig{}
 
     Frame {
         bottomPadding: 8
@@ -165,7 +166,7 @@ Item {
             PropertyChanges { target: control_button; text: "Clear"; enabled: true  }
             PropertyChanges { target: instructionWidget; enabled: false  }
             PropertyChanges { target: identifierWidget; enabled: true  }
-            PropertyChanges { target: frameRectangle; color: suiteResultColour() }
+            PropertyChanges { target: frameRectangle; color: suiteResultColour(config.states.idle.color) }
             PropertyChanges { target: suite_container; duration: 0 }
         },
         State {
@@ -173,46 +174,46 @@ Item {
             PropertyChanges { target: control_button; text: "Clear"; enabled: true  }
             PropertyChanges { target: instructionWidget; enabled: true  }
             PropertyChanges { target: identifierWidget; enabled: true  }
-            PropertyChanges { target: frameRectangle; color: "gray" }
+            PropertyChanges { target: frameRectangle; color: config.states.ready.color }
         },
         State {
             name: "running"
             PropertyChanges { target: control_button; text: "Stop"; enabled: true  }
             PropertyChanges { target: instructionWidget; enabled: true  }
             PropertyChanges { target: identifierWidget; enabled: false  }
-            PropertyChanges { target: frameRectangle; color: "gray" }
+            PropertyChanges { target: frameRectangle; color: config.states.running.color }
         },
         State {
             name: "starting"
             PropertyChanges { target: control_button; text: "Starting"; enabled: false }
             PropertyChanges { target: instructionWidget; enabled: false  }
-            PropertyChanges { target: frameRectangle; color: "gray" }
+            PropertyChanges { target: frameRectangle; color: config.states.running.color }
         },
         State {
             name: "stopping"
             PropertyChanges { target: control_button; text: "Stopping"; enabled: false }
             PropertyChanges { target: instructionWidget; enabled: true  }
             PropertyChanges { target: identifierWidget; enabled: false  }
-            PropertyChanges { target: frameRectangle; color: "orange" }
+            PropertyChanges { target: frameRectangle; color: config.states.stopped.color }
         },
         State {
             name: "stopped"
             PropertyChanges { target: control_button; text: "Clear"; enabled: true }
             PropertyChanges { target: instructionWidget; enabled: false  }
             PropertyChanges { target: identifierWidget; enabled: true  }
-            PropertyChanges { target: frameRectangle; color: "orange" }
+            PropertyChanges { target: frameRectangle; color: config.states.stopped.color }
         },
         State {
             name: "end"
             PropertyChanges { target: control_button; text: "Clear"; enabled: true }
             PropertyChanges { target: instructionWidget; enabled: false  }
             PropertyChanges { target: identifierWidget; enabled: true  }
-            PropertyChanges { target: frameRectangle; color: suiteResultColour() }
+            PropertyChanges { target: frameRectangle; color: suiteResultColour(config.states.idle.color) }
         }
     ]
-    function suiteResultColour()
+    function suiteResultColour(defaultColor)
     {
-        var colour = "lightgray";
+        var colour = defaultColor;
         if (tswModel.testsuite.result === "Pass")
         {
             colour = "green"

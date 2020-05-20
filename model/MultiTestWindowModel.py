@@ -1,4 +1,4 @@
-from PySide2.QtCore import QObject
+from PySide2.QtCore import QObject, QJsonDocument
 from PySide2.QtCore import Signal, Property, Slot
 
 
@@ -11,6 +11,7 @@ class MultiTestWindowModel(QObject):
         self._closeHeading = "There Are Still Tests Running"
         self._closeText = "Stop all suites if you want to quit"
         self._allowAbort = False
+        self._config = None
         if abortCallback is not None:
             self._allowAbort = True
             self._closeText = "Do you want to abort all tests?"
@@ -66,6 +67,20 @@ class MultiTestWindowModel(QObject):
 
     allowAbort_changed = Signal()
     allowAbort = Property(bool, _getallowAbort, _setallowAbort, notify=allowAbort_changed)
+
+    def _setconfig(self, config):
+        """ Setter for config Property """
+        if self._config != config:
+            self._config = config
+            self.config_changed.emit()
+
+    def _getconfig(self):
+        """ Getter for config Property """
+        return self._config
+
+    config_changed = Signal()
+    config = Property(str, _getconfig, _setconfig, notify=config_changed)
+
 
     @Slot()
     def abortAll(self):

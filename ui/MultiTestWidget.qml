@@ -20,6 +20,12 @@ Item {
                 tswModel: model
                 width: parent.width / testSuiteRepeater.count - 1
                 height: parent.height
+                Component.onCompleted: {
+                    if (app_model.config) {
+                        var json = JSON.parse(app_model.config)
+                        config = json
+                    }
+                }
             }
         }
     }
