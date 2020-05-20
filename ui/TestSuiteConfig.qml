@@ -35,11 +35,15 @@ Item {
       // results takes remaining space
       "status": 0.04
     }
+
     /*
      * viewableCount: The number of test results to be visible. Effects height of each test result, dependent on
      *                proportion values set.
+     * item: Undefined here as default config will come from ResultItemConfig. User should define it to an equivalent
+     *       json to ResultItemConfig it they want to override the default.
      */
     property var results: {
-      "viewableCount": 10
+      "viewableCount": 10,
+      "item": {}
     }
 }

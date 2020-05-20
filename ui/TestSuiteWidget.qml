@@ -86,6 +86,7 @@ Item {
                 transformOrigin: Item.Center
                 clip: true
                 viewableCount: config.results.viewableCount
+                itemConfig: config.results.item
             }
             Item {
                 id: buttonContainer

@@ -6,10 +6,12 @@ import QtQuick 2.4
 import QtQuick.Controls 2.1
 
 Item {
+    id: resultList
     width: 600
     clip: true
     property var results
     property int viewableCount: -1
+    property var itemConfig
 
     Rectangle {
         id: resultListRectangle
@@ -29,6 +31,9 @@ Item {
                 Component.onCompleted: {
                     if (results.currentTestIndex === -1) {
                         resultListView.positionViewAtEnd();
+                    }
+                    if (resultList.itemConfig) {
+                        config = resultList.config.item
                     }
                 }
             }
