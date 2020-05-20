@@ -38,13 +38,32 @@ config = '''{
     "results": {
       "viewableCount": 8,
       "color": "#e5e2e2",
-      "item": false
+      "item": {
+        "proportion": {
+            "name": 0.3,
+            "time": 0.2
+        },
+        "color": "#605b5b",
+        "border": {"color": "#00000000"},
+        "name": {
+            "color": "#00000000",
+            "text": {"color": "#e5e2e2"}
+        },
+        "feedback": {
+            "color": "#8e8a8a",
+            "border": {"color": "#b9e5e2e2"},
+            "text": {"color": {"default": "black", "progress": "#e5e2e2"}},
+            "progress": {"color": "green"}
+        },
+        "time": {
+            "color": "#00000000",
+            "text": {"color": "#e5e2e2"}
+        }
+      }
     },
 
     "identification": {
-      "color": "#e5e2e2",
-      "proportion": {"input": 0.15},
-      "item": false
+      "proportion": {"input": 0.35}
     }
 }
 '''
