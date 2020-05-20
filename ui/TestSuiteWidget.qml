@@ -85,7 +85,7 @@ Item {
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                 transformOrigin: Item.Center
                 clip: true
-                viewableCount: 10 // Change this to get this from a 'test suite view Config' model
+                viewableCount: config.results.viewableCount
             }
             Item {
                 id: buttonContainer
@@ -163,52 +163,52 @@ Item {
         },
         State {
             name: "idle"
-            PropertyChanges { target: control_button; text: "Clear"; enabled: true  }
+            PropertyChanges { target: control_button; text: config.states.idle.button.text; enabled: true  }
             PropertyChanges { target: instructionWidget; enabled: false  }
             PropertyChanges { target: identifierWidget; enabled: true  }
-            PropertyChanges { target: frameRectangle; color: suiteResultColour(config.states.idle.color) }
+            PropertyChanges { target: frameRectangle; color: suiteResultColour(config.states.idle.color.default) }
             PropertyChanges { target: suite_container; duration: 0 }
         },
         State {
             name: "ready"
-            PropertyChanges { target: control_button; text: "Clear"; enabled: true  }
+            PropertyChanges { target: control_button; text: config.states.ready.button.text; enabled: true  }
             PropertyChanges { target: instructionWidget; enabled: true  }
             PropertyChanges { target: identifierWidget; enabled: true  }
             PropertyChanges { target: frameRectangle; color: config.states.ready.color }
         },
         State {
             name: "running"
-            PropertyChanges { target: control_button; text: "Stop"; enabled: true  }
+            PropertyChanges { target: control_button; text: config.states.running.button.text; enabled: true  }
             PropertyChanges { target: instructionWidget; enabled: true  }
             PropertyChanges { target: identifierWidget; enabled: false  }
             PropertyChanges { target: frameRectangle; color: config.states.running.color }
         },
         State {
             name: "starting"
-            PropertyChanges { target: control_button; text: "Starting"; enabled: false }
+            PropertyChanges { target: control_button; text: config.states.running.button.text; enabled: false }
             PropertyChanges { target: instructionWidget; enabled: false  }
             PropertyChanges { target: frameRectangle; color: config.states.running.color }
         },
         State {
             name: "stopping"
-            PropertyChanges { target: control_button; text: "Stopping"; enabled: false }
+            PropertyChanges { target: control_button; text: config.states.stopped.button.text; enabled: false }
             PropertyChanges { target: instructionWidget; enabled: true  }
             PropertyChanges { target: identifierWidget; enabled: false  }
             PropertyChanges { target: frameRectangle; color: config.states.stopped.color }
         },
         State {
             name: "stopped"
-            PropertyChanges { target: control_button; text: "Clear"; enabled: true }
+            PropertyChanges { target: control_button; text: config.states.stopped.button.text; enabled: true }
             PropertyChanges { target: instructionWidget; enabled: false  }
             PropertyChanges { target: identifierWidget; enabled: true  }
             PropertyChanges { target: frameRectangle; color: config.states.stopped.color }
         },
         State {
             name: "end"
-            PropertyChanges { target: control_button; text: "Clear"; enabled: true }
+            PropertyChanges { target: control_button; text: config.states.idle.button.text; enabled: true }
             PropertyChanges { target: instructionWidget; enabled: false  }
             PropertyChanges { target: identifierWidget; enabled: true  }
-            PropertyChanges { target: frameRectangle; color: suiteResultColour(config.states.idle.color) }
+            PropertyChanges { target: frameRectangle; color: suiteResultColour(config.states.idle.color.default) }
         }
     ]
     function suiteResultColour(defaultColor)
@@ -216,11 +216,11 @@ Item {
         var colour = defaultColor;
         if (tswModel.testsuite.result === "Pass")
         {
-            colour = "green"
+            colour = config.states.idle.color.pass
         }
         else if (tswModel.testsuite.result === "Fail")
         {
-            colour = "red"
+            colour = config.states.idle.color.fail
         }
         return colour;
     }
