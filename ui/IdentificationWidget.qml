@@ -10,6 +10,9 @@ Item {
     id: identificationWidget
     property string inputid
     property var identifiers
+    property var color
+    property var itemConfig
+
     ColumnLayout {
         id: identificationWidgetLayout
         anchors.fill: parent
@@ -19,6 +22,8 @@ Item {
             keyvalues: identifiers
             Layout.fillHeight: true
             Layout.fillWidth: true
+            color: identificationWidget.color
+            itemConfig: identificationWidget.itemConfig
         }
 
         Item {

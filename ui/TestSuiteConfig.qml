@@ -39,11 +39,23 @@ Item {
     /*
      * viewableCount: The number of test results to be visible. Effects height of each test result, dependent on
      *                proportion values set.
-     * item: Undefined here as default config will come from ResultItemConfig. User should define it to an equivalent
-     *       json to ResultItemConfig it they want to override the default.
+     * color: Background color when no items in list
+     * item: Set to false here, in order to use default config from ResultItemConfig.
+     *       User should define it to an equivalent json to ResultItemConfig it they want to override the default.
      */
     property var results: {
       "viewableCount": 10,
-      "item": {}
+      "color": "#e5e2e2",
+      "item": false
+    }
+
+    /*
+     * color: Background color when no items in list
+     * item: Set to false here, in order to use default config from KeyValueItemConfig.
+     *       User should define it to an equivalent json to KeyValueItemConfig it they want to override the default.
+     */
+    property var identification: {
+      "color": "#e5e2e2",
+      "item": false
     }
 }

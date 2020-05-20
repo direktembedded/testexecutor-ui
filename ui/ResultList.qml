@@ -12,10 +12,11 @@ Item {
     property var results
     property int viewableCount: -1
     property var itemConfig
+    property var color: "#e5e2e2"
 
     Rectangle {
         id: resultListRectangle
-        color: "#e5e2e2"
+        color: color
         anchors.fill: parent
 
         ListView {
@@ -33,7 +34,7 @@ Item {
                         resultListView.positionViewAtEnd();
                     }
                     if (resultList.itemConfig) {
-                        config = resultList.config.item
+                        config = resultList.itemConfig
                     }
                 }
             }

@@ -64,6 +64,8 @@ Item {
                     value: identifierWidget.inputid
                 }
                 identifiers: tswModel.testsuite.identifiers
+                color: config.identification.color
+                itemConfig: config.identification.item
             }
 
             InstructionWidget {
@@ -72,7 +74,6 @@ Item {
                 Layout.preferredHeight: parent.height * config.proportion.instructions
                 Layout.maximumHeight: parent.height * 0.7
                 clip: true
-                //Layout.fillHeight: true
                 Layout.fillWidth: true
                 model: tswModel.testsuite.instructions
             }
@@ -86,6 +87,7 @@ Item {
                 transformOrigin: Item.Center
                 clip: true
                 viewableCount: config.results.viewableCount
+                color: config.results.color
                 itemConfig: config.results.item
             }
             Item {
@@ -110,7 +112,6 @@ Item {
                         enabled: false
                         padding: 0
                         spacing: 3
-                        //anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: parent.height * 0.7
                         onClicked: {
                             // Set suite state to 'next' which is informing the model to change to the next state.

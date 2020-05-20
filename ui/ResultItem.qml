@@ -57,7 +57,7 @@ Item {
                 }
                 Text {
                     id: feedback
-                    color: test.progress < 1 ? feedback.text.color.default : feedback.text.color.progress
+                    color: test.progress < 1 ? config.feedback.text.color.default : config.feedback.text.color.progress
                     text: test.feedback
                     verticalAlignment: Text.AlignVCenter
                     clip: true

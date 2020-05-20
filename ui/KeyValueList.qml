@@ -5,14 +5,17 @@
 import QtQuick 2.4
 
 Item {
+    id: keyValueList
     width: 400
     clip: true
     property var keyvalues
     property int viewableCount: -1
+    property var color: "#e5e2e2"
+    property var itemConfig
 
     Rectangle {
-        id: rectangle
-        color: "#e5e2e2"
+        id: keyValueRectangle
+        color: keyValueList.color
         anchors.fill: parent
 
         ListView {
@@ -23,6 +26,11 @@ Item {
             anchors.fill: parent
             delegate: KeyValueItem {
                 height: (viewableCount <= 0) ? (listView.height / listView.count) : (listView.height / viewableCount)
+                Component.onCompleted: {
+                    if (keyValueList.itemConfig) {
+                        config = keyValueList.itemConfig
+                    }
+                }
             }
             model: keyvalues
         }

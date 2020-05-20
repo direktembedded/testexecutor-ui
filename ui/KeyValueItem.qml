@@ -11,6 +11,7 @@ Item {
     width:parent.width
     height: 40
     clip: true
+    property var config: KeyValueItemConfig {}
 
     Binding {
         target: model.value
@@ -21,26 +22,29 @@ Item {
     Rectangle {
         id: rectangle
         width: parent.width
-        color: "#605b5b"
-        border.color: "#00000000"
+        color: config.color
+        border.width: 1
+        border.color: config.border.color
         anchors.fill: parent
 
         RowLayout {
             id: row
             height: parent.height
+            spacing: 1.5
             anchors.fill: parent
 
             Rectangle {
                 id: keyLabelRectangle
                 Layout.preferredWidth: parent.width * 0.3
-                color: "#00000000"
+                color: config.name.color
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-                border.color: "#00000000"
+                border.color: config.name.border.color
+                border.width: 1
                 Layout.fillHeight: true
 
                 Text {
                     id: identifierName
-                    color: "#e5e2e2"
+                    color: config.name.text.color
                     text: value.label
                     verticalAlignment: Text.AlignVCenter
                     anchors.rightMargin: 2
@@ -55,9 +59,10 @@ Item {
             Rectangle {
                 id: valueRectangle
                 Layout.fillHeight: true
-                color: "#ffffff"
+                color: config.value.color
                 Layout.fillWidth: true
                 border.width: 1
+                border.color: config.value.border.color
                 ComboBox {
                     id: comboControl
                     anchors.fill: parent
@@ -76,12 +81,14 @@ Item {
                     }
                     background: Rectangle {
                         border.width: 1
+                        border.color: config.value.border.color
                     }
                 }
 
                 TextInput {
                     id: identifier
                     text: value.value
+                    color: config.value.text.color
                     visible: !valueIsArray()
                     activeFocusOnPress: false
                     autoScroll: true
