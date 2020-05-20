@@ -31,7 +31,7 @@ Item {
 
             Rectangle {
                 id: rectangleTitle
-                Layout.maximumHeight: parent.height * 0.1
+                Layout.maximumHeight: parent.height * config.proportion.title
                 Layout.minimumHeight: parent.height * 0.04
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 Layout.fillWidth: true
@@ -52,7 +52,8 @@ Item {
 
             IdentificationWidget {
                 id: identifierWidget
-                Layout.maximumHeight: parent.height * 0.4
+                Layout.maximumHeight: parent.height * 0.5
+                Layout.preferredHeight: parent.height * config.proportion.identification
                 Layout.minimumHeight: parent.height * 0.2
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                 clip: false
@@ -67,10 +68,11 @@ Item {
 
             InstructionWidget {
                 id: instructionWidget
-                Layout.minimumWidth: parent.width * 0.3
-                Layout.preferredHeight: parent.height * 0.4
+                Layout.minimumHeight: parent.height * 0.3
+                Layout.preferredHeight: parent.height * config.proportion.instructions
+                Layout.maximumHeight: parent.height * 0.7
                 clip: true
-                Layout.fillHeight: true
+                //Layout.fillHeight: true
                 Layout.fillWidth: true
                 model: tswModel.testsuite.instructions
             }
@@ -78,22 +80,20 @@ Item {
             ResultList {
                 results: tswModel.testsuite.results
                 id: testList
-                Layout.preferredHeight: parent.height * 0.3
-                Layout.minimumHeight: parent.height * 0.2
                 Layout.fillWidth: true
+                Layout.fillHeight: true
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                 transformOrigin: Item.Center
                 clip: true
-                viewableCount: 10 // Change this to get this from a 'test suite view config' model
+                viewableCount: 10 // Change this to get this from a 'test suite view Config' model
             }
             Item {
                 id: buttonContainer
-                Layout.fillHeight: true
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 // The Item wrapper is to allow TextField pixelSize to reference the parents height.
-                Layout.preferredHeight: parent.height * 0.04
-                Layout.minimumHeight: parent.height * 0.04
-                Layout.maximumHeight: parent.height * 0.04
+                Layout.preferredHeight: parent.height * config.proportion.status
+                Layout.minimumHeight: parent.height * config.proportion.status
+                Layout.maximumHeight: parent.height * config.proportion.status
                 Layout.fillWidth: true
                 GridLayout {
                     anchors.fill: parent
@@ -109,7 +109,7 @@ Item {
                         enabled: false
                         padding: 0
                         spacing: 3
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        //anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: parent.height * 0.7
                         onClicked: {
                             // Set suite state to 'next' which is informing the model to change to the next state.

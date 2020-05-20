@@ -10,9 +10,17 @@
 import QtQuick 2.0
 
 Item {
-    property var states: { "idle": { "color": "lightgray"},
-                           "ready": { "color": "gray"},
-                           "running": { "color": "gray"},
-                           "stopped": { "color": "orange"},
-                            }
+    property var states: {
+      "idle": { "color": "lightgray"},
+      "ready": { "color": "gray"},
+      "running": { "color": "gray"},
+      "stopped": { "color": "orange"},
+    }
+    property var proportion: {
+      "title": 0.1,
+      "identification": 0.3,
+      "instructions": 0.5,
+      // results takes remaining space
+      "status": 0.04
+    }
 }
