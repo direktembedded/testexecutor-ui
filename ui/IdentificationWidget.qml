@@ -10,7 +10,8 @@ Item {
     id: identificationWidget
     property string inputid
     property var identifiers
-    property var color
+    property var color: "#e5e2e2"
+    property var proportion: 0.15
     property var itemConfig
 
     ColumnLayout {
@@ -28,8 +29,8 @@ Item {
 
         Item {
             // The Item wrapper is to allow TextField pixelSize to reference the parents height.
-            Layout.preferredHeight: parent.height * 0.2
-            Layout.minimumHeight: parent.height * 0.1
+            Layout.preferredHeight: parent.height * proportion.input
+            Layout.minimumHeight: parent.height * 0.15
             Layout.maximumHeight: parent.height * 0.3
             Layout.fillWidth: true
             TextField {

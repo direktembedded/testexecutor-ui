@@ -56,6 +56,7 @@ Item {
      */
     property var identification: {
       "color": "#e5e2e2",
+      "proportion": {"input": 0.15},
       "item": false
     }
 }
