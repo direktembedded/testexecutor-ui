@@ -10,12 +10,13 @@ Item {
     width: parent.width
     height: 40
     clip: true
+    property var config: ResultItemConfig{}
 
     Rectangle {
         id: resultRectangle
-        color: "#605b5b"
+        color: config.color
         border.width: 3
-        border.color: "#00000000"
+        border.color: config.border.color
         anchors.fill: parent
 
         RowLayout {
@@ -25,15 +26,13 @@ Item {
 
             Rectangle {
                 id: nameRectangle
-                Layout.preferredWidth: parent.width * 0.2
-                color: "#00000000"
+                Layout.preferredWidth: parent.width * config.proportion.name
+                color: config.name.color
                 Layout.fillHeight: true
-                border.width: 0
-                border.color: "#00b63333"
 
                 Text {
                     id: resultName
-                    color: "#e5e2e2"
+                    color: config.name.text.color
                     text: test.name
                     verticalAlignment: Text.AlignVCenter
                     font.pixelSize: parent.height / 1.2
@@ -46,19 +45,19 @@ Item {
 
             Rectangle {
                 id: feedbackRectangle
-                color: "#8e8a8a"
-                border.color: "#b9e5e2e2"
+                color: config.feedback.color
+                border.color: config.feedback.border.color
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Rectangle {
                     height: parent.height
                     width: parent.width * test.progress
-                    color: test.progress == 1 ? "transparent" : "green"
+                    color: test.progress == 1 ? "transparent" : config.feedback.progress.color
                     opacity: 0.5
                 }
                 Text {
                     id: feedback
-                    color: test.progress < 1 ? "black" : "#e5e2e2"
+                    color: test.progress < 1 ? feedback.text.color.default : feedback.text.color.progress
                     text: test.feedback
                     verticalAlignment: Text.AlignVCenter
                     clip: true
@@ -71,12 +70,10 @@ Item {
 
             Rectangle {
                 id: timeRectangle
-                Layout.preferredWidth: parent.width * 0.2
+                Layout.preferredWidth: parent.width * config.proportion.time
                 Layout.maximumWidth: parent.width * 0.3
-                color: "#00000000"
+                color: config.time.color
                 Layout.fillHeight: true
-                border.width: 0
-                border.color: "#e5e2e2"
                 Timer {
                     interval: 1000;
                     running: (state === "Running") && (test.progress < 1);
@@ -87,7 +84,7 @@ Item {
                 }
                 Text {
                     id: timeProgress
-                    color: "#e5e2e2"
+                    color: config.time.text.color
                     text: formatTime(test.duration)
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignRight
