@@ -44,7 +44,7 @@ Item {
      *       User should define it to an equivalent json to ResultItemConfig it they want to override the default.
      */
     property var results: {
-      "viewableCount": 10,
+      "viewableCount": 8,
       "color": "#e5e2e2",
       "item": false
     }
