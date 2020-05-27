@@ -91,7 +91,8 @@ if __name__ == "__main__":
         mySuiteGroup.addData(SampleTestSuiteWrapper("Station {0}".format(i)))
 
     current_path = os.path.dirname(sys.argv[0])
-    ui_path = os.path.join(current_path, 'ui')
+    relative_path = os.path.join(current_path, "..")
+    ui_path = os.path.join(relative_path, 'ui')
     qml_file = os.path.join(ui_path, 'MultiTestWindow.qml')
     url = QUrl.fromLocalFile(qml_file)
     iconFile = os.path.join(ui_path, 'te-64x64.ico')
@@ -116,5 +117,4 @@ if __name__ == "__main__":
     engine.rootContext().setContextProperty("model_list", mySuiteGroup)
 
     engine.load(url)
-
     exit(app.exec_())

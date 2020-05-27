@@ -11,4 +11,4 @@ The UI is a Pyside2/QML based UI and has a listener api via which the test frame
 There is a default configuration for the layout of the test suites which can be replaced using a json string with all layout configuration items. 
 
 ## Example
-The testexecutorsample.py provides a demonstration of tetost execution and user configuration.
+The TestExecutorSample.py provides a demonstration of tetost execution and user configuration.
