@@ -4,8 +4,8 @@ from PySide2.QtCore import Qt
 from PySide2.QtCore import QObject
 from PySide2.QtCore import QMutex
 
-from model.TestSuiteModel import TestSuiteModel
-from control.TestListenerApi import TestListenerApi
+from testexecutor.model.TestSuiteModel import TestSuiteModel
+from testexecutor.control.TestListenerApi import TestListenerApi
 
 
 class Link(QObject):

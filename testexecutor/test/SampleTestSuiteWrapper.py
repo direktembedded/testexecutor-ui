@@ -2,11 +2,11 @@
 Copyright (c) 2020 Direkt, Australia
 Licensed under BSD-3-Clause, refer LICENSE
 """
-from model.TestSuiteModel import TestSuiteModel
-from model.ResultModel import ResultModel
-from control.TestSuiteListener import TestSuiteListener
-from test.SampleIdentificationData import SampleIdentificationData
-from test.SampleTestExecution import SampleTestExecution
+from testexecutor.model.TestSuiteModel import TestSuiteModel
+from testexecutor.model.ResultModel import ResultModel
+from testexecutor.control.TestSuiteListener import TestSuiteListener
+from SampleIdentificationData import SampleIdentificationData
+from SampleTestExecution import SampleTestExecution
 
 
 class SampleTestSuiteWrapper(TestSuiteModel, TestSuiteListener):

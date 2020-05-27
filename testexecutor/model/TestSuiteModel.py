@@ -6,7 +6,7 @@ Licensed under BSD-3-Clause, refer LICENSE
 import threading
 from PySide2.QtCore import QObject
 from PySide2.QtCore import Signal, Property, Slot
-from model.InstructionsModel import InstructionModel
+from testexecutor.model.InstructionsModel import InstructionModel
 
 class TestSuiteModel(QObject):
     # these state strings must match those in TestSuiteWidget.qml

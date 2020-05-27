@@ -3,8 +3,8 @@ Copyright (c) 2020 Direkt, Australia
 Licensed under BSD-3-Clause, refer LICENSE
 """
 import string
-from model.KeyValueModel import KeyValueModel
-from model.KeyValueModel import KeyValue
+from testexecutor.model.KeyValueModel import KeyValueModel
+from testexecutor.model.KeyValueModel import KeyValue
 
 
 class SampleIdentificationData(KeyValueModel):

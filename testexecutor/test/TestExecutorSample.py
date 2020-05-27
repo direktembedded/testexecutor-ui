@@ -6,9 +6,9 @@ Copyright (c) 2020 Direkt, Australia
 Licensed under BSD-3-Clause, refer LICENSE
 """
 
-from model.TestSuiteGroup import TestSuiteGroup
-from model.MultiTestWindowModel import MultiTestWindowModel
-from test.SampleTestSuiteWrapper import SampleTestSuiteWrapper
+from testexecutor.model.TestSuiteGroup import TestSuiteGroup
+from testexecutor.model.MultiTestWindowModel import MultiTestWindowModel
+from SampleTestSuiteWrapper import SampleTestSuiteWrapper
 
 config = '''{
     "states": {

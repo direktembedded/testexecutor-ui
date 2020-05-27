@@ -9,7 +9,7 @@ Licensed under BSD-3-Clause, refer LICENSE
 import threading
 import time
 
-from model.ResultModel import Result
+from testexecutor.model.ResultModel import Result
 
 ExampleInstance = 1
 
