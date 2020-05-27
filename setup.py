@@ -1,0 +1,24 @@
+import setuptools
+
+VERSION="0.1.0"
+
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+setuptools.setup(
+    name="testexecutor",
+    version=VERSION,
+    description="A python UI library for the execution and control of device tests",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    packages=setuptools.find_packages(),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: BSD-3-Clause License",
+        "Operating System :: OS Independent",
+    ],
+    install_requires=[
+        'PySide2',
+    ],
+    python_requires='>=3.6',
+)
