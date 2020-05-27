@@ -1,4 +1,8 @@
 /*
+ * A generic key value item with a label for the 'name' and a value which can be a string or list of string.
+ * The layout can be controlled using a configuration json string.
+ * To override the default config set context property contextKeyValueItemConfig with the desired json string.
+ *
  * Copyright (c) 2020 Direkt, Australia
  * Licensed under BSD-3-Clause, refer LICENSE
  */
@@ -35,7 +39,7 @@ Item {
 
             Rectangle {
                 id: keyLabelRectangle
-                Layout.preferredWidth: parent.width * 0.3
+                Layout.preferredWidth: parent.width * config.proportion.name
                 color: config.name.color
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                 border.color: config.name.border.color
@@ -101,8 +105,16 @@ Item {
             }
         }
     }
+    Component.onCompleted: parseConfigStr()
+
     function valueIsArray() {
         return (possibles.length > 1) ? true : false;
+    }
+    function parseConfigStr() {
+        if (typeof contextKeyValueItemConfig !== "undefined") {
+            var json = JSON.parse(contextKeyValueItemConfig)
+            keyValueItem.config = json
+        }
     }
 }
 

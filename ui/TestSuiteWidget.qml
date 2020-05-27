@@ -53,7 +53,7 @@ Item {
             IdentificationWidget {
                 id: identifierWidget
                 Layout.maximumHeight: parent.height * 0.5
-                Layout.preferredHeight: parent.height * config.proportion.identification
+                Layout.preferredHeight: parent.height * (config ? config.proportion.identification : 0.3)
                 Layout.minimumHeight: parent.height * 0.2
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                 clip: false
@@ -64,9 +64,9 @@ Item {
                     value: identifierWidget.inputid
                 }
                 identifiers: tswModel.testsuite.identifiers
-                color: config.identification.color
-                proportion: config.identification.proportion
-                itemConfig: config.identification.item
+                color: config ? config.identification.color : "#e5e2e2"
+                proportion: config ? config.identification.proportion : ""
+                itemConfig: config ? config.identification.item : ""
             }
 
             InstructionWidget {

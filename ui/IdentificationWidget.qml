@@ -23,7 +23,6 @@ Item {
             keyvalues: identifiers
             Layout.fillHeight: true
             Layout.fillWidth: true
-            color: identificationWidget.color
         }
 
         Item {

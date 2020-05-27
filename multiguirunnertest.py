@@ -30,7 +30,7 @@ config = '''{
 
     "proportion": {
       "title": 0.1,
-      "identification": 0.3,
+      "identification": 0.2,
       "instructions": 0.4,
       "status": 0.04
     },
@@ -63,7 +63,24 @@ config = '''{
     },
 
     "identification": {
-      "proportion": {"input": 0.35}
+      "proportion": {"input": 0.15},
+      "item": { 
+            "proportion": {
+              "name": 0.4
+            },
+            "color": "#605b5b",
+            "border": { "color": "#00000000" },
+            "name": {
+              "color": "#00000000",
+              "text": {"color": "#e5e2e2"},
+              "border": {"color": "#00000000"}
+            },
+            "value": {
+              "color": "#ffffff",
+              "border": {"color": "#b9e5e2e2"},
+              "text": {"color": "black"}
+            }
+      }
     }
 }
 '''
@@ -74,7 +91,6 @@ if __name__ == "__main__":
         mySuiteGroup.addData(SampleTestSuiteWrapper("Station {0}".format(i)))
 
     current_path = os.path.dirname(sys.argv[0])
-    config_path = os.path.join(current_path, 'Config')
     ui_path = os.path.join(current_path, 'ui')
     qml_file = os.path.join(ui_path, 'MultiTestWindow.qml')
     url = QUrl.fromLocalFile(qml_file)
@@ -95,8 +111,10 @@ if __name__ == "__main__":
     windowModel.config = config
 
     engine = QQmlApplicationEngine()
-    engine.rootContext().setContextProperty("model_list", mySuiteGroup)
     engine.rootContext().setContextProperty("app_model", windowModel)
+    engine.rootContext().setContextProperty("contextKeyValueItemConfig", json.dumps(testJson["identification"]["item"]))
+    engine.rootContext().setContextProperty("model_list", mySuiteGroup)
+
     engine.load(url)
 
     exit(app.exec_())
