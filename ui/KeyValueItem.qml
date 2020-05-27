@@ -59,6 +59,7 @@ Item {
                     horizontalAlignment: Text.AlignRight
                     ToolTip {
                         visible: identifierName.truncated ? mouseArea.containsMouse : false
+                        timeout: 3000
                         contentItem:
                             Column {
                                 Text {
@@ -89,6 +90,9 @@ Item {
                     font.pixelSize: parent.height * 0.7
                     model: possibles
                     visible: valueIsArray()
+                    ToolTip.visible: hovered
+                    ToolTip.text: currentText
+                    ToolTip.timeout: 3000
                     delegate: ItemDelegate {
                         width: comboControl.width
                         contentItem: Text {
@@ -119,6 +123,7 @@ Item {
                     anchors.fill: parent
                     ToolTip {
                         visible: parent.text ? identifierMouseArea.containsMouse : false
+                        timeout: 3000
                         contentItem:
                             Column {
                                 Text {
