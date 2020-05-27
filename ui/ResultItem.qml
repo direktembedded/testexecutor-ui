@@ -99,6 +99,7 @@ Item {
         ToolTip {
             visible: test.name ? resultMouseArea.containsMouse : false
             timeout: 3000
+            delay: 500
             contentItem:
                 Rectangle {
                     color: resultRectangle.color

@@ -60,6 +60,7 @@ Item {
                     ToolTip {
                         visible: identifierName.truncated ? mouseArea.containsMouse : false
                         timeout: 3000
+                        delay: 500
                         contentItem:
                             Column {
                                 Text {
@@ -90,9 +91,20 @@ Item {
                     font.pixelSize: parent.height * 0.7
                     model: possibles
                     visible: valueIsArray()
-                    ToolTip.visible: hovered
-                    ToolTip.text: currentText
-                    ToolTip.timeout: 3000
+                    ToolTip {
+                        visible: comboControl.currentText ? comboControl.hovered : false
+                        timeout: 3000
+                        delay: 500
+                        contentItem:
+                            Column {
+                                Text {
+                                    text: comboControl.currentText
+                                    font.pixelSize: identifier.height
+                                    font.weight: Font.ExtraBold
+                                }
+                            }
+                    }
+
                     delegate: ItemDelegate {
                         width: comboControl.width
                         contentItem: Text {
@@ -124,6 +136,7 @@ Item {
                     ToolTip {
                         visible: parent.text ? identifierMouseArea.containsMouse : false
                         timeout: 3000
+                        delay: 500
                         contentItem:
                             Column {
                                 Text {
