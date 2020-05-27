@@ -121,6 +121,7 @@ Item {
                              * in the configuration
                              */
                             if (suite_container.state === "running" || suite_container.state === "starting") {
+                                actionDialog.action = control_button.text
                                 actionDialog.open()
                             } else {
                                 tswModel.testsuite.action(control_button.text)
@@ -219,13 +220,14 @@ Item {
 
     Dialog {
         id: actionDialog
+        property var action
         title: "There Are Tests Running"
         Label {
             text: "Do you want to " + control_button.text + "?"
         }
         standardButtons: StandardButton.Yes | StandardButton.No
         onYes: {
-            tswModel.testsuite.action(control_button.text)
+            tswModel.testsuite.action(action)
         }
     }
 
