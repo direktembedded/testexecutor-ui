@@ -8,7 +8,7 @@ Licensed under BSD-3-Clause, refer LICENSE
 
 from testexecutor.model.TestSuiteGroup import TestSuiteGroup
 from testexecutor.model.MultiTestWindowModel import MultiTestWindowModel
-from SampleTestSuiteWrapper import SampleTestSuiteWrapper
+from testexecutor.test.SampleTestSuiteWrapper import SampleTestSuiteWrapper
 
 config = '''{
     "states": {

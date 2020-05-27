@@ -100,7 +100,7 @@ class MultiTestWindowModel(QObject):
             self._abortCallback()
 
     def exec(self):
-        current_path = os.path.dirname(sys.argv[0])
+        current_path = os.path.dirname(os.path.abspath(__file__))
         relative_path = os.path.join(current_path, "..")
         ui_path = os.path.join(relative_path, 'ui')
         qml_file = os.path.join(ui_path, 'MultiTestWindow.qml')

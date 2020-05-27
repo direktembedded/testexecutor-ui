@@ -5,8 +5,8 @@ Licensed under BSD-3-Clause, refer LICENSE
 from testexecutor.model.TestSuiteModel import TestSuiteModel
 from testexecutor.model.ResultModel import ResultModel
 from testexecutor.control.TestSuiteListener import TestSuiteListener
-from SampleIdentificationData import SampleIdentificationData
-from SampleTestExecution import SampleTestExecution
+from testexecutor.test.SampleIdentificationData import SampleIdentificationData
+from testexecutor.test.SampleTestExecution import SampleTestExecution
 
 
 class SampleTestSuiteWrapper(TestSuiteModel, TestSuiteListener):
