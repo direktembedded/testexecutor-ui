@@ -17,7 +17,8 @@ class TestSuiteModel(QObject):
     STATE_END = "end"
     STATE_IDLE = "idle"
     STATE_READY = "ready"
-    STATE_NEXT = "next"  # When suitestate is set to 'next', the UI state button has been pressed
+    ACTION_CLEAR = "Clear"
+    ACTION_STOP = "Stop"
 
     def __init__(self, idlist=None, resultlist=None, setid_callback=None, setstate_callback=None, title=None):
         QObject.__init__(self)
@@ -37,15 +38,6 @@ class TestSuiteModel(QObject):
         self.identifiers.clearData()
         self.suitestate = self.STATE_IDLE
 
-    def _default_state_change(self, st):
-        newstate = st
-        if st == TestSuiteModel.STATE_NEXT:
-            if newstate == TestSuiteModel.STATE_IDLE or not self._state:
-                newstate = TestSuiteModel.STATE_RUNNING
-            else:
-                newstate = TestSuiteModel.STATE_IDLE
-        return newstate
-
     def setstate(self, st):
         """ Setter for suitestate Property """
         newstate = None
@@ -53,7 +45,7 @@ class TestSuiteModel(QObject):
         if self.setstate_callback:
             newstate = self.setstate_callback(st)
         else:
-            newstate = self._default_state_change(st)
+            newstate = st
         with self.lock:
             if newstate and newstate != self._state:
                 changed = True
@@ -182,3 +174,16 @@ class TestSuiteModel(QObject):
     def active(self):
         activeStates = [self.STATE_STOPPING, self.STATE_STARTING, self.STATE_RUNNING]
         return self.suitestate in activeStates
+
+    @Slot(str)
+    def action(self, action):
+        """
+        Two default actions are supported, Clear and Stop. The action string comes from the text on the control/action
+        button of the TestSuiteWidget.qml states, so ensure the configuration has strings which match exactly.
+        :param action:
+        :return:
+        """
+        if action == self.ACTION_CLEAR:
+            self.clear()
+        elif action == self.ACTION_STOP:
+            self.suitestate = self.STATE_STOPPING

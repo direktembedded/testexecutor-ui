@@ -115,8 +115,12 @@ Item {
                         spacing: 3
                         font.pixelSize: parent.height * 0.7
                         onClicked: {
-                            // Set suite state to 'next' which is informing the model to change to the next state.
-                            tswModel.testsuite.suitestate = "next"
+                            /*
+                             * Call the action 'event' on the test suite model with the text of the button as defined
+                             * in the configuration
+                             */
+                            console.log("button text", control_button.text)
+                            tswModel.testsuite.action(control_button.text)
                         }
                         contentItem: Text {
                             text: control_button.text
@@ -158,12 +162,6 @@ Item {
     state: tswModel.testsuite.suitestate
 
     states: [
-        State {
-            name: "next"
-            PropertyChanges { target: control_button; text: "next"; enabled: false  }
-            PropertyChanges { target: instructionWidget; enabled: false  }
-            PropertyChanges { target: identifierWidget; enabled: false  }
-        },
         State {
             name: "idle"
             PropertyChanges { target: control_button; text: config.states.idle.button.text; enabled: true  }
