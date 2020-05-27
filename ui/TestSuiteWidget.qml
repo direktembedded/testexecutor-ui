@@ -2,10 +2,11 @@
  * Copyright (c) 2020 Direkt, Australia
  * Licensed under BSD-3-Clause, refer LICENSE
  */
-import QtQuick 2.0
+import QtQuick 2.4
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.10
+import QtQuick.Dialogs 1.2
 
 Item {
     id: suite_container
@@ -119,8 +120,11 @@ Item {
                              * Call the action 'event' on the test suite model with the text of the button as defined
                              * in the configuration
                              */
-                            console.log("button text", control_button.text)
-                            tswModel.testsuite.action(control_button.text)
+                            if (suite_container.state === "running" || suite_container.state === "starting") {
+                                actionDialog.open()
+                            } else {
+                                tswModel.testsuite.action(control_button.text)
+                            }
                         }
                         contentItem: Text {
                             text: control_button.text
@@ -212,6 +216,19 @@ Item {
             PropertyChanges { target: frameRectangle; color: suiteResultColour(config.states.idle.color.default) }
         }
     ]
+
+    Dialog {
+        id: actionDialog
+        title: "There Are Tests Running"
+        Label {
+            text: "Do you want to continue?"
+        }
+        standardButtons: StandardButton.Yes | StandardButton.No
+        onYes: {
+            tswModel.testsuite.action(control_button.text)
+        }
+    }
+
     function suiteResultColour(defaultColor)
     {
         var colour = defaultColor;
