@@ -2,8 +2,9 @@
  * Copyright (c) 2020 Direkt, Australia
  * Licensed under BSD-3-Clause, refer LICENSE
  */
-import QtQuick 2.4
+import QtQuick 2.6
 import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.12
 
 Item {
     id: resultItem
@@ -94,6 +95,57 @@ Item {
                     clip: true
                 }
             }
+        }
+        ToolTip {
+            visible: test.name ? resultMouseArea.containsMouse : false
+            timeout: 3000
+            contentItem:
+                Rectangle {
+                    color: resultRectangle.color
+                    Row {
+                        Rectangle {
+                            Text {
+                                text: resultName.text
+                                font.pixelSize: resultRectangle.height
+                                font.weight: Font.Bold
+                                color: resultName.color
+                            }
+                            color: nameRectangle.color
+                            width: childrenRect.width
+                            height: childrenRect.height
+                        }
+                        Rectangle {
+                            Text {
+                                text: feedback.text
+                                font.pixelSize: resultRectangle.height
+                                font.weight: Font.Bold
+                                color: feedback.color
+                            }
+                            color: feedbackRectangle.color
+                            width: childrenRect.width
+                            height: childrenRect.height
+                        }
+                        Rectangle {
+                            Text {
+                                text: timeProgress.text
+                                font.pixelSize: resultRectangle.height
+                                font.weight: Font.Bold
+                                color: timeProgress.color
+                            }
+                            color: timeRectangle.color
+                            width: childrenRect.width
+                            height: childrenRect.height
+                        }
+                        spacing: 10
+                        rightPadding: 10
+                        leftPadding: 10
+                    }
+                }
+        }
+        MouseArea {
+            id: resultMouseArea
+            anchors.fill: parent
+            hoverEnabled: true
         }
     }
     state: test.result
