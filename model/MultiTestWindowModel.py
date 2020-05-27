@@ -4,12 +4,12 @@ from PySide2.QtCore import Signal, Property, Slot
 
 class MultiTestWindowModel(QObject):
 
-    def __init__(self, abortCallback=None, title="Test Executor", closeHeading=None, closeText=None):
+    def __init__(self, abortCallback=None, title="Test Executor", closeHeading="There Are Still Tests Running", closeText="Stop all suites if you want to quit"):
         QObject.__init__(self)
         self._title = title
         self._abortCallback = abortCallback
-        self._closeHeading = "There Are Still Tests Running"
-        self._closeText = "Stop all suites if you want to quit"
+        self._closeHeading = closeHeading
+        self._closeText = closeText
         self._allowAbort = False
         self._config = None
         if abortCallback is not None:
