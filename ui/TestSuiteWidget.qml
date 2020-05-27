@@ -221,7 +221,7 @@ Item {
         id: actionDialog
         title: "There Are Tests Running"
         Label {
-            text: "Do you want to continue?"
+            text: "Do you want to " + control_button.text + "?"
         }
         standardButtons: StandardButton.Yes | StandardButton.No
         onYes: {
