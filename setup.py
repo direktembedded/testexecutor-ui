@@ -18,7 +18,10 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     install_requires=[
-        'PySide2',
+        'PySide2>=5.13',
     ],
     python_requires='>=3.6',
 )
+
+# python -m pip install --user --upgrade setuptools wheel
+# python setup.py sdist bdist_wheel
