@@ -1,20 +1,10 @@
 """
-Test module to kick off text-executor gui.
+Test module to kick off text-executor gui and run a number of dummy tests in a python thread.
 execute as python3 <filename.py>
 
 Copyright (c) 2020 Direkt, Australia
 Licensed under BSD-3-Clause, refer LICENSE
 """
-from PySide2.QtWidgets import QApplication
-from PySide2.QtCore import QUrl
-from PySide2.QtCore import Qt
-from PySide2.QtCore import QCoreApplication
-from PySide2.QtQml import QQmlApplicationEngine
-from PySide2.QtGui import QIcon
-
-import os
-import sys
-import json
 
 from model.TestSuiteGroup import TestSuiteGroup
 from model.MultiTestWindowModel import MultiTestWindowModel
@@ -90,31 +80,11 @@ if __name__ == "__main__":
     for i in range(6):
         mySuiteGroup.addData(SampleTestSuiteWrapper("Station {0}".format(i)))
 
-    current_path = os.path.dirname(sys.argv[0])
-    relative_path = os.path.join(current_path, "..")
-    ui_path = os.path.join(relative_path, 'ui')
-    qml_file = os.path.join(ui_path, 'MultiTestWindow.qml')
-    url = QUrl.fromLocalFile(qml_file)
-    iconFile = os.path.join(ui_path, 'te-64x64.ico')
-
     # messy style: material
     # workable styles: fusion, imagine, universal
     #sys.argv += ['--style', 'fusion']
 
-    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
-    QCoreApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
-    app = QApplication(sys.argv)
-
-    app.setWindowIcon(QIcon(iconFile))
-
-    windowModel = MultiTestWindowModel(mySuiteGroup.abortAll, "Multiple Runner")
-    testJson = json.loads(config)
+    windowModel = MultiTestWindowModel(mySuiteGroup, "Multiple Runner")
     windowModel.config = config
 
-    engine = QQmlApplicationEngine()
-    engine.rootContext().setContextProperty("app_model", windowModel)
-    engine.rootContext().setContextProperty("contextKeyValueItemConfig", json.dumps(testJson["identification"]["item"]))
-    engine.rootContext().setContextProperty("model_list", mySuiteGroup)
-
-    engine.load(url)
-    exit(app.exec_())
+    exit(windowModel.exec())

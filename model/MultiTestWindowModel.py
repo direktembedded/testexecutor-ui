@@ -1,18 +1,29 @@
 from PySide2.QtCore import QObject, QJsonDocument
 from PySide2.QtCore import Signal, Property, Slot
+from PySide2.QtWidgets import QApplication
+from PySide2.QtCore import QUrl
+from PySide2.QtCore import Qt
+from PySide2.QtCore import QCoreApplication
+from PySide2.QtGui import QIcon
+from PySide2.QtQml import QQmlApplicationEngine
 
+import os
+import sys
+import json
 
 class MultiTestWindowModel(QObject):
 
-    def __init__(self, abortCallback=None, title="Test Executor", closeHeading="There Are Still Tests Running", closeText="Stop all suites if you want to quit"):
+    def __init__(self, suiteGroup=None, title="Test Executor", closeHeading="There Are Still Tests Running", closeText="Stop all suites if you want to quit"):
         QObject.__init__(self)
         self._title = title
-        self._abortCallback = abortCallback
+        self._abortCallback = None
         self._closeHeading = closeHeading
         self._closeText = closeText
         self._allowAbort = False
         self._config = None
-        if abortCallback is not None:
+        self._suiteGroup = suiteGroup
+        if suiteGroup is not None and suiteGroup.abortAll is not None:
+            self._abortCallback = suiteGroup.abortAll
             self._allowAbort = True
             self._closeText = "Do you want to abort all tests?"
 
@@ -87,3 +98,28 @@ class MultiTestWindowModel(QObject):
         print("abortAll")
         if self._abortCallback:
             self._abortCallback()
+
+    def exec(self):
+        current_path = os.path.dirname(sys.argv[0])
+        relative_path = os.path.join(current_path, "..")
+        ui_path = os.path.join(relative_path, 'ui')
+        qml_file = os.path.join(ui_path, 'MultiTestWindow.qml')
+        url = QUrl.fromLocalFile(qml_file)
+        iconFile = os.path.join(ui_path, 'te-64x64.ico')
+
+        QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+        QCoreApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
+        app = QApplication(sys.argv)
+
+        app.setWindowIcon(QIcon(iconFile))
+        check_json = json.loads(self.config)
+        engine = QQmlApplicationEngine()
+        engine.rootContext().setContextProperty("app_model", self)
+        engine.rootContext().setContextProperty("contextKeyValueItemConfig",
+                                                json.dumps(check_json["identification"]["item"]))
+        engine.rootContext().setContextProperty("model_list", self._suiteGroup)
+
+        engine.load(url)
+
+        return app.exec_()
+
