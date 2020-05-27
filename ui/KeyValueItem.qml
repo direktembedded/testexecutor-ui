@@ -55,8 +55,24 @@ Item {
                     anchors.fill: parent
                     font.pixelSize: parent.height * 0.7
                     minimumPixelSize: 10
-                    clip: true
+                    elide: Text.ElideLeft
                     horizontalAlignment: Text.AlignRight
+                    ToolTip {
+                        visible: identifierName.truncated ? mouseArea.containsMouse : false
+                        contentItem:
+                            Column {
+                                Text {
+                                    text: identifierName.text
+                                    font.pixelSize: identifier.height
+                                    font.weight: Font.ExtraBold
+                                }
+                            }
+                    }
+                    MouseArea {
+                        id: mouseArea
+                        anchors.fill: parent
+                        hoverEnabled: true
+                    }
                 }
             }
 
@@ -101,10 +117,27 @@ Item {
                     anchors.rightMargin: 0
                     anchors.leftMargin: 3
                     anchors.fill: parent
+                    ToolTip {
+                        visible: parent.text ? identifierMouseArea.containsMouse : false
+                        contentItem:
+                            Column {
+                                Text {
+                                    text: identifier.text
+                                    font.pixelSize: identifier.height
+                                    font.weight: Font.ExtraBold
+                                }
+                            }
+                    }
+                    MouseArea {
+                        id: identifierMouseArea
+                        anchors.fill: parent
+                        hoverEnabled: true
+                    }
                 }
             }
         }
     }
+
     Component.onCompleted: parseConfigStr()
 
     function valueIsArray() {
