@@ -16,7 +16,6 @@ class Link(QObject):
     endSignal = Signal(str, str)
     progressSignal = Signal(str, int)
     userDecisionSignal = Signal(str, str, list)
-    userWaitMutex = QMutex()
     _userCallback = None
 
     def setAsyncInstructionCallback(self, signal, callback):
@@ -64,22 +63,18 @@ class TestSuiteListener(TestListenerApi):
 
     def userDecision(self, title, message):
         buttons = ["Yes", "No"]
-        self.link.userWaitMutex.lock()
         self.link.userDecisionSignal.emit(title, message, buttons)
-        self.model.instructions.control.userDecisionWait.wait(self.link.userWaitMutex)
-        self.link.userWaitMutex.unlock()
+        self.model.instructions.userDecisionWait()
         return self.model.instructions.control.lastUserDecision()
 
     def userInstructions(self, title, message, expectResponse=True):
         buttons = []
         if expectResponse:
             buttons = ["Ok"]
-        self.link.userWaitMutex.lock()
         self.link.userDecisionSignal.emit(title, message, buttons)
         if expectResponse:
-            self.model.instructions.control.userDecisionWait.wait(self.link.userWaitMutex)
+            self.model.instructions.userDecisionWait()
             self.clearInstructions()
-        self.link.userWaitMutex.unlock()
         return self.model.instructions.control.lastUserDecision()
 
     def suiteStart(self, name="test run", tests=[]):

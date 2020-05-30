@@ -8,7 +8,6 @@ from PySide2.QtCore import Slot
 from PySide2.QtCore import Signal
 from PySide2.QtCore import Property
 from PySide2.QtCore import QObject
-from PySide2.QtCore import QWaitCondition
 
 
 class ControlButtonConfig(QObject):
@@ -56,7 +55,7 @@ class InstructionControl(QObject):
         self.lock = threading.RLock()
         self._buttons = [ControlButtonConfig(), ControlButtonConfig()]
         self._controlReceived = None
-        self.userDecisionWait = QWaitCondition()
+        self.userDecisionEvent = threading.Event()
 
     onUserDecision = Signal(str)
 
@@ -88,12 +87,12 @@ class InstructionControl(QObject):
         with self.lock:
             self._controlReceived = decision
         self.setButtons([])  # Do not allow for a second button press by clearing all buttons
-        self.userDecisionWait.wakeAll()
+        self.userDecisionEvent.set()
         self.onUserDecision.emit(self.lastUserDecision())
 
     def cancelWaiting(self):
         self._controlReceived = None
-        self.userDecisionWait.wakeAll()
+        self.userDecisionEvent.set()
 
     def setButtons(self, buttonTextList):
         info = buttonTextList
@@ -164,6 +163,14 @@ class InstructionModel(QObject):
         self.instructionTitle = title
         self.instructionText = message
         self.enabled = self.control.requestDecision(control)
+
+    def userDecisionWait(self):
+        """
+        If the caller wishes to block until the user decision requested is made, they can call this immediately
+        after calling userDecision.
+        """
+        self.control.userDecisionEvent.clear()
+        self.control.userDecisionEvent.wait()
 
     def _setinstructionText(self, instructionText):
         """ Setter for instructionText Property """
