@@ -8,7 +8,7 @@ import QtQuick.Controls 2.12
 
 Item {
     id: resultItem
-    width: parent.width
+    width: parent ? parent.width : 100
     height: 40
     clip: true
     property var config: ResultItemConfig{}

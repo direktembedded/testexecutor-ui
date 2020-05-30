@@ -109,7 +109,7 @@ Item {
                         width: parent.width
                         height: parent.height * 0.8
                         text: ""
-                        Layout.column: 2
+                        Layout.column: 1
                         Layout.columnSpan: 1
                         enabled: false
                         padding: 0
@@ -151,7 +151,7 @@ Item {
                         color: "#e5e2e2"
                         text: formatTime(duration)
                         Layout.fillWidth: false
-                        Layout.column: 3
+                        Layout.column: 2
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                         Layout.columnSpan: 1
                         verticalAlignment: Text.AlignVCenter
