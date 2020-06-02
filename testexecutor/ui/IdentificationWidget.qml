@@ -48,9 +48,7 @@ Item {
                 }
                 // Whenever a new line is detected we want to update input it also so the caller gets the scanned input
                 onTextEdited: {
-                    console.log("onTextEdited")
                     var str = singleInputField.text
-                    print(str)
                     if (str.charAt(str.length - 1) === '\n') {
                         if (identificationWidget.inputid === singleInputField.text) {
                             identificationWidget.inputid = ""
