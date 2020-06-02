@@ -10,6 +10,9 @@ Copyright (c) 2020 Direkt, Australia
 Licensed under BSD-3-Clause, refer LICENSE file
 """
 
+packagename='testexecutor'
+
+
 def getGitVersion():
     import subprocess
     return subprocess.check_output(["git", "describe", "--dirty"]).strip().decode()
@@ -30,12 +33,13 @@ if __name__ == "__main__":
     import os
     return_code = -1
     current_path = os.path.dirname(os.path.abspath(__file__))
+    package_path = os.path.join(current_path, packagename)
     version = getGitVersion()
     if isVersionClean(version):
-        with open(os.path.join(current_path, 'VERSION'), "r") as version_file:
+        with open(os.path.join(package_path, 'VERSION'), "r") as version_file:
             fileVersion = version_file.read().strip()
         if fileVersion != version:
-            with open(os.path.join(current_path, 'VERSION'), "w") as version_file:
+            with open(os.path.join(package_path, 'VERSION'), "w") as version_file:
                 print(version, file=version_file)
                 print("File version ({0}) not same as git version ({1})\nFile has been updated\nPlease confirm, commit, tag and re-run this script".format(fileVersion, version))
         else:

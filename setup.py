@@ -13,7 +13,7 @@ import os
 VERSION=""
 
 current_path = os.path.dirname(os.path.abspath(__file__))
-with open(os.path.join(current_path, 'VERSION')) as version_file:
+with open(os.path.join(current_path, 'testexecutor', 'VERSION')) as version_file:
     VERSION = version_file.read().strip()
 
 with open("README.md", "r") as fh:
@@ -26,7 +26,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
-    package_data={'testexecutor': ['ui/*.qml', 'ui/*.ico']},
+    package_data={'testexecutor': ['ui/*.qml', 'ui/*.ico', 'VERSION']},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: BSD-3-Clause License",
