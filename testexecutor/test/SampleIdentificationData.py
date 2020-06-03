@@ -27,21 +27,22 @@ class SampleIdentificationData(KeyValueModel):
     def hasModel(self):
         return self.getValue(self.Model) and self.getValue(self.Model) != ""
 
-    def input_filter(self, value):
+    def input_filter(self, values):
         self.setPossibleValues(self.List, ['', 'one', 'two', 'three'])
-        if value.isalpha():
-            print("isalpha:", value)
-            self.setValue(SampleIdentificationData.Model, value)
-        elif value.isdigit():
-            print("isdigit:", value)
-            self.setValue(SampleIdentificationData.SerialNumber, value)
-        elif value.isalnum() and all(c in string.hexdigits for c in value):
-            print("ishex:", value)
-            self.setValue(SampleIdentificationData.Mac, value)
-        else:
-            if value is not None and value != "":
-                print("other:", value)
-                self.setValue(SampleIdentificationData.OtherId, value)
+        for value in values.split('\n'):
+            if value.isalpha():
+                print("isalpha:", value)
+                self.setValue(SampleIdentificationData.Model, value)
+            elif value.isdigit():
+                print("isdigit:", value)
+                self.setValue(SampleIdentificationData.SerialNumber, value)
+            elif value.isalnum() and all(c in string.hexdigits for c in value):
+                print("ishex:", value)
+                self.setValue(SampleIdentificationData.Mac, value)
+            else:
+                if value is not None and value != "":
+                    print("other:", value)
+                    self.setValue(SampleIdentificationData.OtherId, value)
 
     SerialNumber = 'SN'
     Model = 'Model'
