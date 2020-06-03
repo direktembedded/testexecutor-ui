@@ -76,6 +76,8 @@ config = '''{
 '''
 
 if __name__ == "__main__":
+    import testexecutor as te
+
     mySuiteGroup = TestSuiteGroup()
     for i in range(6):
         mySuiteGroup.addData(SampleTestSuiteWrapper("Station {0}".format(i)))
@@ -84,7 +86,7 @@ if __name__ == "__main__":
     # workable styles: fusion, imagine, universal
     #sys.argv += ['--style', 'fusion']
 
-    windowModel = MultiTestWindowModel(mySuiteGroup, "Multiple Runner")
+    windowModel = MultiTestWindowModel(mySuiteGroup, "Sample Multiple Runner (TE {0})".format(te.__version__))
     windowModel.config = config
 
     exit(windowModel.exec())
