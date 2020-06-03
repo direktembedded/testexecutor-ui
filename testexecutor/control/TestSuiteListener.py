@@ -1,3 +1,8 @@
+"""
+Copyright (c) 2020 Direkt, Australia
+Licensed under BSD-3-Clause, refer LICENSE file
+"""
+
 from PySide2.QtCore import Signal
 from PySide2.QtCore import Slot
 from PySide2.QtCore import Qt

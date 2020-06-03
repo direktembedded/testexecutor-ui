@@ -1,6 +1,20 @@
-import setuptools
+#!/usr/bin/env python3
 
-VERSION="0.1.0"
+"""
+Pip setup file used to create a package for testexecutor.
+
+Copyright (c) 2020 Direkt, Australia
+Licensed under BSD-3-Clause, refer LICENSE file
+"""
+
+import setuptools
+import os
+
+VERSION=""
+
+current_path = os.path.dirname(os.path.abspath(__file__))
+with open(os.path.join(current_path, 'VERSION')) as version_file:
+    VERSION = version_file.read().strip()
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
