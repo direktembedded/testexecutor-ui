@@ -13,7 +13,12 @@ from testexecutor.model.ResultModel import Result
 
 ExampleInstance = 1
 
+
 class SampleTestExecution:
+    """
+    A class which provides a set of dummy test runs, which are used by SampleTestSuiteWrapper to demonstrate how
+    tests can use the testexecutor.TestListenerApi to connect to the testexecuter UI.
+    """
 
     def __init__(self, listener, exit_callback=None, timeout=1.0):
         self._listener = listener
