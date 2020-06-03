@@ -6,8 +6,9 @@ ApplicationWindow {
     id: application
     title: (app_model) ? app_model.title : "Test Executor"
     visible: true
-    width: 800
+    width: 1200
     height: 800
+    visibility: "Maximized"
     MultiTestWidget {
         test_suites: model_list
     }

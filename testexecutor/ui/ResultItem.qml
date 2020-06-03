@@ -53,7 +53,7 @@ Item {
                 Rectangle {
                     height: parent.height
                     width: parent.width * test.progress
-                    color: test.progress == 1 ? "transparent" : config.feedback.progress.color
+                    color: Boolean(test) && test.progress == 1 ? "transparent" : config.feedback.progress.color
                     opacity: 0.5
                 }
                 Text {
