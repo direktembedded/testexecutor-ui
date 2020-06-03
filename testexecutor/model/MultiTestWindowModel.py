@@ -99,13 +99,14 @@ class MultiTestWindowModel(QObject):
         if self._abortCallback:
             self._abortCallback()
 
-    def exec(self):
+    def exec(self, iconFile=None):
         current_path = os.path.dirname(os.path.abspath(__file__))
         relative_path = os.path.join(current_path, "..")
         ui_path = os.path.join(relative_path, 'ui')
         qml_file = os.path.join(ui_path, 'MultiTestWindow.qml')
         url = QUrl.fromLocalFile(qml_file)
-        iconFile = os.path.join(ui_path, 'te-64x64.ico')
+        if not iconFile:
+            iconFile = os.path.join(ui_path, 'te-64x64.ico')
 
         QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
         QCoreApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
@@ -122,4 +123,3 @@ class MultiTestWindowModel(QObject):
         engine.load(url)
 
         return app.exec_()
-
