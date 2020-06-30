@@ -78,6 +78,8 @@ Item {
                 clip: true
                 Layout.fillWidth: true
                 model: tswModel.testsuite.instructions
+                color: config ? config.instructions.color : "yellow"
+                proportion: config ? config.instructions.proportion : {"header": 0.1, "textHeight": 0.07, "control": 0.02}
             }
 
             ResultList {

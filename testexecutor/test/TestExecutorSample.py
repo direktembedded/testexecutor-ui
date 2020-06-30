@@ -71,6 +71,11 @@ config = '''{
               "text": {"color": "black"}
             }
       }
+    },
+    
+    "instructions": {
+        "color": "yellow",
+        "proportion": {"header": 0.1, "textHeight": 0.05, "control": 0.1}
     }
 }
 '''

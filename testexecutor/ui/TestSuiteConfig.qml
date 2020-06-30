@@ -59,4 +59,16 @@ Item {
       "proportion": {"input": 0.15},
       "item": false
     }
+
+    /*
+     * color: Background color when instruction text is not html
+     * proportion:
+     *    header: Proportion of text box dedicated to header if there is one
+     *    text: Proportion of text box the main instruction text height will be
+     *    control: Proportion of instruction box the control buttons are in height
+     */
+    property var instructions: {
+      "color": "yellow" ,
+      "proportion": {"header": 0.1, "textHeight": 0.07, "control": 0.02}
+    }
 }
