@@ -39,6 +39,10 @@ class Link(QObject):
 
 
 class TestSuiteListener(TestListenerApi):
+
+    PASS = "Pass"
+    FAIL = "Fail"
+
     def __init__(self, model=None):
         """
         Connect the Qml UI with our listener through a Link object which holds our connection Qt signals and slots.
@@ -65,7 +69,12 @@ class TestSuiteListener(TestListenerApi):
         self.link.startSignal.emit(name)
 
     def testCompleted(self, name, result):
-        self.link.endSignal.emit(name, result)
+        resultStr = result
+        if type(result) is bool:
+            resultStr = self.FAIL
+            if result:
+                resultStr = self.PASS
+        self.link.endSignal.emit(name, resultStr)
 
     def testProgress(self, name, progress):
         """

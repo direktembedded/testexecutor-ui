@@ -130,11 +130,11 @@ class SampleTestExecution:
     _testGroups = [
         [
             {"name": "test one", "result": Result.StatePass, "type": 1},
-            {"name": "test two", "result": Result.StateFail, "type": 1},
-            {"name": "test three", "result": Result.StatePass, "type": 1},
+            {"name": "test two", "result": False, "type": 1},
+            {"name": "test three", "result": True, "type": 1},
             {"name": "test four", "result": Result.StatePass, "type": 1},
-            {"name": "test five", "result": Result.StatePass, "type": 1},
-            {"name": "test six", "result": Result.StateFail, "type": 1}
+            {"name": "test five", "result": True, "type": 1},
+            {"name": "test six", "result": False, "type": 1}
         ],
         [
             {"name": "flash", "result": Result.StatePass, "type": 0},
@@ -145,8 +145,8 @@ class SampleTestExecution:
             {"name": "buttons", "result": Result.StatePass, "type": 1}
         ],
         [
-            {"name": "test 1", "result": Result.StatePass, "type": 2},
-            {"name": "test 2", "result": Result.StateFail, "type": 2},
+            {"name": "test 1", "result": True, "type": 2},
+            {"name": "test 2", "result": False, "type": 2},
             {"name": "test 3", "result": Result.StatePass, "type": 2},
             {"name": "test 4", "result": Result.StatePass, "type": 2},
             {"name": "test 5", "result": Result.StatePass, "type": 2},
