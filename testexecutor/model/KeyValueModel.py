@@ -149,3 +149,7 @@ class KeyValueModel(QAbstractListModel):
                 self._data[row][KeyValueModel.ValueKey].value = ""
                 ix = self.index(row, 0)
             self.dataChanged.emit(ix, ix, self.roleNames())
+        # Send an additional data changed because the connect UI model switches between a combox box or string item
+        # widget and when this happens, there are 'two' widgets to clear and this additional clear handles the
+        # duplicate clear.
+        self.dataChanged.emit(ix, ix, self.roleNames())
