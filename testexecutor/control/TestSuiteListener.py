@@ -112,6 +112,7 @@ class TestSuiteListener(TestListenerApi):
         buttons = ["Yes", "No"]
         self.link.userDecisionSignal.emit(title, message, buttons)
         self.model.instructions.userDecisionWait()
+        self.clearInstructions()
         return self.model.instructions.control.lastUserDecision()
 
     def userInstructions(self, title, message, expectResponse=True):
