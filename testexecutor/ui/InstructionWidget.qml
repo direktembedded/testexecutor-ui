@@ -45,7 +45,7 @@ Item {
                 Rectangle {
                     id: rectangleText
                     anchors.fill: parent
-                    color: (Boolean(model) && model.enabled && model.instructionText && !model.instructionText.toLowerCase().includes("html")) ? instructionWidget.color : rectangleBase.color
+                    color: (Boolean(model) && model.enabled && model.instructionText) ? instructionWidget.color : rectangleBase.color
                     ColumnLayout {
                         id: instructionBox
                         anchors.fill: parent
