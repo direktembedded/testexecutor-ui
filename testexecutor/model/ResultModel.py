@@ -162,7 +162,6 @@ class ResultModel(QAbstractListModel):
                  Result.StateFail: One state failed
         """
         overall_result = None
-        passed_count = 0
         if self._data and len(self._data):
             for item in self._data:
                 test = item[self.TestKey]

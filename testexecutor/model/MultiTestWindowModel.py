@@ -95,7 +95,6 @@ class MultiTestWindowModel(QObject):
 
     @Slot()
     def abortAll(self):
-        print("abortAll")
         if self._abortCallback:
             self._abortCallback()
 

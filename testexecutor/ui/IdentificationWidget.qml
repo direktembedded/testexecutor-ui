@@ -11,7 +11,7 @@ Item {
     property string inputid
     property var identifiers
     property var color: "#e5e2e2"
-    property var proportion: {"input", 0.15}
+    property var proportion: {"input": 0.15}
     property alias itemConfig: identificationList.itemConfig
 
     ColumnLayout {
