@@ -35,6 +35,8 @@ Item {
             TextField {
                 id: singleInputField
                 text: ""
+                topPadding: 0
+                bottomPadding: 0
                 anchors.fill: parent
                 horizontalAlignment: Text.AlignHCenter
                 placeholderText: "Input"
