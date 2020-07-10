@@ -84,9 +84,15 @@ class InstructionControl(QObject):
 
     @Slot(str)
     def onControl(self, decision):
+        """
+        A callback called once a button has been pressed in the instruction window.
+        onControl does not clear the instruction window, as the caller may wish to have multiple callbacks.
+        This means the caller needs to clear the instruction window when it wants to.
+        :param decision: The button press or decision made
+        :return:
+        """
         with self.lock:
             self._controlReceived = decision
-        self.setButtons([])  # Do not allow for a second button press by clearing all buttons
         self.userDecisionEvent.set()
         self.onUserDecision.emit(self.lastUserDecision())
 

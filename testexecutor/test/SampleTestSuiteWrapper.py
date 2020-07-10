@@ -33,6 +33,7 @@ class SampleTestSuiteWrapper(TestSuiteModel, TestSuiteListener):
         should call the TestListenerApi's suiteStart
         :return:
         """
+        self.instructions.clear()
         if not self._testrun:
             self.suitestate = TestSuiteModel.STATE_STARTING  # recursive loop risk!
             self._testrun = SampleTestExecution(listener=self, exit_callback=self._on_exit)
