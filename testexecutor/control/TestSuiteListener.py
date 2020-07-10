@@ -166,7 +166,7 @@ class TestSuiteListener(TestListenerApi):
         :param message: A message to display to the user. Currently not used.
         :return: None
         """
-        self.model.suitestate = TestSuiteModel.STATE_STOPPING
+        self.model.suitestate = TestSuiteModel.STATE_STOPPED
 
     def asyncInstructions(self, title, message, callback=None, control=[], response=[]):
         """

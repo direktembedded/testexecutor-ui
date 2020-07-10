@@ -87,4 +87,4 @@ class TestSuiteGroup(QAbstractListModel):
 
     def abortAll(self):
         for item in self._datas:
-            item.suiteAbort()
+            item.suitestate = "stopping"
