@@ -138,6 +138,18 @@ class KeyValueModel(QAbstractListModel):
                     value = self._data[row][KeyValueModel.ValueKey].value
         return value
 
+    def getValues(self):
+        """
+        Returns dictionary with key:value pairs as string:string. Note the label is not included.
+        :return: Returns dictionary with key:value pairs
+        """
+        values = {}
+        with self.lock:
+            for row in range(len(self._data)):
+                item = self._data[row]
+                values[item[KeyValueModel.KeyKey]] = item[KeyValueModel.ValueKey].value
+        return values
+
     def clearData(self):
         """
         Clear the data content, namely the values and active value.
