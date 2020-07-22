@@ -55,7 +55,7 @@ Item {
                 id: identifierWidget
                 Layout.maximumHeight: parent.height * 0.5
                 Layout.preferredHeight: parent.height * (config ? config.proportion.identification : 0.3)
-                Layout.minimumHeight: parent.height * 0.2
+                Layout.minimumHeight: 0
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                 clip: false
                 Layout.fillWidth: true
