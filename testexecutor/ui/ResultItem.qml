@@ -76,8 +76,8 @@ Item {
                 color: config.time.color
                 Layout.fillHeight: true
                 Timer {
-                    interval: 1000;
-                    running: (state === "Running") && (test.progress < 1);
+                    interval: 1000
+                    running: (state === "Running") && (test.progress < 1)
                     repeat: true
                     onTriggered: {
                         test.duration = test.duration + 1
@@ -117,7 +117,7 @@ Item {
                         }
                         Rectangle {
                             Text {
-                                text: feedback.text
+                                text: feedback.text ? feedback.text:"  "
                                 font.pixelSize: resultRectangle.height
                                 font.weight: Font.Bold
                                 color: feedback.color
