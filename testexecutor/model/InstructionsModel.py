@@ -168,7 +168,8 @@ class InstructionModel(QObject):
         """
         self.instructionTitle = title
         self.instructionText = message
-        self.enabled = self.control.requestDecision(control)
+        enabled = self.control.requestDecision(control)
+        self._internal_setenabled(enabled)
 
     def userDecisionWait(self):
         """
@@ -240,11 +241,7 @@ class InstructionModel(QObject):
     control_changed = Signal()
     control = Property(QObject, _getcontrol, _setcontrol, notify=control_changed)
 
-    def _setenabled(self, enabled):
-        """ Setter for enabled Property """
-        if not enabled:
-            # If we have been disabled, ensure there is no pending control blocking operation
-            self.control.cancelWaiting()
+    def _internal_setenabled(self, enabled):
         changed = False
         with self.lock:
             if self._enabled != enabled:
@@ -252,6 +249,13 @@ class InstructionModel(QObject):
                 changed = True
         if changed:
             self.enabled_changed.emit()
+
+    def _setenabled(self, enabled):
+        """ Setter for enabled Property """
+        if not enabled:
+            # If we have been disabled, ensure there is no pending control blocking operation
+            self.control.cancelWaiting()
+        self._internal_setenabled(enabled)
 
     def _getenabled(self):
         """ Getter for enabled Property """
