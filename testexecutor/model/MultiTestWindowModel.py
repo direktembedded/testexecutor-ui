@@ -112,11 +112,13 @@ class MultiTestWindowModel(QObject):
         app = QApplication(sys.argv)
 
         app.setWindowIcon(QIcon(iconFile))
-        check_json = json.loads(self.config)
+        if self.config:
+            check_json = json.loads(self.config)
         engine = QQmlApplicationEngine()
         engine.rootContext().setContextProperty("app_model", self)
-        engine.rootContext().setContextProperty("contextKeyValueItemConfig",
-                                                json.dumps(check_json["identification"]["item"]))
+        if self.config:
+            engine.rootContext().setContextProperty("contextKeyValueItemConfig",
+                                                    json.dumps(check_json["identification"]["item"]))
         engine.rootContext().setContextProperty("model_list", self._suiteGroup)
 
         engine.load(url)
