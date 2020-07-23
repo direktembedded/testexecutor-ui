@@ -22,7 +22,7 @@ class TestListenerApi(object):
     def userDecision(self, title, message, control=[]):
         return None
 
-    def userInstructions(self, title, message, expectResponse = True):
+    def userInstructions(self, title, message, expectResponse = True, control=[]):
         return None
 
     def suiteStart(self, name = "test run", tests=[]):

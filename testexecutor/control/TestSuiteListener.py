@@ -116,7 +116,7 @@ class TestSuiteListener(TestListenerApi):
         self.clearInstructions()
         return self.model.instructions.control.lastUserDecision()
 
-    def userInstructions(self, title, message, expectResponse=True):
+    def userInstructions(self, title, message, expectResponse=True, control=[]):
         """
         Provides user instructions. By default acknowledgement is requested (paramter expectResponse is true) and the
         user should press "Ok" to continue
@@ -129,6 +129,8 @@ class TestSuiteListener(TestListenerApi):
         buttons = []
         if expectResponse:
             buttons = ["Ok"]
+            if control and type(control) is list and len(control) > 0:
+                buttons = control
         self.link.userDecisionSignal.emit(title, self._convert_message(message), buttons)
         if expectResponse:
             self.model.instructions.userDecisionWait()
