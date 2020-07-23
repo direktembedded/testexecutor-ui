@@ -94,7 +94,7 @@ class SampleTestExecution:
         self._listener.testProgress(tname, 30)
         time.sleep(self._timeout / 6)
         self._listener.testProgress(tname, 50)
-        self._listener.userInstructions("", "There is no title but please go ahead and do something for me anyway by pressing Ok", True)
+        self._listener.userInstructions("", ["There is no title but please go ahead and do something for me anyway by pressing Ok", "You can do it"], True)
         time.sleep(self._timeout / 6)
         self._listener.userInstructions("", self._exampleHtml, False)
         time.sleep(self._timeout)

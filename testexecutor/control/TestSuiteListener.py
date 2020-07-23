@@ -92,7 +92,7 @@ class TestSuiteListener(TestListenerApi):
         :param data: string containing feedback
         :return: None
         """
-        self.link.feedbackSignal.emit(name, data)
+        self.link.feedbackSignal.emit(name, self._convert_message(data))
 
     def userInput(self, title, message):
         """
@@ -111,7 +111,7 @@ class TestSuiteListener(TestListenerApi):
         :return: The decision made as "yes" or "no" string by default, or control values
         """
         buttons = control
-        self.link.userDecisionSignal.emit(title, message, buttons)
+        self.link.userDecisionSignal.emit(title, self._convert_message(message), buttons)
         self.model.instructions.userDecisionWait()
         self.clearInstructions()
         return self.model.instructions.control.lastUserDecision()
@@ -129,7 +129,7 @@ class TestSuiteListener(TestListenerApi):
         buttons = []
         if expectResponse:
             buttons = ["Ok"]
-        self.link.userDecisionSignal.emit(title, message, buttons)
+        self.link.userDecisionSignal.emit(title, self._convert_message(message), buttons)
         if expectResponse:
             self.model.instructions.userDecisionWait()
             self.clearInstructions()
@@ -190,7 +190,7 @@ class TestSuiteListener(TestListenerApi):
         :return: None
         """
         self.link.setAsyncInstructionCallback(self.model.instructions.control.onUserDecision, callback)
-        self.link.userDecisionSignal.emit(title, message, control)
+        self.link.userDecisionSignal.emit(title, self._convert_message(message), control)
 
     def clearInstructions(self):
         """
@@ -198,3 +198,8 @@ class TestSuiteListener(TestListenerApi):
         :return: None
         """
         self.link.userDecisionSignal.emit(None, None, None)
+
+    def _convert_message(self, message):
+        if type(message) is list:
+            message = "\n".join(message)
+        return message
