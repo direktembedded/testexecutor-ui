@@ -31,17 +31,13 @@ class SampleIdentificationData(KeyValueModel):
         self.setPossibleValues(self.List, ['', 'one', 'two', 'three'])
         for value in values.split('\n'):
             if value.isalpha():
-                print("isalpha:", value)
                 self.setValue(SampleIdentificationData.Model, value)
             elif value.isdigit():
-                print("isdigit:", value)
                 self.setValue(SampleIdentificationData.SerialNumber, value)
             elif value.isalnum() and all(c in string.hexdigits for c in value):
-                print("ishex:", value)
                 self.setValue(SampleIdentificationData.Mac, value)
             else:
                 if value is not None and value != "":
-                    print("other:", value)
                     self.setValue(SampleIdentificationData.OtherId, value)
 
     SerialNumber = 'SN'

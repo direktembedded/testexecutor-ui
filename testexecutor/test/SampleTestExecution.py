@@ -54,7 +54,6 @@ class SampleTestExecution:
         """
         # TODO: add every second to not include full self._tests list to test that GUI can handle adding tests as they
         # come along, rather than expecting a whole list of tests
-        print("Started new runner thread", name)
         testnames = []
         for test in self._tests:
             testnames.append(test["name"])
