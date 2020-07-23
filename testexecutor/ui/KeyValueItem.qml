@@ -87,10 +87,22 @@ Item {
                 border.color: config.value.border.color
                 ComboBox {
                     id: comboControl
-                    anchors.fill: parent
+                    height: parent.height * 1.2
+                    width: parent.width
                     font.pixelSize: parent.height * 0.7
                     model: possibles
                     visible: valueIsArray()
+                    bottomPadding: height * 0.1
+                    leftPadding: 2
+                    rightPadding: 0
+                    contentItem: Text {
+                        leftPadding: 0
+                        rightPadding: comboControl.indicator.width + comboControl.spacing
+                        text: comboControl.displayText
+                        font: comboControl.font
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
                     ToolTip {
                         visible: comboControl.currentText ? comboControl.hovered : false
                         timeout: 3000
@@ -112,6 +124,7 @@ Item {
                             font: comboControl.font
                             elide: Text.ElideRight
                             verticalAlignment: Text.AlignVCenter
+                            padding: 0
                         }
                         highlighted: comboControl.highlightedIndex === index
                     }
