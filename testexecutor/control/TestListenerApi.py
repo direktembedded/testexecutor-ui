@@ -19,7 +19,7 @@ class TestListenerApi(object):
     def userInput(self, title, message):
         return None
 
-    def userDecision(self, title, message):
+    def userDecision(self, title, message, control=[]):
         return None
 
     def userInstructions(self, title, message, expectResponse = True):

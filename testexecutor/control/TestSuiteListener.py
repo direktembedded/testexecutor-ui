@@ -101,15 +101,16 @@ class TestSuiteListener(TestListenerApi):
         """
         pass
 
-    def userDecision(self, title, message):
+    def userDecision(self, title, message, control=["Yes", "No"]):
         """
         Request a yes or no user decision. This is a blocking call and will not return until user has made a decision
         or test is cancelled/stopped.
         :param title: Top line of the question posed to the user
         :param message: message asked of the user
-        :return: The decision made as "yes" or "no" string
+        :param control: Alternate button/control values. First two only used.
+        :return: The decision made as "yes" or "no" string by default, or control values
         """
-        buttons = ["Yes", "No"]
+        buttons = control
         self.link.userDecisionSignal.emit(title, message, buttons)
         self.model.instructions.userDecisionWait()
         self.clearInstructions()
