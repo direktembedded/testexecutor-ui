@@ -29,7 +29,7 @@ Item {
             // The Item wrapper is to allow TextField pixelSize to reference the parents height.
             Layout.preferredHeight: parent.height * proportion.input
             Layout.minimumHeight: parent.height * 0.15
-            Layout.maximumHeight: parent.height * 0.3
+            Layout.maximumHeight: parent.height
             Layout.fillWidth: true
 
             TextField {
