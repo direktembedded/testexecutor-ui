@@ -53,14 +53,14 @@ Item {
                 Rectangle {
                     height: parent.height
                     width: parent.width * test.progress
-                    color: Boolean(test) && test.progress == 1 ? "transparent" : config.feedback.progress.color
+                    color: Boolean(test) && test.progress === 1 ? "transparent" : config.feedback.progress.color
                     opacity: 0.5
                 }
                 Text {
                     id: feedback
                     color: test.progress < 1 ? config.feedback.text.color.default : config.feedback.text.color.progress
                     text: test.feedback
-                    verticalAlignment: Text.AlignVTop
+                    verticalAlignment: Text.AlignTop
                     clip: true
                     font.pixelSize: parent.height / 1.2
                     anchors.rightMargin: 0
