@@ -45,7 +45,7 @@ Item {
                 Rectangle {
                     id: rectangleText
                     anchors.fill: parent
-                    color: (Boolean(model) && model.enabled && model.instructionText) ? instructionWidget.color : rectangleBase.color
+                    color: backColour(model)
                     ColumnLayout {
                         id: instructionBox
                         anchors.fill: parent
@@ -138,5 +138,14 @@ Item {
     }
     function onControlClick(control) {
         model.control.onControl(control)
+    }
+    function backColour(model) {
+        var colour = rectangleBase.color
+        if (Boolean(model) && model.instructionTitle === "ERROR" ) {
+            colour = instructionWidget.color
+        } else if (Boolean(model) && model.enabled && model.instructionText) {
+            colour = instructionWidget.color
+        }
+        return (colour)
     }
 }
