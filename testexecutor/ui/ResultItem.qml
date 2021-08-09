@@ -52,7 +52,7 @@ Item {
                 Layout.fillWidth: true
                 Rectangle {
                     height: parent.height
-                    width: parent.width * test.progress
+                    width: Boolean(test) ? parent.width * test.progress : 0
                     color: Boolean(test) && test.progress === 1 ? "transparent" : config.feedback.progress.color
                     opacity: 0.5
                 }
@@ -97,7 +97,7 @@ Item {
             }
         }
         ToolTip {
-            visible: test.name ? resultMouseArea.containsMouse : false
+            visible: test && test.name ? resultMouseArea.containsMouse : false
             timeout: 3000
             delay: 500
             contentItem:
