@@ -36,12 +36,12 @@ ApplicationWindow {
             Column {
                 Text {
                     text: (app_model) ? app_model.closeHeading : "There Are Still Tests Running"
-                    font.pointSize: application.height * 0.03
+                    font.pixelSize: application.height * 0.03
                     font.weight: Font.ExtraBold
                 }
                 Text {
                     text: (app_model) ? app_model.closeText : "Stop all suites if you want to quit"
-                    font.pointSize: application.height * 0.02
+                    font.pixelSize: application.height * 0.03
                     font.weight: Font.ExtraBold
                 }
             }
