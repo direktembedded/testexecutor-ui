@@ -96,7 +96,7 @@ class SampleTestExecution:
         self._listener.testProgress(tname, 50)
         self._listener.userInstructions("", ["There is no title but please go ahead and do something for me anyway by pressing Ok", "You can do it"], True, control=["Just do it"])
         time.sleep(self._timeout / 6)
-        self._listener.userInstructions("", self._exampleHtml, False)
+        self._listener.userInstructions("", self._exampleHtml, True)
         time.sleep(self._timeout)
         self._listener.testProgress(tname, 70)
         time.sleep(self._timeout / 6)
@@ -165,15 +165,53 @@ class SampleTestExecution:
         ],
     ]
 
-    _exampleHtml = """<HTML>
-<BODY BGCOLOR="violet">
-<H1>This is a Html Instruction</H1>
-<H2>It may help</H2>
-<P>
-<ul>
-  <li>Make for easier reading!</li>
-  <li><B><I>and highlighting</I></B></li>
-</ul>
-</BODY>
-</HTML>
+    _exampleHtml = """
+<html>
+    <body style="background-color:orange; height: 100%; font-size:large; font-weight:400; font-style:normal; text-decoration:none; min-height: 100%">
+        <h1 align="center" style=" margin-top:2px; margin-bottom:2px; margin-left:0px; margin-right:2px; -qt-block-indent:0; text-indent:0px;">
+          <span style=" font-size:large; font-weight:600;">Example Html Instruction</span>
+        </h1>
+        <p style=" margin-top:12px; margin-bottom:2px; margin-left:4px; margin-right:2px; -qt-block-indent:0; text-indent:0px; font-size:small;">
+            <span style=" font-style:italic; font-size:small">
+                A subset of html can be used to format instructions for clarity
+            </span>
+        </p>
+        <p style="margin-top:12px; margin-bottom:2px; margin-left:4px; margin-right:4px; -qt-block-indent:0; text-indent:0px; font-size:small;">
+            <span style="font-size:small;">For information of what html subset refer to</span>
+            <br/> 
+            <a style="font-size:small;" href="https://doc.qt.io/qt-5/richtext-html-subset.html">
+                https://doc.qt.io/qt-5/richtext-html-subset.html
+            </a>              
+        </p>
+        <p style=" margin-top:12px; margin-bottom:12px; margin-left:4px; margin-right:4px; -qt-block-indent:0; text-indent:0px;">
+            <span style=" font-size:large;">Supported are </span>
+            <span style=" font-size:small; font-weight:600;">bold</span>
+            <span style=" font-size:small;">, </span>
+            <span style=" font-size:small; font-style:italic;">italic</span>
+            <span style=" font-size:small;">, and </span>
+            <span style=" font-size:small; text-decoration: underline;">underlined</span>
+            <span style=" font-size:small;"> font styles, and </span>
+            <span style=" font-size:small; font-weight:600; color:#00007f;">multicolored</span>
+            <span style=" font-size:small;"> </span>
+            <span style=" font-size:small; font-weight:600; color:#aa0000;">text</span>
+            <br/>
+            <span style=" font-size:small;">Font families such as </span>
+            <span style=" font-family:'Times New Roman'; font-size:small; font-weight:600;">Times New Roman</span>
+            <span style=" font-size:small;"> and </span>
+            <span style=" font-family:'Courier'; font-size:small; font-weight:600;">Courier</span>
+            <span style=" font-size:small;"> can also be used directly. </span>
+        </p>
+        <p align="center" style="margin-top:12px; margin-bottom:2px; margin-left:4px; margin-right:4px; -qt-block-indent:0; text-indent:0px; font-size:small;">
+            <span style=" font-style:italic;">
+                To extend html background color at the end of the instruction, you can use line breaks.
+            </span>
+        </p>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+    </body>
+</html>
 """
