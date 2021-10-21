@@ -1,14 +1,28 @@
 /*
+ * Copyright 2020 Direkt, Australia
+ * Copyright 2021 Direkt Embedded Pty Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import QtQuick 2.0
+
+/*
  * A qml item which acts as the default configuration for the test suite widget.
  * If the inheriting model wants to override this model they can do so by forcefully setting the config property
  * of the TestSuiteWidget.qml file with equivalent json string. Note the full json needs to be set or some aspects
  * of the UI will fail due to missing configuration.
- *
- * Copyright (c) 2020 Direkt, Australia
- * Licensed under BSD-3-Clause, refer LICENSE
  */
-import QtQuick 2.0
-
 Item {
     /*
      * Configuration variables set dependent on the state of the suite.

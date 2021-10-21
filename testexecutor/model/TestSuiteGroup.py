@@ -1,3 +1,18 @@
+#  Copyright 2020 Direkt, Australia
+#  Copyright 2021 Direkt Embedded Pty Ltd
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
 """
 A class which inherits QAbstractListModel to provide a list of TestSuites for a multi test runner.
 Usage
@@ -16,9 +31,6 @@ if view.status() != QQuickView.Error:
     # Set the UIs Property model_list to the set of 4 TestSuiteListeners (which inherit TestSuiteModel)
     view.rootContext().setContextProperty("model_list", mySuiteGroup)
     view.showMaximized()
-
-Copyright (c) 2020 Direkt, Australia
-Licensed under BSD-3-Clause, refer LICENSE
 """
 
 from PySide2.QtCore import QAbstractListModel
