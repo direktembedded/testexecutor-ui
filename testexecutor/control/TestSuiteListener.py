@@ -25,7 +25,7 @@ from testexecutor.control.TestListenerApi import TestListenerApi
 
 class Link(QObject):
     """
-    A class which is the linke between this modules 'Python" TestSuiteListener and the Qt/Qml UI.
+    A class which is the link between this modules 'Python" TestSuiteListener and the Qt/Qml UI.
     It simply provides some Qt Signals and Slots which correspond to the PySide2 models Slots and Signals.
     """
     addSignal = Signal(str, str)
@@ -111,7 +111,7 @@ class TestSuiteListener(TestListenerApi):
         """
         pass
 
-    def userDecision(self, title, message, control=["Yes", "No"]):
+    def userDecision(self, title, message, control=None):
         """
         Request a yes or no user decision. This is a blocking call and will not return until user has made a decision
         or test is cancelled/stopped.
@@ -120,13 +120,15 @@ class TestSuiteListener(TestListenerApi):
         :param control: Alternate button/control values. First two only used.
         :return: The decision made as "yes" or "no" string by default, or control values
         """
+        if control is None:
+            control = ["Yes", "No"]
         buttons = control
         self.link.userDecisionSignal.emit(title, self._convert_message(message), buttons)
         self.model.instructions.userDecisionWait()
         self.clearInstructions()
         return self.model.instructions.control.lastUserDecision()
 
-    def userInstructions(self, title, message, expectResponse=True, control=[]):
+    def userInstructions(self, title, message, expectResponse=True, control=None):
         """
         Provides user instructions. By default acknowledgement is requested (paramter expectResponse is true) and the
         user should press "Ok" to continue
@@ -136,6 +138,8 @@ class TestSuiteListener(TestListenerApi):
                                i.e. if this is only a test step detail.
         :return: "ok" if response requested, else None or ""
         """
+        if control is None:
+            control = []
         buttons = []
         if expectResponse:
             buttons = ["Ok"]
@@ -147,15 +151,16 @@ class TestSuiteListener(TestListenerApi):
             self.clearInstructions()
         return self.model.instructions.control.lastUserDecision()
 
-    def suiteStart(self, name="test run", tests=[]):
+    def suiteStart(self, name="test run", tests=None):
         """
         This should be called by test execution module/thread whenever a new suite is started to ensure the listener
         (likely a UI) can update its state to indicate the suite is in progress.
-        TODO name is not used, could add a title to the model.
         :param name: The name of the test suite run. Currently not used.
         :param tests: The tests to run
         :return: nothing
         """
+        if tests is None:
+            tests = []
         self.link.populateSignal.emit(tests)
         self.model.suitestate = TestSuiteModel.STATE_RUNNING
 
@@ -181,7 +186,7 @@ class TestSuiteListener(TestListenerApi):
         """
         self.model.suitestate = TestSuiteModel.STATE_STOPPED
 
-    def asyncInstructions(self, title, message, callback=None, control=[], response=[]):
+    def asyncInstructions(self, title, message, callback=None, control=None, response=None):
         """
         A non blocking instruction provided to the user. The callback will be called when the instruction control
         action is taken.
@@ -201,6 +206,10 @@ class TestSuiteListener(TestListenerApi):
         :param response: a set of response strings to use. Should correspond to the control entries. Currently not used.
         :return: None
         """
+        if control is None:
+            control = []
+        if response is None:
+            response = []
         self.link.setAsyncInstructionCallback(self.model.instructions.control.onUserDecision, callback)
         self.link.userDecisionSignal.emit(title, self._convert_message(message), control)
 

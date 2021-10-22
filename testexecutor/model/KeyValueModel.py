@@ -94,7 +94,7 @@ class KeyValueModel(QAbstractListModel):
                 KeyValueModel.PossibleValuesRole: KeyValueModel.PossibleValuesKey,
                 KeyValueModel.ValueRole: KeyValueModel.ValueKey}
 
-    def data(self, index, role):
+    def data(self, index, role=None):
         with self.lock:
             d = self._data[index.row()]
         if role == KeyValueModel.KeyRole:
@@ -105,7 +105,9 @@ class KeyValueModel(QAbstractListModel):
             return d[KeyValueModel.PossibleValuesKey]
         return None
 
-    def add(self, key, value, possibleValues=[]):
+    def add(self, key, value, possibleValues=None):
+        if possibleValues is None:
+            possibleValues = []
         rowCount = self.rowCount(QModelIndex())
         self.beginInsertRows(QModelIndex(), rowCount, rowCount)
         with self.lock:

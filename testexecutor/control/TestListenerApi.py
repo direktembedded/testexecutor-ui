@@ -34,13 +34,13 @@ class TestListenerApi(object):
     def userInput(self, title, message):
         return None
 
-    def userDecision(self, title, message, control=[]):
+    def userDecision(self, title, message, control):
         return None
 
-    def userInstructions(self, title, message, expectResponse = True, control=[]):
+    def userInstructions(self, title, message, expectResponse = True, control=None):
         return None
 
-    def suiteStart(self, name = "test run", tests=[]):
+    def suiteStart(self, name="test run", tests=None):
         pass
 
     def suiteEnd(self, name="test run", failures=-1, message=""):
@@ -49,7 +49,7 @@ class TestListenerApi(object):
     def suiteAbort(self, name="test run", message=""):
         pass
 
-    def asyncInstructions(self, title, message, callback=None, control=[], response=[]):
+    def asyncInstructions(self, title, message, callback=None, control=None, response=None):
         pass
 
     def clearInstructions(self):

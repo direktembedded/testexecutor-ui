@@ -58,7 +58,7 @@ class TestSuiteGroup(QAbstractListModel):
         self._datas.append(data)
         self.endInsertRows()
 
-    def setData(self, index, value, role):
+    def setData(self, index, value, role=None):
         try:
             data = self._datas[index.row()]
         except IndexError:

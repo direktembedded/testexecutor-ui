@@ -154,7 +154,7 @@ class ResultModel(QAbstractListModel):
     def roleNames(self):
         return {self.TestRole: self.TestKey}
 
-    def data(self, index, role):
+    def data(self, index, role=None):
         d = self._data[index.row()]
         if role == self.TestRole:
             return d[self.TestKey]
@@ -225,6 +225,7 @@ class ResultModel(QAbstractListModel):
         Method called to end a test.
         Only updated if test is found. If no tests with name exist, nothing is done.
         :param name: unique name of the test
+        :param result: test result for the suite
         :return: None
         """
         for row in range(len(self._data)):
