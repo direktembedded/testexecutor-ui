@@ -47,7 +47,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     install_requires=[
-        'PySide2>=5.13',
+        'PySide6>=6.2',
     ],
     python_requires='>=3.6',
 )
