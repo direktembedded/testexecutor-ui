@@ -165,8 +165,8 @@ class InstructionModel(QObject):
         self.instructionText = ""
         self.control.clear()
 
-    @Slot(str, str, list)
-    def userDecision(self, title, message, control):
+    @Slot(str, str, list, bool)
+    def userDecision(self, title, message, control, enable=True):
         """
         Method called to send instructions to the user
         The caller will use control.lastUserDecision() to obtain the decision chosen, implementing a wait state
@@ -176,12 +176,13 @@ class InstructionModel(QObject):
         :param name: unique name of the test, not used
         :param message: class containing information to display to the user
         :param control: list of text to display on decision/control buttons
+        :param enable: enable text widget even if no buttons so highlighted colour is shown
         :return: None
         """
         self.instructionTitle = title
         self.instructionText = message
-        enabled = self.control.requestDecision(control)
-        self._internal_setenabled(enabled)
+        buttons_enabled = self.control.requestDecision(control)
+        self._internal_setenabled(buttons_enabled | enable)
 
     def userDecisionWait(self):
         """

@@ -34,7 +34,7 @@ class Link(QObject):
     feedbackSignal = Signal(str, str)
     endSignal = Signal(str, str)
     progressSignal = Signal(str, int)
-    userDecisionSignal = Signal(str, str, list)
+    userDecisionSignal = Signal(str, str, list, bool)
     _userCallback = None
 
     def __init__(self, instruction_signal):
@@ -128,7 +128,7 @@ class TestSuiteListener(TestListenerApi):
         if control is None:
             control = ["Yes", "No"]
         buttons = control
-        self.link.userDecisionSignal.emit(title, self._convert_message(message), buttons)
+        self.link.userDecisionSignal.emit(title, self._convert_message(message), buttons, False)
         self.model.instructions.userDecisionWait()
         self.clear_instructions()
         return self.model.instructions.control.lastUserDecision()
@@ -150,7 +150,7 @@ class TestSuiteListener(TestListenerApi):
             buttons = ["Ok"]
             if control and type(control) is list and len(control) > 0:
                 buttons = control
-        self.link.userDecisionSignal.emit(title, self._convert_message(message), buttons)
+        self.link.userDecisionSignal.emit(title, self._convert_message(message), buttons, True)
         if expectResponse:
             self.model.instructions.userDecisionWait()
             self.clear_instructions()
@@ -216,14 +216,14 @@ class TestSuiteListener(TestListenerApi):
         if response is None:
             response = []
         self.link.setAsyncInstructionCallback(callback)
-        self.link.userDecisionSignal.emit(title, self._convert_message(message), control)
+        self.link.userDecisionSignal.emit(title, self._convert_message(message), control, True)
 
     def clear_instructions(self):
         """
         Infor the listener to clear the instruction window.
         :return: None
         """
-        self.link.userDecisionSignal.emit(None, None, None)
+        self.link.userDecisionSignal.emit(None, None, None, False)
 
     def _convert_message(self, message):
         if type(message) is list:
