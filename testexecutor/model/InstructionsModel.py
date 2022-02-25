@@ -199,7 +199,7 @@ class InstructionModel(QObject):
             if self._instructionText != instructionText:
                 changed = True
                 self._instructionText = instructionText
-                if "html" not in instructionText.lower():
+                if instructionText and "html" not in instructionText.lower():
                     self._instructionText = Qt.convertFromPlainText(instructionText)
                     if "\r\n" in instructionText:
                         self._instructionText = instructionText.replace("\r\n", "<br/>")
