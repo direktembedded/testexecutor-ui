@@ -190,7 +190,7 @@ Item {
         State {
             name: "idle"
             PropertyChanges { target: control_button; text: config.states.idle.button.text; enabled: true  }
-            PropertyChanges { target: instructionWidget; enabled: true; color: interactionColour(config.instructions.color.default)  }
+            PropertyChanges { target: instructionWidget; enabled: true  }
             PropertyChanges { target: identifierWidget; enabled: true  }
             PropertyChanges { target: frameRectangle; color: suiteResultColour(config.states.idle.color.default) }
             PropertyChanges { target: suite_container; duration: 0 }
