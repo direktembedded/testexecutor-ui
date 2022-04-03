@@ -38,7 +38,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
-    package_data={'testexecutor': ['ui/*.qml', 'ui/*.ico', 'VERSION']},
+    package_data={'testexecutor': ['ui/*.qml', 'ui/*.ico', 'ui/selector/*.qml', 'VERSION']},
     url="https://www.direktembedded.com",
     license_files=("LICENSE", "NOTICE"),
     classifiers=[
