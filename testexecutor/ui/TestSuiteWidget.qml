@@ -24,7 +24,8 @@ import QtQuick.Dialogs
 Item {
     id: suite_container
     property var tswModel
-    property int duration
+    property int duration: 0
+    property int internal_duration: 0
     property var config: TestSuiteConfig{}
     property var about
 
@@ -193,7 +194,7 @@ Item {
             PropertyChanges { target: instructionWidget; enabled: true  }
             PropertyChanges { target: identifierWidget; enabled: true  }
             PropertyChanges { target: frameRectangle; color: suiteResultColour(config.states.idle.color.default) }
-            PropertyChanges { target: suite_container; duration: 0 }
+            PropertyChanges { target: suite_container; internal_duration: setDuration(0) }
         },
         State {
             name: "ready"
@@ -273,6 +274,13 @@ Item {
         standardButtons: Dialog.Ok
         implicitWidth: aboutLabel.width * 1.3
         anchors.centerIn: Overlay.overlay
+    }
+    function setDuration(secs)
+    {
+        // This is a workaround so the duration property set in the state change
+        // actually takes affect.
+        suite_container.duration = secs
+        return secs
     }
     function suiteRunningColour(defaultColor)
     {
