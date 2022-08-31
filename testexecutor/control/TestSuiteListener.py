@@ -144,7 +144,11 @@ class TestSuiteListener(TestListenerApi):
         self.link.userDecisionSignal.emit(title, self._convert_message(message), buttons, False)
         self.model.instructions.userDecisionWait()
         self.clear_instructions()
-        return self.model.instructions.control.lastUserDecision()
+        decision = self.model.instructions.control.lastUserDecision()
+        if self.model.instructions.control.lastWasUserInput():
+            # If last entry was user input then interpret it as a button press
+            decision = self.model.instructions.control.lastUserInput()
+        return decision
 
     def user_instructions(self, title, message, expectResponse=True, control=None):
         """

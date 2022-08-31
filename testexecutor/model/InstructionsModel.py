@@ -131,7 +131,7 @@ class InstructionControl(QObject):
         A callback providing input from a relevant external control. The control should be supplied externally to
         this component and provide complete string input.
         """
-        self._onControl("input", input_value)
+        self._onControl(self.USER_INPUT, input_value)
 
     def cancelWaiting(self):
         self._controlReceived = None
@@ -154,6 +154,9 @@ class InstructionControl(QObject):
             present = len(info) > 0
         return present
 
+    def lastWasUserInput(self):
+        return self.lastUserDecision() == self.USER_INPUT
+
     # TODO: Consider modifying to provide more buttons, rather than fixed right left.
     def _getleftButton(self):
         """ Getter for leftButton Property """
@@ -173,6 +176,7 @@ class InstructionControl(QObject):
     rightButton_changed = Signal()
     rightButton = Property(QObject, _getrightButton, None, notify=rightButton_changed)
 
+    USER_INPUT = 'te_input'
 
 class InstructionModel(QObject):
 
