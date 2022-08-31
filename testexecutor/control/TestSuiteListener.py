@@ -119,7 +119,6 @@ class TestSuiteListener(TestListenerApi):
         if control is None:
             control = ["Cancel"]
         buttons = control
-        print('title', title, 'message', message, 'default', default_value, 'values', values)
         # if exception occurs here we get no error and test seems unrecoverable
         self.link.userInputRequestSignal.emit(title, self._convert_message(message), buttons,
                                               default_value, values, False)

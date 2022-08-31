@@ -44,7 +44,8 @@ Item {
      */
     property var proportion: {
       "title": 0.1,
-      "identification": 0.3,
+      "identification": 0.25,
+      "input": 0.05,
       "instructions": 0.4,
       // results takes remaining space
       "status": 0.04
@@ -70,7 +71,6 @@ Item {
      */
     property var identification: {
       "color": "#e5e2e2",
-      "proportion": {"input": 0.15},
       "item": false
     }
 

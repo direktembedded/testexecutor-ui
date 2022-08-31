@@ -101,7 +101,7 @@ Item {
                 onEnabledChanged: {
                     var allowed = (config && config.input) ? config.input.allow_focus : false
                     if (enabled && allowed)
-                        inputWidget.inputFocus(); console.log('force', config.input.allow_focus, allowed)
+                        inputWidget.inputFocus();
                     }
             }
 
