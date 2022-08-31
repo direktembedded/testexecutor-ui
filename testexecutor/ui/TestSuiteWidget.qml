@@ -98,6 +98,11 @@ Item {
                 }
                 color: config ? config.identification.color : "#e5e2e2"
                 enabled: identifierWidget.enabled || instructionWidget.control_enabled
+                onEnabledChanged: {
+                    var allowed = (config && config.input) ? config.input.allow_focus : false
+                    if (enabled && allowed)
+                        inputWidget.inputFocus(); console.log('force', config.input.allow_focus, allowed)
+                    }
             }
 
             InstructionWidget {

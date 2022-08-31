@@ -75,6 +75,13 @@ Item {
     }
 
     /*
+     * allow_focus: allow for the input to automatically get focus when the instruction becomes active
+     */
+    property var input: {
+      "allow_focus": true
+    }
+
+    /*
      * color: Background color when instruction text is not html
      * proportion:
      *    header: Proportion of text box dedicated to header if there is one

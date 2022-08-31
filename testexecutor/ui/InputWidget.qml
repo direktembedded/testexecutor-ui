@@ -65,5 +65,8 @@ Item {
             }
         }
     }
+    function inputFocus() {
+        singleInputField.forceActiveFocus();
+    }
 }
 
