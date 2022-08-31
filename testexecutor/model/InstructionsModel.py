@@ -67,13 +67,16 @@ class InstructionControl(QObject):
         self.lock = threading.RLock()
         self._buttons = [ControlButtonConfig(), ControlButtonConfig()]
         self._controlReceived = None
-        self.userDecisionEvent = threading.Event()
+        self._inputReceived = None
+        self._expectInput = False
+        self.userInputEvent = threading.Event()
 
-    onUserDecision = Signal(str)
+    onUserInput = Signal(str, str)
 
     def requestDecision(self, buttontextList):
         with self.lock:
             self._controlReceived = None
+            self._inputReceived = None
         return self.setButtons(buttontextList)
 
     def lastUserDecision(self):
@@ -90,6 +93,16 @@ class InstructionControl(QObject):
                 decision = decision.lower()
         return decision
 
+    def lastUserInput(self):
+        """
+        Obtain the last user input decision that was chosen by the user, or None if no decision pending.
+        The decision is not cleared until the next call to requestDecision.
+        :return: decision string
+        """
+        with self.lock:
+            input = self._inputReceived
+        return input
+
     def clear(self):
         self.cancelWaiting()
         self.setButtons([])
@@ -103,14 +116,26 @@ class InstructionControl(QObject):
         :param decision: The button press or decision made
         :return:
         """
+        self._onControl(decision)
+
+    def _onControl(self, decision, input_value=None):
         with self.lock:
             self._controlReceived = decision
-        self.userDecisionEvent.set()
-        self.onUserDecision.emit(self.lastUserDecision())
+            self._inputReceived = input_value
+        self.userInputEvent.set()
+        self.onUserInput.emit(self.lastUserDecision(), self.lastUserInput())
+
+    @Slot(str)
+    def onExternalInput(self, input_value):
+        """
+        A callback providing input from a relevant external control. The control should be supplied externally to
+        this component and provide complete string input.
+        """
+        self._onControl("input", input_value)
 
     def cancelWaiting(self):
         self._controlReceived = None
-        self.userDecisionEvent.set()
+        self.userInputEvent.set()
 
     def setButtons(self, buttonTextList):
         info = buttonTextList
@@ -184,13 +209,34 @@ class InstructionModel(QObject):
         buttons_enabled = self.control.requestDecision(control)
         self._internal_setenabled(buttons_enabled | enable)
 
+    @Slot(str, str, list, str, tuple, bool)
+    def userInputRequest(self, title, message, control, default_value=None, values=None, enable=True):
+        """
+        Method called to send instructions to the user
+        The caller will use control.lastUserDecision() to obtain the decision chosen, implementing a wait state
+        if required.
+        If no control information is given, then this model will remain disabled as their is no expectation for the
+        user to provide input.
+        :param name: unique name of the test, not used
+        :param message: class containing information to display to the user
+        :param control: list of text to display on decision/control buttons
+        :param default_value: value to provide as a default to the user - future
+        :param values: enable text widget even if no buttons so highlighted colour is shown - future
+        :param enable: enable text widget even if no buttons so highlighted colour is shown
+        :return: None
+        """
+        self.instructionTitle = title
+        self.instructionText = message
+        buttons_enabled = self.control.requestDecision(control)
+        self._internal_setenabled(buttons_enabled | enable)
+
     def userDecisionWait(self):
         """
         If the caller wishes to block until the user decision requested is made, they can call this immediately
         after calling userDecision.
         """
-        self.control.userDecisionEvent.clear()
-        self.control.userDecisionEvent.wait()
+        self.control.userInputEvent.clear()
+        self.control.userInputEvent.wait()
 
     def _setinstructionText(self, instructionText):
         """ Setter for instructionText Property """

@@ -31,7 +31,7 @@ class TestListenerApi(object):
     def feedback(self, name, data):
         pass
 
-    def user_input(self, title, message):
+    def user_input(self, title, message, control=None, default_value=None, *values):
         pass
 
     def user_decision(self, title, message, control):

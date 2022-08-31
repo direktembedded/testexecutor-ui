@@ -16,7 +16,7 @@
 # This Python file uses the following encoding: utf-8
 import threading
 import time
-from PySide6.QtCore import QObject
+from PySide6.QtCore import QObject, Qt
 from PySide6.QtCore import Signal, Property, Slot
 from testexecutor.model.InstructionsModel import InstructionModel
 
@@ -95,6 +95,7 @@ class TestSuiteModel(QObject):
         self._title = title
         self._controller = None
         self._suite_colours = SuiteColours()
+        self.on_input.connect(self.instructions.control.onExternalInput, Qt.QueuedConnection)
 
     def clear(self):
         self.identifiers.clearData()
@@ -143,6 +144,7 @@ class TestSuiteModel(QObject):
         if self.setid_callback:
             self.setid_callback(id)
         self.id_changed.emit()
+        self.on_input.emit(id)
 
     def _getid(self):
         """ Getter for newid Property """
@@ -152,6 +154,7 @@ class TestSuiteModel(QObject):
         return id
 
     id_changed = Signal()
+    on_input = Signal(str)
     newid = Property(str, _getid, _setid, notify=id_changed)
 
     def _setidentifiers(self, identifiers):

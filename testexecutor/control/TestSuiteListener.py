@@ -35,6 +35,7 @@ class Link(QObject):
     endSignal = Signal(str, str)
     progressSignal = Signal(str, int)
     userDecisionSignal = Signal(str, str, list, bool)
+    userInputRequestSignal = Signal(str, str, list, str, tuple, bool)
     _userCallback = None
 
     def __init__(self, instruction_signal):
@@ -45,7 +46,7 @@ class Link(QObject):
         self._userCallback = callback
 
     @Slot(str)
-    def _asyncInstructionCallback(self, response):
+    def _asyncInstructionCallback(self, response, input):
         if self._userCallback:
             if self._userCallback(response):
                 self._userCallback = None
@@ -63,7 +64,7 @@ class TestSuiteListener(TestListenerApi):
         """
         self.model = model
         self.clear_results_on_start = True
-        self.link = Link(self.model.instructions.control.onUserDecision)
+        self.link = Link(self.model.instructions.control.onUserInput)
         self.link.addSignal.connect(self.model.results.add, Qt.QueuedConnection)
         self.link.startSignal.connect(self.model.results.start, Qt.QueuedConnection)
         self.link.populateSignal.connect(self.model.results.populateTests, Qt.QueuedConnection)
@@ -71,6 +72,7 @@ class TestSuiteListener(TestListenerApi):
         self.link.endSignal.connect(self.model.results.end, Qt.QueuedConnection)
         self.link.progressSignal.connect(self.model.results.progress, Qt.QueuedConnection)
         self.link.userDecisionSignal.connect(self.model.instructions.userDecision, Qt.QueuedConnection)
+        self.link.userInputRequestSignal.connect(self.model.instructions.userInputRequest, Qt.QueuedConnection)
 
     # Test Listener Api methods
     def test_started(self, name):
@@ -109,12 +111,23 @@ class TestSuiteListener(TestListenerApi):
         """
         self.link.feedbackSignal.emit(name, self._convert_message(data))
 
-    def user_input(self, title, message):
+    def user_input(self, title, message, control=None, default_value=None, *values):
         """
         Place holder for allowing user to return a value
-        Unused currently
+        :return: (input, decision) e.g. (None, "cancel") or ("Hello", "ok")
         """
-        pass
+        if control is None:
+            control = ["Cancel"]
+        buttons = control
+        print('title', title, 'message', message, 'default', default_value, 'values', values)
+        # if exception occurs here we get no error and test seems unrecoverable
+        self.link.userInputRequestSignal.emit(title, self._convert_message(message), buttons,
+                                              default_value, values, False)
+        self.model.instructions.userDecisionWait()
+        self.clear_instructions()
+        input_value = self.model.instructions.control.lastUserInput()
+        decision = self.model.instructions.control.lastUserDecision()
+        return input_value, decision
 
     def user_decision(self, title, message, control=None):
         """
