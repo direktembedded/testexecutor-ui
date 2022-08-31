@@ -131,7 +131,8 @@ class InstructionControl(QObject):
         A callback providing input from a relevant external control. The control should be supplied externally to
         this component and provide complete string input.
         """
-        self._onControl(self.USER_INPUT, input_value)
+        if input_value:
+            self._onControl(self.USER_INPUT, input_value)
 
     def cancelWaiting(self):
         self._controlReceived = None
