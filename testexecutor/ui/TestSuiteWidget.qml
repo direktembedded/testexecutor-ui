@@ -78,15 +78,26 @@ Item {
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                 clip: false
                 Layout.fillWidth: true
+                identifiers: tswModel.testsuite.identifiers
+                color: config ? config.identification.color : "#e5e2e2"
+                itemConfig: config ? config.identification.item : ""
+            }
+
+            InputWidget {
+                id: inputWidget
+                Layout.maximumHeight: parent.height * 0.2
+                Layout.preferredHeight: parent.height * (config ? config.proportion.input : 0.05)
+                Layout.minimumHeight: 0
+                Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+                clip: false
+                Layout.fillWidth: true
                 Binding {
                     target: tswModel.testsuite
                     property: "newid"
-                    value: identifierWidget.inputid
+                    value: inputWidget.inputid
                 }
-                identifiers: tswModel.testsuite.identifiers
                 color: config ? config.identification.color : "#e5e2e2"
-                proportion: config ? config.identification.proportion : ""
-                itemConfig: config ? config.identification.item : ""
+                enabled: identifierWidget.enabled || instructionWidget.control_enabled
             }
 
             InstructionWidget {

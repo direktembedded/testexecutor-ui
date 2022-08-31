@@ -141,10 +141,13 @@ class TestSuiteModel(QObject):
         """ Setter for newid Property """
         with self.lock:
             self._newId = id
-        if self.setid_callback:
-            self.setid_callback(id)
+        # call id call back only when not active as we do not want to change ids after started
+        if not self.active():
+            if self.setid_callback:
+                self.setid_callback(id)
+        else:
+            self.on_input.emit(id)
         self.id_changed.emit()
-        self.on_input.emit(id)
 
     def _getid(self):
         """ Getter for newid Property """

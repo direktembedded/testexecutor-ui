@@ -26,6 +26,7 @@ Item {
     property var color: "yellow"
     property var proportion: {"header": 0.1, "textHeight": 0.05, "control": 0.1}
     property var model
+    property var control_enabled: controlEnabled()
 
     Binding {
         target: model
@@ -175,5 +176,8 @@ Item {
             }
         }
         return (padding)
+    }
+    function controlEnabled() {
+        return (model && (model.control.rightButton.enabled || model.control.leftButton.enabled))
     }
 }
