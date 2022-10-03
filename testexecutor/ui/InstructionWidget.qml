@@ -76,7 +76,8 @@ Item {
                             textFormat: Text.AutoText
                             font.pixelSize: parent.height * proportion.header * 0.9
                             wrapMode: TextEdit.Wrap
-                            enabled: false
+                            readOnly: true
+                            selectByMouse: true
                         }
                         ScrollView {
                             Layout.fillHeight: true
@@ -92,7 +93,8 @@ Item {
                                 topPadding: instructionPadding(model)
                                 bottomPadding: instructionPadding(model)
                                 wrapMode: TextArea.WordWrap
-                                enabled: false
+                                readOnly: true
+                                selectByMouse: true
                             }
                         }
                     }
