@@ -254,11 +254,7 @@ class InstructionModel(QObject):
                 changed = True
                 self._instructionText = instructionText
                 if instructionText and "html" not in instructionText.lower():
-                    self._instructionText = Qt.convertFromPlainText(instructionText)
-                    if "\r\n" in instructionText:
-                        self._instructionText = instructionText.replace("\r\n", "<br/>")
-                    if "\n" in self._instructionText:
-                        self._instructionText = instructionText.replace("\n", "<br/>")
+                    self._instructionText = Qt.convertFromPlainText(instructionText, Qt.WhiteSpaceNormal)
 
         if changed:
             self.instructionText_changed.emit()
