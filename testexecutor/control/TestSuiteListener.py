@@ -35,7 +35,7 @@ class Link(QObject):
     endSignal = Signal(str, str)
     progressSignal = Signal(str, int)
     userDecisionSignal = Signal(str, str, list, bool)
-    userInputRequestSignal = Signal(str, str, list, str, tuple, bool)
+    userInputRequestSignal = Signal(str, str, list, str, bool, tuple, bool)
     _userCallback = None
 
     def __init__(self, instruction_signal):
@@ -111,7 +111,7 @@ class TestSuiteListener(TestListenerApi):
         """
         self.link.feedbackSignal.emit(name, self._convert_message(data))
 
-    def user_input(self, title, message, control=None, default_value=None, *values):
+    def user_input(self, title, message, control=None, default_value=None, hidden=False, *values):
         """
         Place holder for allowing user to return a value
         :return: (input, decision) e.g. (None, "cancel") or ("Hello", "ok")
@@ -121,7 +121,7 @@ class TestSuiteListener(TestListenerApi):
         buttons = control
         # if exception occurs here we get no error and test seems unrecoverable
         self.link.userInputRequestSignal.emit(title, self._convert_message(message), buttons,
-                                              default_value, values, False)
+                                              default_value, hidden, values, False)
         self.model.instructions.userDecisionWait()
         self.clear_instructions()
         input_value = self.model.instructions.control.lastUserInput()

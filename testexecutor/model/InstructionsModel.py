@@ -187,6 +187,7 @@ class InstructionModel(QObject):
         self._instructionText = None
         self._control = InstructionControl()
         self._enabled = False
+        self._input_hidden = False
         self._instructionTitle = None
         self._instructionText = None
 
@@ -214,8 +215,8 @@ class InstructionModel(QObject):
         buttons_enabled = self.control.requestDecision(control)
         self._internal_setenabled(buttons_enabled | enable)
 
-    @Slot(str, str, list, str, tuple, bool)
-    def userInputRequest(self, title, message, control, default_value=None, values=None, enable=True):
+    @Slot(str, str, list, str, bool, tuple, bool)
+    def userInputRequest(self, title, message, control, default_value=None, hidden=False, values=None, enable=True):
         """
         Method called to send instructions to the user
         The caller will use control.lastUserDecision() to obtain the decision chosen, implementing a wait state
@@ -228,10 +229,12 @@ class InstructionModel(QObject):
         :param default_value: value to provide as a default to the user - future
         :param values: enable text widget even if no buttons so highlighted colour is shown - future
         :param enable: enable text widget even if no buttons so highlighted colour is shown
+        :param hidden: hide text as entered
         :return: None
         """
         self.instructionTitle = title
         self.instructionText = message
+        self.input_hidden = hidden
         buttons_enabled = self.control.requestDecision(control)
         self._internal_setenabled(buttons_enabled | enable)
 
@@ -331,3 +334,22 @@ class InstructionModel(QObject):
 
     enabled_changed = Signal()
     enabled = Property(bool, _getenabled, _setenabled, notify=enabled_changed)
+
+    def _set_input_hidden(self, input_hidden):
+        """ Setter for _input_hidden Property """
+        changed = False
+        with self.lock:
+            if self._input_hidden != input_hidden:
+                self._input_hidden = input_hidden
+                changed = True
+        if changed:
+            self.input_hidden_changed.emit()
+
+    def _get_input_hidden(self):
+        """ Getter for _input_hidden Property """
+        with self.lock:
+            e = self._input_hidden
+        return e
+
+    input_hidden_changed = Signal()
+    input_hidden = Property(bool, _get_input_hidden, _set_input_hidden, notify=input_hidden_changed)
