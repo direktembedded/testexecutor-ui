@@ -22,6 +22,7 @@ Item {
     id: inputWidget
     property var color: "#e5e2e2"
     property string inputid
+    property bool hidden: false
 
     ColumnLayout {
         id: inputWidgetLayout
@@ -43,6 +44,7 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 placeholderText: "Input"
                 font.pixelSize: parent.height * 0.7
+                echoMode: inputWidget.hidden ? TextInput.Password : TextInput.Normal
                 // onAccepted is called when 'return' is entered.
                 onAccepted: {
                     if (inputWidget.inputid === singleInputField.text) {
