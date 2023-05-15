@@ -128,26 +128,17 @@ class KeyValueModel(QAbstractListModel):
                         self._data[row][KeyValueModel.ValueKey].value = value
                     if label:
                         self._data[row][KeyValueModel.ValueKey].label = label
-                    ix = self.index(row, 0)
-                    changed = True
                     break
-        if changed:
-            self.dataChanged.emit(ix, ix, self.roleNames())
 
     def setLabel(self, key, label):
         self.setValue(key, value=None, label=label)
 
     def setPossibleValues(self, key, values):
-        changed = False
         with self.lock:
             for row in range(len(self._data)):
                 if self._data[row][KeyValueModel.KeyKey] == key:
                     self._data[row][KeyValueModel.PossibleValuesKey] = values
-                    ix = self.index(row, 0)
-                    changed = True
                     break
-        if changed:
-            self.dataChanged.emit(ix, ix, self.roleNames())
 
     def getValue(self, key):
         value = None
@@ -178,5 +169,3 @@ class KeyValueModel(QAbstractListModel):
             with self.lock:
                 self._data[row][KeyValueModel.ValueKey].value = ""
                 self._data[row][KeyValueModel.PossibleValuesKey] = []
-                ix = self.index(row, 0)
-            self.dataChanged.emit(ix, ix, self.roleNames())
