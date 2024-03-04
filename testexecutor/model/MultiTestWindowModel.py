@@ -36,6 +36,7 @@ class MultiTestWindowModel(QObject):
     def __init__(self, suiteGroup=None, title="Test Executor", closeHeading="There Are Still Tests Running", closeText="Stop all suites if you want to quit"):
         QObject.__init__(self)
         self._title = title
+        self._visibility = "Maximized"
         self._abortCallback = None
         self._closeHeading = closeHeading
         self._closeText = closeText
@@ -60,6 +61,19 @@ class MultiTestWindowModel(QObject):
 
     title_changed = Signal()
     title = Property(str, _gettitle, _settitle, notify=title_changed)
+
+    def _setvisibility(self, visibility):
+        """ Setter for visibility Property """
+        if self._visibility != visibility:
+            self._visibility = visibility
+            self.visibility_changed.emit()
+
+    def _getvisibility(self):
+        """ Getter for visibility Property """
+        return self._visibility
+
+    visibility_changed = Signal()
+    visibility = Property(str, _getvisibility, _setvisibility, notify=visibility_changed)
 
     def _setabout(self, about):
         """ Setter for about Property. Expects html (or rich text subset there of) """
