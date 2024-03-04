@@ -25,7 +25,7 @@ ApplicationWindow {
     visible: true
     width: 1200
     height: 800
-    visibility: "Maximized"
+    visibility: (app_model && app_model.visibility) ? app_model.visibility : "Maximized"
     MultiTestWidget {
         test_suites: model_list
     }
