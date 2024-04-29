@@ -42,9 +42,11 @@ class ItemList(QAbstractListModel):
 
     def addData(self, data):
         index = QModelIndex()
-        self.beginInsertRows(index, self.rowCount(), self.rowCount())
+        row = self.rowCount()
+        self.beginInsertRows(index, row, row)
         self._datas.append(data)
         self.endInsertRows()
+        self.dataChanged.emit(row, row, self._roles)
 
     def setData(self, index, value, role):
         try:
@@ -54,7 +56,7 @@ class ItemList(QAbstractListModel):
         if role == self.ItemRole:
             self._datas[index.row()] = value
             self.dataChanged.emit(index, index, {self.ItemRole: self.ItemKey})
-        return True
+        return False
 
     def rowCount(self, parent=QModelIndex()):
         return len(self._datas)
@@ -73,6 +75,13 @@ class ItemList(QAbstractListModel):
     def roleNames(self):
         return self._roles
 
+    def removeRows(self, position, rows, parent=QModelIndex()):
+        self.beginRemoveRows(parent, position, position + rows - 1)
+        del self._datas[position:position + rows]
+        self.endRemoveRows()
+        #self.dataChanged.emit(0, self.rowCount(), self._roles)
+        return True
+
     def getItems(self):
         """
         Returns dictionary with key:value pairs as string:string. Note the label is not included.
@@ -87,25 +96,36 @@ class ItemList(QAbstractListModel):
     def updateItems(self, content_list):
         """
         Update the items to match data, ensuring we remove and add rather than dump the whole set and replace.
-        :param data: the new content to be added
+        :param content_list: the new content to be added
         :return:
         """
         rowCount = self.rowCount()
         alreadyPresent = []
+        indexes_to_remove = []
         for i in range(rowCount):
-            existingItem = self.index(i, 0).data(self.ItemRole)
+            existing_index = self.index(i, 0)
+            existingItem = existing_index.data(self.ItemRole)
             if existingItem not in content_list:
-                self.beginRemoveRows(QModelIndex(), i, i)
-                self.removeRow(i)
-                self.endRemoveRows()
+                indexes_to_remove.insert(0, existing_index)
             elif existingItem in content_list:
                 alreadyPresent.append(existingItem)
+        for index in indexes_to_remove:
+            self.removeRow(index.row())
         for item in content_list:
             if item not in alreadyPresent:
                 row = self.rowCount()
                 self.beginInsertRows(QModelIndex(), row, row)
                 self.addData(item)
                 self.endInsertRows()
+        #self.dataChanged.emit(0, self.rowCount(), self._roles)
+
+    @Slot()
+    def clear(self):
+        rowCount = self.rowCount(QModelIndex())
+        if rowCount:
+            self.beginRemoveRows(QModelIndex(), 0, rowCount - 1)
+            self._datas.clear()
+            self.endRemoveRows()
 
     @Slot(str)
     def prepend(self, data):
@@ -130,8 +150,6 @@ class FilterModel(QObject):
     
     def __init__(self, name=None, allowable=[]):
         QObject.__init__(self)
-        #self._proposed = QStringListModel()
-        #self._proposed.setStringList(allowable)
         self._proposed = ItemList()
         for item in allowable:
             self._proposed.prepend(item)

@@ -290,7 +290,7 @@ class ResultModel(QAbstractListModel):
 
     def removeRows(self, position, rows, parent=QtCore.QModelIndex()):
         self.beginRemoveRows(parent, position, position + rows - 1)
-        self._data.clear()
+        del self._data[position:position + rows]
         self.endRemoveRows()
         return True
 

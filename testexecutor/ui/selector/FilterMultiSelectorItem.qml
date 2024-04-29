@@ -86,7 +86,7 @@ Item {
                     delegate: ItemDelegate {
                         width: comboControl.width
                         contentItem: Text {
-                            text: modelData
+                            text: Boolean(modelData) ? modelData:""
                             font: comboControl.font
                             elide: Text.ElideRight
                             verticalAlignment: Text.AlignVCenter
@@ -102,8 +102,10 @@ Item {
                     model: filterItem.proposed
                     onActivated: {
                         var v = comboControl.currentText
-                        //filterListView.model.insert(0, {text: v})
-                        filterListView.model.prepend(v)
+                        if (v) {
+                            //filterListView.model.insert(0, {text: v})
+                            filterListView.model.prepend(v)
+                        }
                     }
                 }
             }
