@@ -149,7 +149,7 @@ class TestSuiteListener(TestListenerApi):
             decision = self.model.instructions.control.lastUserInput()
         return decision
 
-    def user_instructions(self, title, message, expectResponse=True, control=None):
+    def user_instructions(self, title, message, expectResponse=True, control=None, highlight=True):
         """
         Provides user instructions. By default acknowledgement is requested (paramter expectResponse is true) and the
         user should press "Ok" to continue
@@ -157,6 +157,8 @@ class TestSuiteListener(TestListenerApi):
         :param message: message asked of the user
         :param expectResponse: set to false if not response is required from user.
                                i.e. if this is only a test step detail.
+        :param control: list of control buttons strings to show, e.g. ["Yes", "No"]
+        :param highlight: enable instruction widget (to show colour) even if no control buttons provided
         :return: "ok" if response requested, else None or ""
         """
         if control is None:
@@ -166,7 +168,7 @@ class TestSuiteListener(TestListenerApi):
             buttons = ["Ok"]
             if control and type(control) is list and len(control) > 0:
                 buttons = control
-        self.link.userDecisionSignal.emit(title, self._convert_message(message), buttons, True)
+        self.link.userDecisionSignal.emit(title, self._convert_message(message), buttons, highlight)
         if expectResponse:
             self.model.instructions.userDecisionWait()
             self.clear_instructions()
