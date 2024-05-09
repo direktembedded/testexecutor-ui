@@ -82,11 +82,11 @@ Item {
                             }
                     }
 
-                    textRole: "item"
+                    textRole: "display"
                     delegate: ItemDelegate {
                         width: comboControl.width
                         contentItem: Text {
-                            text: Boolean(modelData) ? modelData:""
+                            text: model.display
                             font: comboControl.font
                             elide: Text.ElideRight
                             verticalAlignment: Text.AlignVCenter

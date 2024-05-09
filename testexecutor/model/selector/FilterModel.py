@@ -148,11 +148,12 @@ class ItemList(QAbstractListModel):
 
 class FilterModel(QObject):
     
-    def __init__(self, name=None, allowable=[]):
+    def __init__(self, name=None, allowable=None):
         QObject.__init__(self)
-        self._proposed = ItemList()
-        for item in allowable:
-            self._proposed.prepend(item)
+        if not allowable:
+            allowable = []
+        self._proposed = QStringListModel()
+        self._proposed.setStringList(allowable)
         self._selected = ItemList()
         self._selected.changed.connect(self._onSelectedChanged, Qt.QueuedConnection)
         self._name = name

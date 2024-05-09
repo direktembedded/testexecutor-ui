@@ -86,5 +86,5 @@ class FilterGroupModel(QAbstractListModel):
         for i in range(rowCount):
             existingItem = self.index(i, 0).data(self.FilterRole)
             if existingItem.name == name:
-                existingItem.proposed.updateItems(content_list)
+                existingItem.proposed.setStringList(content_list)
                 self.dataChanged.emit(self.index(i, 0), self.index(i, 0), self._roles)
