@@ -47,16 +47,20 @@ class ItemList(QAbstractListModel):
         self._datas.append(data)
         self.endInsertRows()
         self.dataChanged.emit(row, row, self._roles)
+        self.changed.emit()
 
     def setData(self, index, value, role):
+        ret = False
         try:
             data = self._datas[index.row()]
         except IndexError:
-            return False
+            return ret
         if role == self.ItemRole:
             self._datas[index.row()] = value
             self.dataChanged.emit(index, index, {self.ItemRole: self.ItemKey})
-        return False
+            self.changed.emit()
+            ret = True
+        return ret
 
     def rowCount(self, parent=QModelIndex()):
         return len(self._datas)
@@ -79,6 +83,8 @@ class ItemList(QAbstractListModel):
         self.beginRemoveRows(parent, position, position + rows - 1)
         del self._datas[position:position + rows]
         self.endRemoveRows()
+        self.dataChanged.emit(0, self.rowCount(), self._roles)
+        self.changed.emit()
         #self.dataChanged.emit(0, self.rowCount(), self._roles)
         return True
 
@@ -110,7 +116,7 @@ class ItemList(QAbstractListModel):
             elif existingItem in content_list:
                 alreadyPresent.append(existingItem)
         for index in indexes_to_remove:
-            self.removeRow(index.row())
+            self.removeRows(index.row(), 1)
         for item in content_list:
             if item not in alreadyPresent:
                 row = self.rowCount()
@@ -118,6 +124,8 @@ class ItemList(QAbstractListModel):
                 self.addData(item)
                 self.endInsertRows()
         #self.dataChanged.emit(0, self.rowCount(), self._roles)
+        self.dataChanged.emit(0, self.rowCount(), self._roles)
+        self.changed.emit()
 
     @Slot()
     def clear(self):
@@ -126,6 +134,8 @@ class ItemList(QAbstractListModel):
             self.beginRemoveRows(QModelIndex(), 0, rowCount - 1)
             self._datas.clear()
             self.endRemoveRows()
+            self.dataChanged.emit(0, self.rowCount(), self._roles)
+            self.changed.emit()
 
     @Slot(str)
     def prepend(self, data):
