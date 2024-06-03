@@ -114,45 +114,45 @@ Item {
             timeout: 3000
             delay: 500
             contentItem:
-                Rectangle {
-                    color: resultRectangle.color
-                    Row {
-                        Rectangle {
-                            Text {
-                                text: resultName.text
-                                font.pixelSize: resultRectangle.height
-                                font.weight: Font.Bold
-                                color: resultName.color
-                            }
-                            color: nameRectangle.color
-                            width: childrenRect.width
-                            height: childrenRect.height
+                Row {
+                    Rectangle {
+                        Text {
+                            text: resultName.text
+                            font.pixelSize: resultRectangle.height
+                            font.weight: Font.Bold
+                            color: resultName.color
+                            rightPadding: 5
+                            leftPadding: 10
                         }
-                        Rectangle {
-                            Text {
-                                text: feedback.text ? feedback.text:"  "
-                                font.pixelSize: resultRectangle.height
-                                font.weight: Font.Bold
-                                color: feedback.color
-                            }
-                            color: feedbackRectangle.color
-                            width: childrenRect.width
-                            height: childrenRect.height
+                        color: nameRectangle.color
+                        width: childrenRect.width
+                        height: childrenRect.height
+                    }
+                    Rectangle {
+                        Text {
+                            text: feedback.text ? feedback.text:"  "
+                            font.pixelSize: resultRectangle.height
+                            font.weight: Font.Bold
+                            color: feedback.color
+                            rightPadding: 5
+                            leftPadding: 5
                         }
-                        Rectangle {
-                            Text {
-                                text: timeProgress.text
-                                font.pixelSize: resultRectangle.height
-                                font.weight: Font.Bold
-                                color: timeProgress.color
-                            }
-                            color: timeRectangle.color
-                            width: childrenRect.width
-                            height: childrenRect.height
+                        color: feedbackRectangle.color
+                        width: childrenRect.width
+                        height: childrenRect.height
+                    }
+                    Rectangle {
+                        Text {
+                            text: timeProgress.text
+                            font.pixelSize: resultRectangle.height
+                            font.weight: Font.Bold
+                            color: timeProgress.color
+                            rightPadding: 10
+                            leftPadding: 5
                         }
-                        spacing: 10
-                        rightPadding: 10
-                        leftPadding: 10
+                        color: timeRectangle.color
+                        width: childrenRect.width
+                        height: childrenRect.height
                     }
                 }
         }
