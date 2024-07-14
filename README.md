@@ -10,4 +10,4 @@ The UI is a Pyside2/QML based UI and has a listener api which the test framework
 ## Configuration
 There is a default configuration for the layout of the test suites which can be replaced using a json string defining each layout configuration item.
 
-Copyright &copy; Direkt Embedded Pty Ltd 
+Copyright &copy; 2021 Direkt Embedded Pty Ltd

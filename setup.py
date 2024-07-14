@@ -32,7 +32,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="testexecutor",
+    name="testexecutor-ui",
     version=VERSION,
     description="A python UI library for the execution and control of device tests",
     long_description=long_description,
@@ -43,7 +43,7 @@ setuptools.setup(
     license_files=("LICENSE", "NOTICE"),
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: Apache-2.0",
+        "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
     ],
     install_requires=[
