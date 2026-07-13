@@ -5,3 +5,4 @@ venv
 build/*
 dist/*
 testexecutor.egg-info/*
+testexecutor_ui.egg-info/*
