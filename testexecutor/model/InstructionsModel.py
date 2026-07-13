@@ -39,7 +39,7 @@ class ControlButtonConfig(QObject):
                 changed = True
         if changed:
             self.text_changed.emit()
-            if en is not self.enabled:
+            if en != self.enabled:
                 self.enable_changed.emit()
 
     def _gettext(self):
