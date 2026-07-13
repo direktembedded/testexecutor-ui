@@ -95,6 +95,10 @@ Item {
                                 wrapMode: TextArea.WordWrap
                                 readOnly: true
                                 selectByMouse: true
+                                // Force the control background to be transparent.
+                                background: Rectangle {
+                                    color: "transparent"
+                                }
                             }
                         }
                     }
