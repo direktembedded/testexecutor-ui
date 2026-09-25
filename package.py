@@ -37,7 +37,7 @@ def isVersionClean(version):
 def package():
     from build.__main__ import main
     print("VERSION file matches git version, running setup to package")
-    main(["--sdist", "--wheel"])
+    return main(["--sdist", "--wheel"])
 
 
 if __name__ == "__main__":
@@ -54,8 +54,8 @@ if __name__ == "__main__":
                 print(version, file=version_file)
                 print("File version ({0}) not same as git version ({1})\nFile has been updated\nPlease confirm, commit, tag and re-run this script".format(fileVersion, version))
         else:
-            package()
+            return_code = package()
     else:
         print("Git version ({0}) not clean, not packaging\ngit tree must be clean and tag must match VERSION file".format(version))
 
-    exit(0)
+    exit(return_code)
