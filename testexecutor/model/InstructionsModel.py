@@ -212,6 +212,7 @@ class InstructionModel(QObject):
         """
         self.instructionTitle = title
         self.instructionText = message
+        self.input_hidden = False
         buttons_enabled = self.control.requestDecision(control)
         self._internal_setenabled(buttons_enabled | enable)
 
